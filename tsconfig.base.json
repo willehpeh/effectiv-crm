@@ -14,7 +14,16 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@austere-albatross/austere-application": [
+        "libs/application/src/index.ts"
+      ],
+      "@austere-albatross/austere-domain": ["libs/domain/src/index.ts"],
+      "@austere-albatross/austere-infrastructure": [
+        "libs/infrastructure/src/index.ts"
+      ],
+      "@austere-albatross/austere-tests": ["libs/tests/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

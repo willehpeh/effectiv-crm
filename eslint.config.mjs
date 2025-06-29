@@ -5,7 +5,7 @@ export default [
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
   {
-    ignores: ['**/dist'],
+    ignores: ['**/dist']
   },
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
@@ -17,13 +17,54 @@ export default [
           allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
           depConstraints: [
             {
-              sourceTag: '*',
-              onlyDependOnLibsWithTags: ['*'],
+              sourceTag: 'scope:domain',
+              onlyDependOnLibsWithTags: ['scope:domain']
             },
-          ],
-        },
-      ],
-    },
+            {
+              sourceTag: 'scope:application',
+              onlyDependOnLibsWithTags: [
+                'scope:application',
+                'scope:domain'
+              ]
+            },
+            {
+              sourceTag: 'scope:infrastructure',
+              onlyDependOnLibsWithTags: [
+                'scope:infrastructure',
+                'scope:application',
+                'scope:domain'
+              ]
+            },
+            {
+              sourceTag: 'scope:test',
+              onlyDependOnLibsWithTags: [
+                'scope:test',
+                'scope:application',
+                'scope:domain',
+                'scope:infrastructure'
+              ]
+            },
+            {
+              sourceTag: 'scope:api',
+              onlyDependOnLibsWithTags: [
+                'scope:api',
+                'scope:application',
+                'scope:domain',
+                'scope:infrastructure'
+              ]
+            },
+            {
+              sourceTag: 'scope:frontend',
+              onlyDependOnLibsWithTags: [
+                'scope:frontend',
+                'scope:api',
+                'scope-application'
+              ]
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     files: [
@@ -34,9 +75,9 @@ export default [
       '**/*.js',
       '**/*.jsx',
       '**/*.cjs',
-      '**/*.mjs',
+      '**/*.mjs'
     ],
     // Override or add rules here
-    rules: {},
-  },
+    rules: {}
+  }
 ];

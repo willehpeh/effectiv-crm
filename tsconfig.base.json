@@ -18,16 +18,16 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@austere-albatross/austere-application": [
+      "@effectiv-crm/austere-application": [
         "libs/application/src/index.ts"
       ],
-      "@austere-albatross/austere-domain": [
+      "@effectiv-crm/austere-domain": [
         "libs/domain/src/index.ts"
       ],
-      "@austere-albatross/austere-infrastructure": [
+      "@effectiv-crm/austere-infrastructure": [
         "libs/infrastructure/src/index.ts"
       ],
-      "@austere-albatross/austere-tests": [
+      "@effectiv-crm/austere-tests": [
         "libs/tests/src/index.ts"
       ]
     }

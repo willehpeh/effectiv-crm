@@ -16,19 +16,19 @@
 To run the dev server for your app, use:
 
 ```sh
-npx nx serve austere-albatross
+npx nx serve effectiv-crm
 ```
 
 To create a production bundle:
 
 ```sh
-npx nx build austere-albatross
+npx nx build effectiv-crm
 ```
 
 To see all available targets to run for a project, run:
 
 ```sh
-npx nx show project austere-albatross
+npx nx show project effectiv-crm
 ```
 
 These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.

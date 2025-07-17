@@ -7,7 +7,7 @@ RUN npm ci --legacy-peer-deps
 RUN npx nx build api
 
 # Stage 2: Run
-FROM node:18-alpine
+FROM node:22-alpine
 WORKDIR /app
 
 COPY --from=builder /app/dist/apps/api ./dist

@@ -1,5 +1,5 @@
 {
-  "name": "austere-tests",
+  "name": "tests",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/tests/src",
   "projectType": "library",

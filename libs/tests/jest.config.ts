@@ -1,5 +1,5 @@
 export default {
-  displayName: 'austere-tests',
+  displayName: 'tests',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

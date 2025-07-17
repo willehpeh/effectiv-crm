@@ -18,16 +18,16 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@effectiv-crm/austere-application": [
+      "@effectiv-crm/application": [
         "libs/application/src/index.ts"
       ],
-      "@effectiv-crm/austere-domain": [
+      "@effectiv-crm/domain": [
         "libs/domain/src/index.ts"
       ],
-      "@effectiv-crm/austere-infrastructure": [
+      "@effectiv-crm/infrastructure": [
         "libs/infrastructure/src/index.ts"
       ],
-      "@effectiv-crm/austere-tests": [
+      "@effectiv-crm/tests": [
         "libs/tests/src/index.ts"
       ]
     }

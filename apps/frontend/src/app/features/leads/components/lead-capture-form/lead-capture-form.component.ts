@@ -97,12 +97,11 @@ import { ButtonComponent } from '../../../../shared/components/ui/button/button.
             ></textarea>
           </div>
 
-          <div class="flex space-x-4 pt-4">
+          <div class="flex gap-4">
             <app-button 
               type="submit" 
               variant="primary" 
-              size="lg"
-              class="flex-1"
+              size="md"
             >
               Save Lead
             </app-button>
@@ -110,8 +109,7 @@ import { ButtonComponent } from '../../../../shared/components/ui/button/button.
             <app-button 
               type="button" 
               variant="outline" 
-              size="lg"
-              class="flex-1"
+              size="md"
             >
               Cancel
             </app-button>

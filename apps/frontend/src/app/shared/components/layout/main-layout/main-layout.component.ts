@@ -26,8 +26,4 @@ import { UiFacade } from '../../../../ui/ui.facade';
 export class MainLayoutComponent {
   protected uiFacade = inject(UiFacade);
   protected menuOpen = this.uiFacade.menuOpen();
-
-
-
-
 }

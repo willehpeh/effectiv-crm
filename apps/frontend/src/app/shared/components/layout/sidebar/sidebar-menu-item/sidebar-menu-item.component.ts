@@ -1,10 +1,11 @@
 import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
-import { DashboardIconComponent } from '../icons/dashboard-icon.component';
-import { LeadsIconComponent } from '../icons/leads-icon.component';
-import { ContactsIconComponent } from '../icons/contacts-icon.component';
-import { ProjectsIconComponent } from '../icons/projects-icon.component';
-import { AnalyticsIconComponent } from '../icons/analytics-icon.component';
-import { SettingsIconComponent } from '../icons/settings-icon.component';
+import { RouterLink } from '@angular/router';
+import { DashboardIconComponent } from '../../../ui/icons/dashboard-icon.component';
+import { LeadsIconComponent } from '../../../ui/icons/leads-icon.component';
+import { ContactsIconComponent } from '../../../ui/icons/contacts-icon.component';
+import { ProjectsIconComponent } from '../../../ui/icons/projects-icon.component';
+import { AnalyticsIconComponent } from '../../../ui/icons/analytics-icon.component';
+import { SettingsIconComponent } from '../../../ui/icons/settings-icon.component';
 
 export type SidebarIcon = 'dashboard' | 'leads' | 'contacts' | 'projects' | 'analytics' | 'settings';
 
@@ -13,6 +14,7 @@ export type SidebarIcon = 'dashboard' | 'leads' | 'contacts' | 'projects' | 'ana
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    RouterLink,
     DashboardIconComponent,
     LeadsIconComponent,
     ContactsIconComponent,
@@ -22,7 +24,7 @@ export type SidebarIcon = 'dashboard' | 'leads' | 'contacts' | 'projects' | 'ana
   ],
   template: `
     <a 
-      [href]="href()"
+      [routerLink]="route()"
       [class]="linkClasses()"
       [attr.aria-current]="active() ? 'page' : null"
     >
@@ -53,7 +55,7 @@ export type SidebarIcon = 'dashboard' | 'leads' | 'contacts' | 'projects' | 'ana
 export class SidebarMenuItemComponent {
   icon = input.required<SidebarIcon>();
   label = input.required<string>();
-  href = input<string>('#');
+  route = input<string>('#');
   active = input<boolean>(false);
 
   protected linkClasses = computed(() => {
@@ -78,3 +80,4 @@ export class SidebarMenuItemComponent {
     return this.active() ? `${baseClasses} ${activeClasses}` : baseClasses;
   });
 }
+

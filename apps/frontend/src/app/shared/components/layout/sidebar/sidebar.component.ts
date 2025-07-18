@@ -1,7 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, Signal, signal, effect, viewChild, ElementRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, ElementRef, inject, viewChild } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { UiFacade } from '../../../../ui/ui.facade';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { SidebarMenuItemComponent } from '../../ui/sidebar-menu-item/sidebar-menu-item.component';
+import { SidebarMenuItemComponent } from './sidebar-menu-item/sidebar-menu-item.component';
 import { MenuItem } from './menu-item';
 
 @Component({
@@ -36,7 +39,7 @@ import { MenuItem } from './menu-item';
               <app-sidebar-menu-item 
                 [icon]="item.icon" 
                 [label]="item.label" 
-                [href]="item.href"
+                [route]="item.route"
                 [active]="item.active"/>
             }
           </nav>
@@ -47,7 +50,7 @@ import { MenuItem } from './menu-item';
               <app-sidebar-menu-item 
                 [icon]="item.icon" 
                 [label]="item.label" 
-                [href]="item.href"
+                [route]="item.route"
                 [active]="item.active"/>
             }
           </nav>
@@ -58,10 +61,20 @@ import { MenuItem } from './menu-item';
   `
 })
 export class SidebarComponent {
-  private uiFacade = inject(UiFacade);
-  protected menuOpen = this.uiFacade.menuOpen();
+private uiFacade = inject(UiFacade);
+private router = inject(Router);
+
+protected menuOpen = this.uiFacade.menuOpen();
 
   private sidebar = viewChild<ElementRef<HTMLElement>>('sidebar');
+
+  // Track current route for active state
+  private currentRoute = toSignal(
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ),
+    { initialValue: new NavigationEnd(0, this.router.url, this.router.url) }
+  );
 
   constructor() {
     // Focus management: when sidebar opens, focus it for keyboard users
@@ -75,15 +88,37 @@ export class SidebarComponent {
     });
   }
 
-  protected mainMenuItems: Signal<MenuItem[]> = signal([
-    new MenuItem({ icon: 'dashboard', label: 'Dashboard' }),
-    new MenuItem({ icon: 'leads', label: 'Leads', active: true }),
-    new MenuItem({ icon: 'contacts', label: 'Contacts' }),
-    new MenuItem({ icon: 'projects', label: 'Projects' }),
-    new MenuItem({ icon: 'analytics', label: 'Analytics' }),
-  ]);
+  // Base menu items without active state
+  private baseMainMenuItems = [
+    new MenuItem({ icon: 'dashboard', label: 'Dashboard', route: '/dashboard' }),
+    new MenuItem({ icon: 'leads', label: 'Leads', route: '/leads' }),
+    new MenuItem({ icon: 'contacts', label: 'Contacts', route: '/contacts' }),
+    new MenuItem({ icon: 'projects', label: 'Projects', route: '/projects' }),
+    new MenuItem({ icon: 'analytics', label: 'Analytics', route: '/analytics' }),
+  ];
 
-  protected settingsMenuItems: Signal<MenuItem[]> = signal([
-    new MenuItem({ icon: 'settings', label: 'Settings' }),
-  ]);
+  private baseSettingsMenuItems = [
+    new MenuItem({ icon: 'settings', label: 'Settings', route: '/settings' }),
+  ];
+
+  // Computed menu items with dynamic active state
+  protected mainMenuItems = computed(() => {
+    const currentUrl = (this.currentRoute() as NavigationEnd)?.url || '/';
+    return this.baseMainMenuItems.map(item =>
+      new MenuItem({
+        ...item,
+        active: currentUrl === item.route
+      })
+    );
+  });
+
+  protected settingsMenuItems = computed(() => {
+    const currentUrl = (this.currentRoute() as NavigationEnd)?.url || '/';
+    return this.baseSettingsMenuItems.map(item =>
+      new MenuItem({
+        ...item,
+        active: currentUrl === item.route
+      })
+    );
+  });
 }

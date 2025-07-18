@@ -1,20 +1,20 @@
-import type { SidebarIcon } from '../../ui/sidebar-menu-item/sidebar-menu-item.component';
+import type { SidebarIcon } from './sidebar-menu-item/sidebar-menu-item.component';
 
 export class MenuItem {
   icon: SidebarIcon;
   label: string;
-  href: string;
+  route: string;
   active: boolean;
 
   constructor(options: {
     icon: SidebarIcon;
     label: string;
-    href?: string;
+    route?: string;
     active?: boolean;
   }) {
     this.icon = options.icon;
     this.label = options.label;
-    this.href = options.href ?? '#';
+    this.route = options.route ?? '#';
     this.active = options.active ?? false;
   }
 }

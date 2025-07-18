@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MainLayoutComponent } from './shared/components/layout/main-layout/main-layout.component';
-import { LeadCaptureFormComponent } from './features/leads/components/lead-capture-form/lead-capture-form.component';
+import { LeadCaptureFormComponent } from './leads/components/lead-capture-form/lead-capture-form.component';
 
 @Component({
   selector: 'app-root',

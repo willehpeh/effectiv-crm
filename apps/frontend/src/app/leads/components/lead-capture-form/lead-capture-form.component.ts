@@ -1,12 +1,12 @@
 
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { CardComponent } from '../../../../shared/components/ui/card/card.component';
-import { LabelComponent } from '../../../../shared/components/ui/label/label.component';
-import { InputComponent } from '../../../../shared/components/ui/input/input.component';
-import { ButtonComponent } from '../../../../shared/components/ui/button/button.component';
-import { CardHeadingDirective } from '../../../../shared/components/ui/card/card-heading.directive';
-import { CardSubheadingDirective } from '../../../../shared/components/ui/card/card-subheading.directive';
-import { CardHeaderComponent } from '../../../../shared/components/ui/card/card-header.component';
+import { CardComponent } from '../../../shared/components/ui/card/card.component';
+import { LabelComponent } from '../../../shared/components/ui/label/label.component';
+import { InputComponent } from '../../../shared/components/ui/input/input.component';
+import { ButtonComponent } from '../../../shared/components/ui/button/button.component';
+import { CardHeadingDirective } from '../../../shared/components/ui/card/card-heading.directive';
+import { CardSubheadingDirective } from '../../../shared/components/ui/card/card-subheading.directive';
+import { CardHeaderComponent } from '../../../shared/components/ui/card/card-header.component';
 
 @Component({
   selector: 'app-lead-capture-form',

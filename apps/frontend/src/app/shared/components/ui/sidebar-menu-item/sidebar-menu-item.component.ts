@@ -24,6 +24,7 @@ export type SidebarIcon = 'dashboard' | 'leads' | 'contacts' | 'projects' | 'ana
     <a 
       [href]="href()"
       [class]="linkClasses()"
+      [attr.aria-current]="active() ? 'page' : null"
     >
       @switch (icon()) {
         @case ('dashboard') {

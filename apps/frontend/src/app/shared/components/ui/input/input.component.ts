@@ -6,6 +6,7 @@ import { Component, ChangeDetectionStrategy, computed, input } from '@angular/co
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <input 
+      [id]="id()"
       [type]="type()"
       [placeholder]="placeholder()"
       [class]="inputClasses()"
@@ -14,6 +15,7 @@ import { Component, ChangeDetectionStrategy, computed, input } from '@angular/co
   `
 })
 export class InputComponent {
+  id = input<string>('');
   type = input<string>('text');
   placeholder = input<string>('');
   disabled = input<boolean>(false);

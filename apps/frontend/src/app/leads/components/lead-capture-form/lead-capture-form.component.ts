@@ -30,6 +30,7 @@ import { CardSubheadingDirective } from '../../../shared/components/ui/card/card
 							First Name
 						</app-label>
 						<app-input
+								id="firstName"
 								type="text"
 								placeholder="James"
 						></app-input>
@@ -40,6 +41,7 @@ import { CardSubheadingDirective } from '../../../shared/components/ui/card/card
 							Last Name
 						</app-label>
 						<app-input
+								id="lastName"
 								type="text"
 								placeholder="Anderson"
 						></app-input>
@@ -51,6 +53,7 @@ import { CardSubheadingDirective } from '../../../shared/components/ui/card/card
 						Email Address
 					</app-label>
 					<app-input
+							id="email"
 							type="email"
 							placeholder="james@example.com"
 					></app-input>
@@ -61,6 +64,7 @@ import { CardSubheadingDirective } from '../../../shared/components/ui/card/card
 						Phone Number
 					</app-label>
 					<app-input
+							id="phone"
 							type="tel"
 							placeholder="06 12 34 56 78"
 					></app-input>
@@ -71,6 +75,7 @@ import { CardSubheadingDirective } from '../../../shared/components/ui/card/card
 						Company
 					</app-label>
 					<app-input
+							id="company"
 							type="text"
 							placeholder="Better Fries Ltd."
 					></app-input>
@@ -81,6 +86,7 @@ import { CardSubheadingDirective } from '../../../shared/components/ui/card/card
 						Job Title
 					</app-label>
 					<app-input
+							id="jobTitle"
 							type="text"
 							placeholder="CTO"
 					></app-input>

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, Signal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Signal, signal, effect, viewChild, ElementRef } from '@angular/core';
 import { UiFacade } from '../../../../ui/ui.facade';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { SidebarMenuItemComponent } from '../../ui/sidebar-menu-item/sidebar-menu-item.component';
@@ -24,6 +24,10 @@ import { MenuItem } from './menu-item';
     @if (menuOpen()) {
       <aside 
         [@slideIn] 
+        role="region"
+        aria-label="Main navigation"
+        tabindex="-1"
+        #sidebar
         class="w-full md:w-64 h-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md md:border-r border-slate-200 dark:border-slate-700/50 absolute z-10"
       >
         <div class="h-full px-3 py-6 overflow-y-auto">
@@ -56,6 +60,20 @@ import { MenuItem } from './menu-item';
 export class SidebarComponent {
   private uiFacade = inject(UiFacade);
   protected menuOpen = this.uiFacade.menuOpen();
+
+  private sidebar = viewChild<ElementRef<HTMLElement>>('sidebar');
+
+  constructor() {
+    // Focus management: when sidebar opens, focus it for keyboard users
+    effect(() => {
+      if (this.menuOpen() && this.sidebar()) {
+        // Small delay to ensure DOM is ready after animation
+        setTimeout(() => {
+          this.sidebar()?.nativeElement.focus();
+        }, 100);
+      }
+    });
+  }
 
   protected mainMenuItems: Signal<MenuItem[]> = signal([
     new MenuItem({ icon: 'dashboard', label: 'Dashboard' }),

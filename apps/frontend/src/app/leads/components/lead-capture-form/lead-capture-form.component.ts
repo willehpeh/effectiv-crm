@@ -1,25 +1,24 @@
-
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CardComponent } from '../../../shared/components/ui/card/card.component';
 import { LabelComponent } from '../../../shared/components/ui/label/label.component';
 import { InputComponent } from '../../../shared/components/ui/input/input.component';
 import { ButtonComponent } from '../../../shared/components/ui/button/button.component';
 import { CardHeadingDirective } from '../../../shared/components/ui/card/card-heading.directive';
-import { CardSubheadingDirective } from '../../../shared/components/ui/card/card-subheading.directive';
 import { CardHeaderComponent } from '../../../shared/components/ui/card/card-header.component';
+import { CardSubheadingDirective } from '../../../shared/components/ui/card/card-subheading.directive';
 
 @Component({
   selector: 'app-lead-capture-form',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CardComponent, LabelComponent, InputComponent, ButtonComponent, CardHeadingDirective, CardSubheadingDirective, CardHeaderComponent],
+  imports: [CardComponent, LabelComponent, InputComponent, ButtonComponent, CardHeadingDirective, CardHeaderComponent, CardSubheadingDirective],
   template: `
 		<app-card shadow="xl">
 			<app-card-header>
-				<h2 cardHeading>
+				<h2 appCardHeading>
 					New Lead
 				</h2>
-				<p cardSubheading>
+				<p appCardSubheading>
 					Capture potential client information
 				</p>
 			</app-card-header>

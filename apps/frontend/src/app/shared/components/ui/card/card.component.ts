@@ -15,8 +15,8 @@ export class CardComponent {
   shadow = input<'sm' | 'md' | 'lg' | 'xl'>('md');
 
   cardClasses = computed(() => {
-    const baseClasses = 'bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700/50 backdrop-blur-sm';
-    
+    const baseClasses = 'bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700/50 backdrop-blur-sm space-y-8';
+
     const paddingClasses = {
       sm: 'p-4',
       md: 'p-8',

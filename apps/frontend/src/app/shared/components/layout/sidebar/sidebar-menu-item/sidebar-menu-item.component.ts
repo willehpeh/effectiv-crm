@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy, input, computed, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { UiFacade } from '../../../../../ui/ui.facade';
 import { DashboardIconComponent } from '../../../ui/icons/dashboard-icon.component';
 import { LeadsIconComponent } from '../../../ui/icons/leads-icon.component';
@@ -21,12 +21,14 @@ export type SidebarIcon = 'dashboard' | 'leads' | 'contacts' | 'projects' | 'ana
     ContactsIconComponent,
     ProjectsIconComponent,
     AnalyticsIconComponent,
-    SettingsIconComponent
+    SettingsIconComponent,
+    RouterLinkActive
   ],
   template: `
     <a 
       [routerLink]="route()"
-      [class]="linkClasses()"
+      routerLinkActive="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-700/50"
+      class="flex items-center px-4 py-3 text-slate-700 rounded-xl hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
       [attr.aria-current]="active() ? 'page' : null"
       (click)="onMenuItemClick()"
     >
@@ -56,17 +58,14 @@ export type SidebarIcon = 'dashboard' | 'leads' | 'contacts' | 'projects' | 'ana
 })
 export class SidebarMenuItemComponent {
   private uiFacade = inject(UiFacade);
-  
+
   icon = input.required<SidebarIcon>();
   label = input.required<string>();
   route = input<string>('#');
   active = input<boolean>(false);
 
   protected linkClasses = computed(() => {
-    const baseClasses = 'flex items-center px-4 py-3 text-slate-700 rounded-xl hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/50 transition-all duration-200 group';
-    const activeClasses = 'bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-700/50';
-
-    return this.active() ? `${baseClasses} ${activeClasses}` : baseClasses;
+    return 'flex items-center px-4 py-3 text-slate-700 rounded-xl hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/50 border';
   });
 
   protected iconClasses = computed(() => {

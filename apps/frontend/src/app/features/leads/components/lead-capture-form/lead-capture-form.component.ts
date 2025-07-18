@@ -81,7 +81,7 @@ import { ButtonComponent } from '../../../../shared/components/ui/button/button.
             </app-label>
             <app-input 
               type="text" 
-              placeholder="Enter job title"
+              placeholder="CTO"
             ></app-input>
           </div>
 
@@ -92,27 +92,26 @@ import { ButtonComponent } from '../../../../shared/components/ui/button/button.
             <textarea 
               id="notes"
               rows="4"
-              placeholder="Additional notes about the lead..."
+              placeholder="Tech stack, organizational structure, requirements…"
               class="w-full px-4 py-3 text-base rounded-xl border border-slate-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none focus:ring-offset-2 focus:ring-offset-slate-950 dark:bg-slate-900/50 dark:border-slate-700 dark:text-slate-50 dark:placeholder-slate-500 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/30 transition-all duration-200 backdrop-blur-sm hover:border-slate-600"
             ></textarea>
           </div>
 
-          <div class="flex gap-4">
-            <app-button 
-              type="submit" 
-              variant="primary" 
-              size="md"
-            >
-              Save Lead
-            </app-button>
-            
-            <app-button 
-              type="button" 
+          <div class="flex justify-end gap-4">
+						<app-button
+						type="button" 
               variant="outline" 
               size="md"
             >
               Cancel
             </app-button>
+						<app-button
+								type="submit"
+								variant="primary"
+								size="md"
+						>
+							Save Lead
+						</app-button>
           </div>
         </form>
       </div>

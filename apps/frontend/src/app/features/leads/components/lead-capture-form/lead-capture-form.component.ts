@@ -30,7 +30,7 @@ import { ButtonComponent } from '../../../../shared/components/ui/button/button.
               </app-label>
               <app-input 
                 type="text" 
-                placeholder="Enter first name"
+                placeholder="James"
               ></app-input>
             </div>
             
@@ -40,7 +40,7 @@ import { ButtonComponent } from '../../../../shared/components/ui/button/button.
               </app-label>
               <app-input 
                 type="text" 
-                placeholder="Enter last name"
+                placeholder="Anderson"
               ></app-input>
             </div>
           </div>
@@ -51,7 +51,7 @@ import { ButtonComponent } from '../../../../shared/components/ui/button/button.
             </app-label>
             <app-input 
               type="email" 
-              placeholder="Enter email address"
+              placeholder="james@example.com"
             ></app-input>
           </div>
 
@@ -61,7 +61,7 @@ import { ButtonComponent } from '../../../../shared/components/ui/button/button.
             </app-label>
             <app-input 
               type="tel" 
-              placeholder="Enter phone number"
+              placeholder="06 12 34 56 78"
             ></app-input>
           </div>
 
@@ -71,7 +71,7 @@ import { ButtonComponent } from '../../../../shared/components/ui/button/button.
             </app-label>
             <app-input 
               type="text" 
-              placeholder="Enter company name"
+              placeholder="Better Fries Ltd."
             ></app-input>
           </div>
 
@@ -93,7 +93,7 @@ import { ButtonComponent } from '../../../../shared/components/ui/button/button.
               id="notes"
               rows="4"
               placeholder="Additional notes about the lead..."
-              class="w-full px-4 py-3 text-base rounded-xl border border-slate-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none focus:ring-offset-2 focus:ring-offset-slate-950 dark:bg-slate-900/50 dark:border-slate-700 dark:text-slate-50 dark:placeholder-slate-400 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/30 transition-all duration-200 backdrop-blur-sm hover:border-slate-600"
+              class="w-full px-4 py-3 text-base rounded-xl border border-slate-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none focus:ring-offset-2 focus:ring-offset-slate-950 dark:bg-slate-900/50 dark:border-slate-700 dark:text-slate-50 dark:placeholder-slate-500 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/30 transition-all duration-200 backdrop-blur-sm hover:border-slate-600"
             ></textarea>
           </div>
 

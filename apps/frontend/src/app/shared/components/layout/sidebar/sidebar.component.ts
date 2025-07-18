@@ -24,40 +24,39 @@ import { MenuItem } from './menu-item';
     ])
   ],
   template: `
-    @if (menuOpen()) {
-      <aside 
-        [@slideIn] 
-        role="region"
-        aria-label="Main navigation"
-        tabindex="-1"
-        #sidebar
-        class="w-full md:w-64 h-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md md:border-r border-slate-200 dark:border-slate-700/50 absolute z-10"
-      >
-        <div class="h-full px-3 py-6 overflow-y-auto">
-          <nav class="space-y-2">
-            @for (item of mainMenuItems(); track item.label) {
-              <app-sidebar-menu-item 
-                [icon]="item.icon" 
-                [label]="item.label" 
-                [route]="item.route"
-                [active]="item.active"/>
-            }
-          </nav>
-        
-        <div class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700/50">
-          <nav class="space-y-2">
-            @for (item of settingsMenuItems(); track item.icon) {
-              <app-sidebar-menu-item 
-                [icon]="item.icon" 
-                [label]="item.label" 
-                [route]="item.route"
-                [active]="item.active"/>
-            }
-          </nav>
-          </div>
+    <aside 
+      role="region"
+      aria-label="Main navigation"
+      tabindex="-1"
+      #sidebar
+      class="w-full h-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md md:border-r border-slate-200 dark:border-slate-700/50 transition-opacity duration-300 ease-in-out"
+      [class.opacity-0]="!menuOpen()"
+      [class.opacity-100]="menuOpen()"
+    >
+      <div class="h-full px-3 py-6 overflow-y-auto">
+        <nav class="space-y-2">
+          @for (item of mainMenuItems(); track item.label) {
+            <app-sidebar-menu-item 
+              [icon]="item.icon" 
+              [label]="item.label" 
+              [route]="item.route"
+              [active]="item.active"/>
+          }
+        </nav>
+      
+      <div class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700/50">
+        <nav class="space-y-2">
+          @for (item of settingsMenuItems(); track item.icon) {
+            <app-sidebar-menu-item 
+              [icon]="item.icon" 
+              [label]="item.label" 
+              [route]="item.route"
+              [active]="item.active"/>
+          }
+        </nav>
         </div>
-      </aside>
-    }
+      </div>
+    </aside>
   `
 })
 export class SidebarComponent {

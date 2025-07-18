@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { UiFacade } from '../../../../ui/ui.facade';
+import { trigger, style, transition, animate } from '@angular/animations';
 import { DashboardIconComponent } from '../../ui/icons/dashboard-icon.component';
 import { LeadsIconComponent } from '../../ui/icons/leads-icon.component';
 import { ContactsIconComponent } from '../../ui/icons/contacts-icon.component';
@@ -12,10 +13,25 @@ import { SettingsIconComponent } from '../../ui/icons/settings-icon.component';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DashboardIconComponent, LeadsIconComponent, ContactsIconComponent, ProjectsIconComponent, AnalyticsIconComponent, SettingsIconComponent],
+  animations: [
+    trigger('slideIn', [
+      transition(':enter', [
+        style({ transform: 'translateX(-100%)' }),
+        animate('300ms ease-in-out', style({ transform: 'translateX(0%)' }))
+      ]),
+      transition(':leave', [
+        animate('300ms ease-in-out', style({ transform: 'translateX(-100%)' }))
+      ])
+    ])
+  ],
   template: `
-    <aside [class]="sidebarClasses()">
-      <div class="h-full px-3 py-6 overflow-y-auto">
-        <nav class="space-y-2">
+    @if (menuOpen()) {
+      <aside 
+        [@slideIn] 
+        class="w-full md:w-64 h-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md md:border-r border-slate-200 dark:border-slate-700/50 absolute z-10"
+      >
+        <div class="h-full px-3 py-6 overflow-y-auto">
+          <nav class="space-y-2">
           <a 
             href="#" 
             class="flex items-center px-4 py-3 text-slate-700 rounded-xl hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/50 transition-all duration-200 group"
@@ -67,19 +83,14 @@ import { SettingsIconComponent } from '../../ui/icons/settings-icon.component';
               <span class="ml-3 font-medium">Settings</span>
             </a>
           </nav>
+          </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+    }
   `
 })
 export class SidebarComponent {
   private uiFacade = inject(UiFacade);
-  private menuOpen = this.uiFacade.menuOpen();
-  
-  protected sidebarClasses = computed(() => {
-    const baseClasses = 'w-full md:w-64 h-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md md:border-r border-slate-200 dark:border-slate-700/50 transition-transform duration-300 ease-in-out absolute z-10';
-    return this.menuOpen() 
-      ? `${baseClasses} transform translate-x-0`
-      : `${baseClasses} transform -translate-x-full`;
-  });
+  protected menuOpen = this.uiFacade.menuOpen();
+
 }

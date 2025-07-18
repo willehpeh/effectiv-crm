@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { UiFacade } from '../../../../../ui/ui.facade';
 import { DashboardIconComponent } from '../../../ui/icons/dashboard-icon.component';
 import { LeadsIconComponent } from '../../../ui/icons/leads-icon.component';
 import { ContactsIconComponent } from '../../../ui/icons/contacts-icon.component';
@@ -27,6 +28,7 @@ export type SidebarIcon = 'dashboard' | 'leads' | 'contacts' | 'projects' | 'ana
       [routerLink]="route()"
       [class]="linkClasses()"
       [attr.aria-current]="active() ? 'page' : null"
+      (click)="onMenuItemClick()"
     >
       @switch (icon()) {
         @case ('dashboard') {
@@ -53,6 +55,8 @@ export type SidebarIcon = 'dashboard' | 'leads' | 'contacts' | 'projects' | 'ana
   `
 })
 export class SidebarMenuItemComponent {
+  private uiFacade = inject(UiFacade);
+  
   icon = input.required<SidebarIcon>();
   label = input.required<string>();
   route = input<string>('#');
@@ -79,5 +83,18 @@ export class SidebarMenuItemComponent {
 
     return this.active() ? `${baseClasses} ${activeClasses}` : baseClasses;
   });
+
+  private isMobile(): boolean {
+    // Check if screen width is below md breakpoint (768px)
+    return window.innerWidth < 768;
+  }
+
+  protected onMenuItemClick(): void {
+    // Close sidebar when menu item is clicked, but only on mobile devices
+    // On desktop, keep the sidebar open for better UX
+    if (this.isMobile() && this.uiFacade.menuOpen()()) {
+      this.uiFacade.toggleMenu();
+    }
+  }
 }
 

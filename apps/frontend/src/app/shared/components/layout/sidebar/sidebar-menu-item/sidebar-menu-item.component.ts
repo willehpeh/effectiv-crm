@@ -66,8 +66,7 @@ export class SidebarMenuItemComponent {
   active = input<boolean>(false);
 
   protected routerActiveOptions = computed(() => {
-    // Dashboard should be exact match to avoid conflicts with root redirect
-    return this.route() === '/dashboard' ? { exact: true } : { exact: false };
+    return { exact: this.route() === '/dashboard' };
   });
 
   protected linkClasses = computed(() => {
@@ -86,13 +85,10 @@ export class SidebarMenuItemComponent {
   });
 
   private isMobile(): boolean {
-    // Check if screen width is below md breakpoint (768px)
     return window.innerWidth < 768;
   }
 
   protected onMenuItemClick(): void {
-    // Close sidebar when menu item is clicked, but only on mobile devices
-    // On desktop, keep the sidebar open for better UX
     if (this.isMobile() && this.uiFacade.menuOpen()()) {
       this.uiFacade.toggleMenu();
     }

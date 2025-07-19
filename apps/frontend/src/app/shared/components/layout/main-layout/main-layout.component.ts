@@ -24,7 +24,7 @@ import { RouterOutlet } from '@angular/router';
           <app-sidebar/>
         </div>
         
-        <main class="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-12 transition-all duration-300 ease-in-out">
+        <main class="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-in-out">
           <router-outlet/>
         </main>
         

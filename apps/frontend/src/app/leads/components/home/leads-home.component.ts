@@ -19,7 +19,7 @@ import { RouterLink } from '@angular/router';
 				<app-button
 						type="button"
 						variant="primary"
-						size="md"
+						size="sm"
             routerLink="new"
 				>
 					New Lead

@@ -26,9 +26,10 @@ export type SidebarIcon = 'dashboard' | 'leads' | 'contacts' | 'projects' | 'ana
   ],
   template: `
     <a 
+      [class]="linkClasses()"
       [routerLink]="route()"
-      routerLinkActive="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-700/50"
-      class="flex items-center px-4 py-3 text-slate-700 rounded-xl hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+      routerLinkActive="text-emerald-700 dark:text-emerald-300 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-700/50"
+      [routerLinkActiveOptions]="routerActiveOptions()"
       [attr.aria-current]="active() ? 'page' : null"
       (click)="onMenuItemClick()"
     >
@@ -64,23 +65,24 @@ export class SidebarMenuItemComponent {
   route = input<string>('#');
   active = input<boolean>(false);
 
+  protected routerActiveOptions = computed(() => {
+    // Dashboard should be exact match to avoid conflicts with root redirect
+    return this.route() === '/dashboard' ? { exact: true } : { exact: false };
+  });
+
   protected linkClasses = computed(() => {
-    return 'flex items-center px-4 py-3 text-slate-700 rounded-xl hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/50 border';
+    return 'flex items-center px-4 py-3 text-slate-700 rounded-xl hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/50 transition-all duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900';
   });
 
   protected iconClasses = computed(() => {
     const baseClasses = 'w-5 h-5';
     const defaultClasses = 'text-slate-500 transition duration-200 group-hover:text-emerald-600 dark:text-slate-400 dark:group-hover:text-emerald-400';
-    const activeClasses = 'text-emerald-600 dark:text-emerald-400';
 
-    return this.active() ? `${baseClasses} ${activeClasses}` : `${baseClasses} ${defaultClasses}`;
+    return `${baseClasses} ${defaultClasses}`;
   });
 
   protected labelClasses = computed(() => {
-    const baseClasses = 'ml-3 font-medium';
-    const activeClasses = 'text-emerald-700 dark:text-emerald-300';
-
-    return this.active() ? `${baseClasses} ${activeClasses}` : baseClasses;
+    return 'ml-3 font-medium';
   });
 
   private isMobile(): boolean {

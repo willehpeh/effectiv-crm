@@ -2,28 +2,28 @@ import { Route } from '@angular/router';
 
 export const appRoutes: Route[] = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { 
-    path: 'dashboard', 
-    loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent)
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./dashboard/dashboard.routes').then(m => m.dashboardRoutes)
   },
-  { 
-    path: 'leads', 
-    loadComponent: () => import('./pages/leads/leads.component').then(m => m.LeadsComponent)
+  {
+    path: 'leads',
+    loadChildren: () => import('./leads/leads.routes').then(m => m.leadsRoutes)
   },
-  { 
-    path: 'contacts', 
-    loadComponent: () => import('./pages/contacts/contacts.component').then(m => m.ContactsComponent)
+  {
+    path: 'contacts',
+    loadChildren: () => import('./contacts/contacts.routes').then(m => m.contactsRoutes)
   },
-  { 
-    path: 'projects', 
-    loadComponent: () => import('./pages/projects/projects.component').then(m => m.ProjectsComponent)
+  {
+    path: 'projects',
+    loadChildren: () => import('./projects/projects.routes').then(m => m.projectsRoutes)
   },
-  { 
-    path: 'analytics', 
-    loadComponent: () => import('./pages/analytics/analytics.component').then(m => m.AnalyticsComponent)
+  {
+    path: 'analytics',
+    loadChildren: () => import('./analytics/analytics.routes').then(m => m.analyticsRoutes)
   },
-  { 
-    path: 'settings', 
-    loadComponent: () => import('./pages/settings/settings.component').then(m => m.SettingsComponent)
+  {
+    path: 'settings',
+    loadChildren: () => import('./settings/settings.routes').then(m => m.settingsRoutes)
   }
 ];

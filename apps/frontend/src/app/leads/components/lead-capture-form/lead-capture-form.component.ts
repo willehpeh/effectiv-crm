@@ -24,28 +24,36 @@ import { CardSubheadingDirective } from '../../../shared/components/ui/card/card
 			</app-card-header>
 
 			<form class="space-y-8">
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-					<div>
-						<app-label htmlFor="firstName" [required]="true">
-							First Name
-						</app-label>
-						<app-input
-								id="firstName"
-								type="text"
-								placeholder="James"
-						></app-input>
-					</div>
+				<div>
+					<app-label htmlFor="company">
+						Company
+					</app-label>
+					<app-input
+							id="company"
+							type="text"
+							placeholder="Better Fries Ltd."
+					></app-input>
+				</div>
+				<div>
+					<app-label htmlFor="firstName" [required]="true">
+						First Name
+					</app-label>
+					<app-input
+							id="firstName"
+							type="text"
+							placeholder="James"
+					></app-input>
+				</div>
 
-					<div>
-						<app-label htmlFor="lastName" [required]="true">
-							Last Name
-						</app-label>
-						<app-input
-								id="lastName"
-								type="text"
-								placeholder="Anderson"
-						></app-input>
-					</div>
+				<div>
+					<app-label htmlFor="lastName" [required]="true">
+						Last Name
+					</app-label>
+					<app-input
+							id="lastName"
+							type="text"
+							placeholder="Anderson"
+					></app-input>
 				</div>
 
 				<div>
@@ -70,16 +78,6 @@ import { CardSubheadingDirective } from '../../../shared/components/ui/card/card
 					></app-input>
 				</div>
 
-				<div>
-					<app-label htmlFor="company">
-						Company
-					</app-label>
-					<app-input
-							id="company"
-							type="text"
-							placeholder="Better Fries Ltd."
-					></app-input>
-				</div>
 
 				<div>
 					<app-label htmlFor="jobTitle">

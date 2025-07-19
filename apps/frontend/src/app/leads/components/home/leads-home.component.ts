@@ -1,12 +1,14 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { ButtonComponent } from '../../shared/components/ui/button/button.component';
+import { ButtonComponent } from '../../../shared/components/ui/button/button.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-leads',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    ButtonComponent
+    ButtonComponent,
+    RouterLink
   ],
   template: `
 		<div class="p-8">
@@ -16,8 +18,9 @@ import { ButtonComponent } from '../../shared/components/ui/button/button.compon
 				</h1>
 				<app-button
 						type="button"
-            variant="primary"
-            size="md"
+						variant="primary"
+						size="md"
+            routerLink="new"
 				>
 					New Lead
 				</app-button>
@@ -31,5 +34,5 @@ import { ButtonComponent } from '../../shared/components/ui/button/button.compon
 		</div>
   `
 })
-export class LeadsComponent {
+export class LeadsHomeComponent {
 }

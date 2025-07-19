@@ -129,7 +129,7 @@ This thread documents comprehensive improvements to the CRM application's naviga
 
 ## Files Created
 - `apps/frontend/src/app/pages/dashboard/dashboard.component.ts`
-- `apps/frontend/src/app/pages/leads/leads.component.ts`  
+- `apps/frontend/src/app/pages/leads/leads-home.component.ts`  
 - `apps/frontend/src/app/pages/contacts/contacts.component.ts`
 - `apps/frontend/src/app/pages/projects/projects.component.ts`
 - `apps/frontend/src/app/pages/analytics/analytics.component.ts`

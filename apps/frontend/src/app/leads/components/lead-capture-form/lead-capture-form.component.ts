@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CardComponent } from '../../../shared/components/ui/card/card.component';
-import { LabelComponent } from '../../../shared/components/ui/label/label.component';
-import { InputComponent } from '../../../shared/components/ui/input/input.component';
-import { ButtonComponent } from '../../../shared/components/ui/button/button.component';
-import { CardHeadingDirective } from '../../../shared/components/ui/card/card-heading.directive';
-import { CardHeaderComponent } from '../../../shared/components/ui/card/card-header.component';
-import { TextareaComponent } from '../../../shared/components/ui/textarea/textarea.component';
-import { SelectComponent, SelectOption } from '../../../shared/components/ui/select/select.component';
+import { CardComponent } from '../../../core/ui/card/card.component';
+import { LabelComponent } from '../../../core/ui/label/label.component';
+import { InputComponent } from '../../../core/ui/input/input.component';
+import { ButtonComponent } from '../../../core/ui/button/button.component';
+import { CardHeadingDirective } from '../../../core/ui/card/card-heading.directive';
+import { CardHeaderComponent } from '../../../core/ui/card/card-header.component';
+import { TextareaComponent } from '../../../core/ui/textarea/textarea.component';
+import { SelectComponent, SelectOption } from '../../../core/ui/select/select.component';
 
 import { Router } from '@angular/router';
 
@@ -21,12 +21,12 @@ import { Router } from '@angular/router';
 				<h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100">
 					New Lead
 				</h1>
-				<div class="flex gap-3 sm:gap-4 w-full sm:w-auto">
+				<div class="flex gap-3 justify-end sm:flex-row flex-row-reverse sm:gap-4 w-full sm:w-auto">
 					<app-button
 							type="button"
 							variant="outline"
-							size="md"
-							class="flex-1 sm:flex-none"
+							size="sm"
+							class="flex-none"
 							(click)="onCancel()"
 					>
 						Cancel
@@ -34,8 +34,8 @@ import { Router } from '@angular/router';
 					<app-button
 							type="submit"
 							variant="primary"
-							size="md"
-							class="flex-1 sm:flex-none"
+							size="sm"
+							class="flex-none"
 							(click)="onSave()"
 					>
 						Save Lead

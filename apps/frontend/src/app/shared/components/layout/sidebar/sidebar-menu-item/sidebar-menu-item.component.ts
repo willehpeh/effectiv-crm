@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { UiFacade } from '../../../../../ui/ui.facade';
-import { DashboardIconComponent } from '../../../ui/icons/dashboard-icon.component';
-import { LeadsIconComponent } from '../../../ui/icons/leads-icon.component';
-import { ContactsIconComponent } from '../../../ui/icons/contacts-icon.component';
-import { ProjectsIconComponent } from '../../../ui/icons/projects-icon.component';
-import { AnalyticsIconComponent } from '../../../ui/icons/analytics-icon.component';
-import { SettingsIconComponent } from '../../../ui/icons/settings-icon.component';
+import { UiFacade } from '../../../../../core/ui/ui.facade';
+import { DashboardIconComponent } from '../../../../../core/ui/icons/dashboard-icon.component';
+import { LeadsIconComponent } from '../../../../../core/ui/icons/leads-icon.component';
+import { ContactsIconComponent } from '../../../../../core/ui/icons/contacts-icon.component';
+import { ProjectsIconComponent } from '../../../../../core/ui/icons/projects-icon.component';
+import { AnalyticsIconComponent } from '../../../../../core/ui/icons/analytics-icon.component';
+import { SettingsIconComponent } from '../../../../../core/ui/icons/settings-icon.component';
 
 export type SidebarIcon = 'dashboard' | 'leads' | 'contacts' | 'projects' | 'analytics' | 'settings';
 

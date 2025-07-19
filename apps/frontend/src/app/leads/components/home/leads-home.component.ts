@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { ButtonComponent } from '../../../shared/components/ui/button/button.component';
+import { ButtonComponent } from '../../../core/ui/button/button.component';
 import { RouterLink } from '@angular/router';
 
 @Component({

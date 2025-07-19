@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { ThemeToggleComponent } from '../../ui/theme-toggle/theme-toggle.component';
-import { MenuToggleComponent } from '../../ui/menu-toggle/menu-toggle.component';
+import { ThemeToggleComponent } from '../../../../core/ui/theme-toggle/theme-toggle.component';
+import { MenuToggleComponent } from '../../../../core/ui/menu-toggle/menu-toggle.component';
 
 @Component({
   selector: 'app-header',

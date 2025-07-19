@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import { UiFacade } from '../../../../ui/ui.facade';
+import { UiFacade } from '../ui.facade';
 import { MenuIconComponent } from '../icons/menu-icon.component';
 
 @Component({

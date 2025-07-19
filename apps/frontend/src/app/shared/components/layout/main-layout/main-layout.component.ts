@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import { UiFacade } from '../../../../ui/ui.facade';
+import { UiFacade } from '../../../../core/ui/ui.facade';
 import { RouterOutlet } from '@angular/router';
 
 @Component({

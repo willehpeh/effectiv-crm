@@ -6,8 +6,8 @@ import {
 import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { appRoutes } from './app.routes';
-import { UiFacade } from './ui/ui.facade';
-import { InMemoryUiFacade } from './ui/in-memory.ui.facade';
+import { UiFacade } from './core/ui/ui.facade';
+import { InMemoryUiFacade } from './core/ui/in-memory.ui.facade';
 
 export const appConfig: ApplicationConfig = {
   providers: [

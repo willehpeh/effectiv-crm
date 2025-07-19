@@ -15,14 +15,7 @@ import { RouterOutlet } from '@angular/router';
       
       <div class="flex h-[calc(100vh-64px)] relative" [class.overflow-hidden]="menuOpen()">
         
-        <div 
-          class="flex-shrink-0 h-full transition-width duration-300 ease-in-out md:relative absolute z-50"
-          [class.w-0]="!menuOpen()"
-          [class.w-full]="menuOpen()"
-          [class.md:w-64]="menuOpen()"
-        >
-          <app-sidebar/>
-        </div>
+        <app-sidebar/>
         
         <main class="flex-1 overflow-y-auto sm:px-6 lg:px-8 transition-width duration-300 ease-in-out">
           <router-outlet/>

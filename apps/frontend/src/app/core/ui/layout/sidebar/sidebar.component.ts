@@ -12,6 +12,12 @@ import { MenuItem } from './menu-item';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SidebarMenuItemComponent],
+  host: {
+    'class': 'flex-shrink-0 h-full transition-width duration-300 ease-in-out md:relative absolute z-50 block',
+    '[class.w-0]': '!menuOpen()',
+    '[class.w-full]': 'menuOpen()',
+    '[class.md:w-64]': 'menuOpen()'
+  },
   animations: [
     trigger('slideIn', [
       transition(':enter', [

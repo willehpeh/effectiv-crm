@@ -16,16 +16,17 @@ import { Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CardComponent, LabelComponent, InputComponent, ButtonComponent, CardHeadingDirective, CardHeaderComponent, TextareaComponent, SelectComponent],
   template: `
-		<div class="p-8">
-			<div class="flex justify-between items-center mb-8">
-				<h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">
+		<div class="p-4 sm:p-8">
+			<div class="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8">
+				<h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100">
 					New Lead
 				</h1>
-				<div class="flex gap-4">
+				<div class="flex gap-3 sm:gap-4 w-full sm:w-auto">
 					<app-button
 							type="button"
 							variant="outline"
 							size="md"
+							class="flex-1 sm:flex-none"
 							(click)="onCancel()"
 					>
 						Cancel
@@ -34,9 +35,10 @@ import { Router } from '@angular/router';
 							type="submit"
 							variant="primary"
 							size="md"
+							class="flex-1 sm:flex-none"
 							(click)="onSave()"
 					>
-						Save
+						Save Lead
 					</app-button>
 				</div>
 			</div>

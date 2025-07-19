@@ -23,7 +23,7 @@ export class InputComponent {
   variant = input<'default' | 'error'>('default');
 
   inputClasses = computed(() => {
-    const baseClasses = 'w-full rounded-xl border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 backdrop-blur-sm dark:bg-slate-900/50 dark:border-slate-700 dark:text-slate-50 dark:placeholder-slate-500';
+    const baseClasses = 'w-full rounded-xl border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 backdrop-blur-sm dark:bg-slate-900/50 dark:border-slate-700 dark:text-slate-50 dark:placeholder-slate-500';
 
     const sizeClasses = {
       sm: 'px-3 py-2 text-sm',

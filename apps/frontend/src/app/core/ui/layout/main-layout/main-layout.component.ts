@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import { UiFacade } from '../../../../core/ui/ui.facade';
+import { UiFacade } from '../../ui.facade';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -24,7 +24,7 @@ import { RouterOutlet } from '@angular/router';
           <app-sidebar/>
         </div>
         
-        <main class="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 transition-width duration-300 ease-in-out">
+        <main class="flex-1 overflow-y-auto sm:px-6 lg:px-8 transition-width duration-300 ease-in-out">
           <router-outlet/>
         </main>
         

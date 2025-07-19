@@ -7,6 +7,7 @@ import { ContactsIconComponent } from '../../../../../shared/components/icons/co
 import { ProjectsIconComponent } from '../../../../../shared/components/icons/projects-icon.component';
 import { AnalyticsIconComponent } from '../../../../../shared/components/icons/analytics-icon.component';
 import { SettingsIconComponent } from '../../../../../shared/components/icons/settings-icon.component';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 export type SidebarIcon = 'dashboard' | 'leads' | 'contacts' | 'projects' | 'analytics' | 'settings';
 
@@ -29,7 +30,7 @@ export type SidebarIcon = 'dashboard' | 'leads' | 'contacts' | 'projects' | 'ana
       [class]="linkClasses()"
       [routerLink]="route()"
       routerLinkActive="text-emerald-700 dark:text-emerald-300 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-700/50"
-      [routerLinkActiveOptions]="routerActiveOptions()"
+      [routerLinkActiveOptions]="{ exact: false }"
       [attr.aria-current]="active() ? 'page' : null"
       (click)="onMenuItemClick()"
     >
@@ -62,12 +63,8 @@ export class SidebarMenuItemComponent {
 
   icon = input.required<SidebarIcon>();
   label = input.required<string>();
-  route = input<string>('#');
+  route = input.required<string>();
   active = input<boolean>(false);
-
-  protected routerActiveOptions = computed(() => {
-    return { exact: this.route() === '/dashboard' };
-  });
 
   protected linkClasses = computed(() => {
     return 'flex items-center px-4 py-3 text-slate-700 rounded-xl hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/50 transition-all duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900';
@@ -84,8 +81,10 @@ export class SidebarMenuItemComponent {
     return 'ml-3 font-medium';
   });
 
+  private device = inject(DeviceDetectorService);
+
   private isMobile(): boolean {
-    return window.innerWidth < 768;
+    return this.device.isMobile();
   }
 
   protected onMenuItemClick(): void {

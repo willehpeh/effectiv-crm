@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import { UiFacade } from '../../ui.facade';
+import { UiFacade } from '../../facades/ui.facade';
 import { RouterOutlet } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
 

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { UiFacade } from '../../../ui.facade';
+import { UiFacade } from '../../../facades/ui.facade';
 import { DashboardIconComponent } from '../../../../../shared/components/icons/dashboard-icon.component';
 import { LeadsIconComponent } from '../../../../../shared/components/icons/leads-icon.component';
 import { ContactsIconComponent } from '../../../../../shared/components/icons/contacts-icon.component';

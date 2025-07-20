@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, ElementRef, injec
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { UiFacade } from '../../ui.facade';
+import { UiFacade } from '../../facades/ui.facade';
 import { SidebarMenuItemComponent } from './sidebar-menu-item/sidebar-menu-item.component';
 import { MenuItem } from './menu-item';
 

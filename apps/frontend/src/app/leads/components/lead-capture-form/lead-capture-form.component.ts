@@ -62,7 +62,7 @@ import { Router } from '@angular/router';
 							></app-input>
 						</div>
 						<div>
-							<app-label htmlFor="firstName" [required]="true">
+							<app-label htmlFor="firstName">
 								First Name
 							</app-label>
 							<app-input
@@ -73,7 +73,7 @@ import { Router } from '@angular/router';
 						</div>
 
 						<div>
-							<app-label htmlFor="lastName" [required]="true">
+							<app-label htmlFor="lastName">
 								Last Name
 							</app-label>
 							<app-input
@@ -84,7 +84,7 @@ import { Router } from '@angular/router';
 						</div>
 
 						<div>
-							<app-label htmlFor="email" [required]="true">
+							<app-label htmlFor="email">
 								Email Address
 							</app-label>
 							<app-input
@@ -115,7 +115,7 @@ import { Router } from '@angular/router';
 									[options]="leadSourceOptions"
 							></app-select>
 						</div>
-
+            
 						<div>
 							<app-label htmlFor="contactDate">
 								Contact Date
@@ -124,6 +124,16 @@ import { Router } from '@angular/router';
 									id="contactDate"
 									type="date"
 							></app-input>
+						</div>
+            
+						<div>
+							<app-label htmlFor="contactType">
+								Contact Type
+							</app-label>
+							<app-select
+									id="contactType"
+									[options]="contactTypeOptions"
+							></app-select>
 						</div>
 
 						<div>
@@ -151,6 +161,13 @@ export class LeadCaptureFormComponent {
     { value: 'cold-call', label: 'Cold Call' },
     { value: 'trade-show', label: 'Trade Show' },
     { value: 'advertising', label: 'Advertising' },
+    { value: 'other', label: 'Other' }
+  ];
+
+  contactTypeOptions: SelectOption[] = [
+    { value: 'phone', label: 'Phone' },
+    { value: 'email', label: 'Email' },
+    { value: 'in-person', label: 'In Person' },
     { value: 'other', label: 'Other' }
   ];
 

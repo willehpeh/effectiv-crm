@@ -112,7 +112,6 @@ import { Router } from '@angular/router';
 							</app-label>
 							<app-select
 									id="leadSource"
-									placeholder="Select lead source"
 									[options]="leadSourceOptions"
 							></app-select>
 						</div>

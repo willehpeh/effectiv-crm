@@ -10,21 +10,35 @@ export interface SelectOption {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <select 
-      [id]="id()"
-      [class]="selectClasses()"
-      [disabled]="disabled()"
-    >
-      <option value="" disabled selected>{{ placeholder() }}</option>
-      @for (option of options(); track option.value) {
-        <option [value]="option.value">{{ option.label }}</option>
-      }
-    </select>
+    <div class="relative">
+      <select 
+        [id]="id()"
+        [class]="selectClasses()"
+        [disabled]="disabled()"
+      >
+        <option value="" disabled selected>{{ placeholder() }}</option>
+        @for (option of options(); track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+      
+      <!-- Custom dropdown arrow -->
+      <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+        <svg 
+          class="w-5 h-5 text-slate-400 dark:text-slate-500" 
+          [class.opacity-50]="disabled()"
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </div>
+    </div>
   `
 })
 export class SelectComponent {
   id = input<string>('');
-  placeholder = input<string>('Select an option');
+  placeholder = input<string>('');
   disabled = input<boolean>(false);
   options = input<SelectOption[]>([]);
   size = input<'sm' | 'md' | 'lg'>('md');
@@ -34,9 +48,9 @@ export class SelectComponent {
     const baseClasses = 'w-full rounded-xl border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 backdrop-blur-sm dark:bg-slate-900/50 dark:border-slate-700 dark:text-slate-50 appearance-none bg-white dark:bg-slate-900';
 
     const sizeClasses = {
-      sm: 'px-3 py-2 text-sm',
-      md: 'px-4 py-3 text-base',
-      lg: 'px-5 py-4 text-lg'
+      sm: 'pl-3 pr-10 py-2 text-sm',
+      md: 'pl-4 pr-12 py-3 text-base',
+      lg: 'pl-5 pr-14 py-4 text-lg'
     };
 
     const variantClasses = {

@@ -3,7 +3,6 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { UiFacade } from '../../ui.facade';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { SidebarMenuItemComponent } from './sidebar-menu-item/sidebar-menu-item.component';
 import { MenuItem } from './menu-item';
 
@@ -13,56 +12,42 @@ import { MenuItem } from './menu-item';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SidebarMenuItemComponent],
   host: {
-    'class': 'flex-shrink-0 h-full transition-width duration-300 ease-in-out md:relative absolute z-50 block',
-    '[class.w-0]': '!menuOpen()',
-    '[class.w-full]': 'menuOpen()',
-    '[class.md:w-64]': 'menuOpen()'
+    'class': 'flex-shrink-0 w-full md:w-64 h-full transition-width duration-300 ease-in-out md:relative absolute z-50 block',
   },
-  animations: [
-    trigger('slideIn', [
-      transition(':enter', [
-        style({ transform: 'translateX(-100%)' }),
-        animate('300ms ease-in-out', style({ transform: 'translateX(0%)' }))
-      ]),
-      transition(':leave', [
-        animate('300ms ease-in-out', style({ transform: 'translateX(-100%)' }))
-      ])
-    ])
-  ],
   template: `
-    <aside 
-      role="region"
-      aria-label="Main navigation"
-      tabindex="-1"
-      #sidebar
-      class="w-full h-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md md:border-r border-slate-200 dark:border-slate-700/50 transition-opacity duration-300 ease-in-out"
-      [class.opacity-0]="!menuOpen()"
-      [class.opacity-100]="menuOpen()"
-    >
-      <div class="h-full px-3 py-6 overflow-y-auto">
-        <nav class="space-y-2">
-          @for (item of mainMenuItems(); track item.label) {
-            <app-sidebar-menu-item 
-              [icon]="item.icon" 
-              [label]="item.label" 
-              [route]="item.route"
-              [active]="item.active"/>
-          }
-        </nav>
-      
-      <div class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700/50">
-        <nav class="space-y-2">
-          @for (item of settingsMenuItems(); track item.icon) {
-            <app-sidebar-menu-item 
-              [icon]="item.icon" 
-              [label]="item.label" 
-              [route]="item.route"
-              [active]="item.active"/>
-          }
-        </nav>
-        </div>
-      </div>
-    </aside>
+		@if (menuOpen()) {
+			<aside
+					role="region"
+					aria-label="Main navigation"
+					tabindex="-1"
+					#sidebar
+					class="w-full h-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md md:border-r border-slate-200 dark:border-slate-700/50 transition-opacity duration-300 ease-in-out"
+			>
+				<div class="h-full px-3 py-6 overflow-y-auto">
+					<nav class="space-y-2">
+						@for (item of mainMenuItems(); track item.label) {
+							<app-sidebar-menu-item
+									[icon]="item.icon"
+									[label]="item.label"
+									[route]="item.route"
+									[active]="item.active"/>
+						}
+					</nav>
+
+					<div class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700/50">
+						<nav class="space-y-2">
+							@for (item of settingsMenuItems(); track item.icon) {
+								<app-sidebar-menu-item
+										[icon]="item.icon"
+										[label]="item.label"
+										[route]="item.route"
+										[active]="item.active"/>
+							}
+						</nav>
+					</div>
+				</div>
+			</aside>
+		}
   `
 })
 export class SidebarComponent {

@@ -72,8 +72,8 @@ private router = inject(Router);
 protected menuOpen = this.uiFacade.menuOpen();
 
   private sidebar = viewChild<ElementRef<HTMLElement>>('sidebar');
+  private focus = this.uiFacade.menuFocused();
 
-  // Track current route for active state
   private currentRoute = toSignal(
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -82,18 +82,13 @@ protected menuOpen = this.uiFacade.menuOpen();
   );
 
   constructor() {
-    // Focus management: when sidebar opens, focus it for keyboard users
     effect(() => {
-      if (this.menuOpen() && this.sidebar()) {
-        // Small delay to ensure DOM is ready after animation
-        setTimeout(() => {
-          this.sidebar()?.nativeElement.focus();
-        }, 100);
+      if (this.focus() && this.sidebar()) {
+        this.sidebar()?.nativeElement.focus();
       }
     });
   }
 
-  // Base menu items without active state
   private baseMainMenuItems = [
     new MenuItem({ icon: 'dashboard', label: 'Dashboard', route: '/dashboard' }),
     new MenuItem({ icon: 'leads', label: 'Leads', route: '/leads' }),
@@ -106,7 +101,6 @@ protected menuOpen = this.uiFacade.menuOpen();
     new MenuItem({ icon: 'settings', label: 'Settings', route: '/settings' }),
   ];
 
-  // Computed menu items with dynamic active state
   protected mainMenuItems = computed(() => {
     const currentUrl = (this.currentRoute() as NavigationEnd)?.url || '/';
     return this.baseMainMenuItems.map(item =>

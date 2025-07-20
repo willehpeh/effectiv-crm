@@ -17,11 +17,11 @@ import { Router } from '@angular/router';
   imports: [CardComponent, LabelComponent, InputComponent, ButtonComponent, CardHeadingDirective, CardHeaderComponent, TextareaComponent, SelectComponent],
   template: `
 			<div class="py-4 sm:py-8 sticky top-0 z-30 bg-slate-50 dark:bg-slate-950">
-				<div class="px-4 flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
+				<div class="px-4 flex justify-between">
 					<h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100">
 						New Lead
 					</h1>
-					<div class="flex gap-3 justify-end sm:flex-row flex-row-reverse sm:gap-4 w-full sm:w-auto">
+					<div class="flex gap-3 justify-end sm:gap-4 sm:w-auto">
 						<app-button
 								type="button"
 								variant="outline"
@@ -38,7 +38,7 @@ import { Router } from '@angular/router';
 								class="flex-none"
 								(click)="onSave()"
 						>
-							Save Lead
+							Save
 						</app-button>
 					</div>
 				</div>

@@ -1,4 +1,5 @@
-import { Component, ChangeDetectionStrategy, computed, input, output } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, input, signal, forwardRef } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 export interface RadioOption {
   value: string;
@@ -9,6 +10,13 @@ export interface RadioOption {
   selector: 'app-radio-group',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => RadioGroupComponent),
+      multi: true
+    }
+  ],
   template: `
     <div [class]="containerClasses()">
       @for (option of options(); track option.value) {
@@ -18,9 +26,10 @@ export interface RadioOption {
             [name]="name()"
             [value]="option.value"
             [checked]="value() === option.value"
-            [disabled]="disabled()"
+            [disabled]="isDisabled()"
             [class]="radioClasses()"
             (change)="onValueChange(option.value)"
+            (blur)="onTouched()"
           />
           <span [class]="textClasses()">{{ option.label }}</span>
         </label>
@@ -28,15 +37,21 @@ export interface RadioOption {
     </div>
   `
 })
-export class RadioGroupComponent {
+export class RadioGroupComponent implements ControlValueAccessor {
   name = input.required<string>();
   options = input<RadioOption[]>([]);
-  value = input<string>('');
-  disabled = input<boolean>(false);
   orientation = input<'horizontal' | 'vertical'>('horizontal');
   size = input<'sm' | 'md' | 'lg'>('md');
-  
-  valueChange = output<string>();
+
+  value = signal<string>('');
+  isDisabled = signal<boolean>(false);
+
+  protected onChange = (value: string) => {
+    // required method for ControlValueAccessor
+  };
+  protected onTouched = () => {
+    // required method for ControlValueAccessor
+  };
 
   containerClasses = computed(() => {
     const baseClasses = 'flex gap-4';
@@ -49,7 +64,7 @@ export class RadioGroupComponent {
 
   labelClasses = computed(() => {
     const baseClasses = 'flex items-center gap-2 cursor-pointer transition-all duration-200';
-    const disabledClasses = this.disabled() ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-80';
+    const disabledClasses = this.isDisabled() ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-80';
     return `${baseClasses} ${disabledClasses}`;
   });
 
@@ -64,7 +79,7 @@ export class RadioGroupComponent {
 
     const colorClasses = 'border-slate-300 text-emerald-600 focus:border-emerald-500 focus:ring-emerald-500/30 dark:border-slate-600 dark:text-emerald-400 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/30';
     
-    const disabledClasses = this.disabled() ? 'cursor-not-allowed' : '';
+    const disabledClasses = this.isDisabled() ? 'cursor-not-allowed' : '';
 
     return `${baseClasses} ${sizeClasses[this.size()]} ${colorClasses} ${disabledClasses}`;
   });
@@ -84,8 +99,25 @@ export class RadioGroupComponent {
   });
 
   onValueChange(value: string): void {
-    if (!this.disabled()) {
-      this.valueChange.emit(value);
+    if (!this.isDisabled()) {
+      this.value.set(value);
+      this.onChange(value);
     }
+  }
+
+  writeValue(value: string): void {
+    this.value.set(value || '');
+  }
+
+  registerOnChange(fn: (value: string) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.isDisabled.set(isDisabled);
   }
 }

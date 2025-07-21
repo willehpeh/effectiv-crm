@@ -1,26 +1,46 @@
-import { Component, ChangeDetectionStrategy, computed, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, input, signal, forwardRef } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-textarea',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => TextareaComponent),
+      multi: true
+    }
+  ],
   template: `
     <textarea 
       [id]="id()"
       [placeholder]="placeholder()"
       [class]="textareaClasses()"
-      [disabled]="disabled()"
+      [disabled]="isDisabled()"
       [rows]="rows()"
+      [value]="value()"
+      (input)="onInput($event)"
+      (blur)="onTouched()"
     ></textarea>
   `
 })
-export class TextareaComponent {
+export class TextareaComponent implements ControlValueAccessor {
   id = input<string>('');
   placeholder = input<string>('');
-  disabled = input<boolean>(false);
   rows = input<number>(4);
   size = input<'sm' | 'md' | 'lg'>('md');
   variant = input<'default' | 'error'>('default');
+
+  value = signal<string>('');
+  isDisabled = signal<boolean>(false);
+
+  protected onChange = (value: string) => {
+    // required method for ControlValueAccessor
+  };
+  protected onTouched = () => {
+    // required method for ControlValueAccessor
+  };
 
   textareaClasses = computed(() => {
     const baseClasses = 'w-full rounded-xl border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 backdrop-blur-sm dark:bg-slate-900/50 dark:border-slate-700 dark:text-slate-50 dark:placeholder-slate-500 resize-vertical';
@@ -36,8 +56,31 @@ export class TextareaComponent {
       error: 'border-red-300 focus:border-red-500 focus:ring-red-500/30 dark:border-red-600 dark:focus:border-red-400 dark:focus:ring-red-400/30'
     };
 
-    const disabledClasses = this.disabled() ? 'opacity-50 cursor-not-allowed' : '';
+    const disabledClasses = this.isDisabled() ? 'opacity-50 cursor-not-allowed' : '';
 
     return `${baseClasses} ${sizeClasses[this.size()]} ${variantClasses[this.variant()]} ${disabledClasses}`;
   });
+
+  onInput(event: Event): void {
+    const target = event.target as HTMLTextAreaElement;
+    const newValue = target.value;
+    this.value.set(newValue);
+    this.onChange(newValue);
+  }
+
+  writeValue(value: string): void {
+    this.value.set(value || '');
+  }
+
+  registerOnChange(fn: (value: string) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.isDisabled.set(isDisabled);
+  }
 }

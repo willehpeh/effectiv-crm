@@ -68,7 +68,6 @@ export class InputComponent implements ControlValueAccessor {
     this.onChange(newValue);
   }
 
-  // ControlValueAccessor implementation
   writeValue(value: string): void {
     this.value.set(value || '');
   }

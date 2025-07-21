@@ -1,13 +1,17 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CardComponent } from '../../../shared/components/card/card.component';
-import { LabelComponent } from '../../../shared/components/label/label.component';
-import { InputComponent } from '../../../shared/components/input/input.component';
-import { ButtonComponent } from '../../../shared/components/button/button.component';
-import { CardHeadingDirective } from '../../../shared/components/card/card-heading.directive';
-import { CardHeaderComponent } from '../../../shared/components/card/card-header.component';
-import { TextareaComponent } from '../../../shared/components/textarea/textarea.component';
-import { SelectComponent, SelectOption } from '../../../shared/components/select/select.component';
-import { RadioGroupComponent, RadioOption } from '../../../shared/components/radio-group/radio-group.component';
+import {
+  ButtonComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardHeadingDirective,
+  InputComponent,
+  LabelComponent,
+  RadioGroupComponent,
+  RadioOption,
+  SelectComponent,
+  SelectOption,
+  TextareaComponent
+} from '../../../shared/components';
 
 import { Router } from '@angular/router';
 

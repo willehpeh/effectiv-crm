@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, input } from '@angular/core';
-import { LabelComponent } from '../label/label.component';
+import { LabelComponent } from './label/label.component';
 
 @Component({
   selector: 'app-form-field',

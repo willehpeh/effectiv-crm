@@ -42,7 +42,6 @@ import { Router } from '@angular/router';
 								variant="primary"
 								size="sm"
 								class="flex-none"
-								[disabled]="leadForm.invalid"
 								(click)="onSave()"
 						>
 							Save

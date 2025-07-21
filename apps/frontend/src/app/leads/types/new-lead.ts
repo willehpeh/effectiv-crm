@@ -8,4 +8,5 @@ export type NewLead = {
   contactType: string;
   details: string;
   isReferral: boolean;
+  referrer?: string;
 }

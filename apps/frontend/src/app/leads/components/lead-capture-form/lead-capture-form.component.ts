@@ -5,8 +5,8 @@ import {
   CardComponent,
   CardHeaderComponent,
   CardHeadingDirective,
+  FormFieldComponent,
   InputComponent,
-  LabelComponent,
   RadioGroupComponent,
   RadioOption,
   SelectComponent,
@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
   selector: 'app-lead-capture-form',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CardComponent, LabelComponent, InputComponent, ButtonComponent, CardHeadingDirective, CardHeaderComponent, TextareaComponent, SelectComponent, RadioGroupComponent, ReactiveFormsModule],
+  imports: [CardComponent, FormFieldComponent, InputComponent, ButtonComponent, CardHeadingDirective, CardHeaderComponent, TextareaComponent, SelectComponent, RadioGroupComponent, ReactiveFormsModule],
   template: `
 			<div class="py-4 sm:py-8 sticky top-0 z-30 bg-slate-50 dark:bg-slate-950">
 				<div class="px-4 flex justify-between">
@@ -58,54 +58,41 @@ import { Router } from '@angular/router';
 					</app-card-header>
           
 					<div [formGroup]="leadForm" class="space-y-8">
-						<div>
-							<app-label htmlFor="company">
-								Company
-							</app-label>
+						<app-form-field label="Company" fieldId="company">
 							<app-input
 									id="company"
 									type="text"
 									placeholder="Better Fries Ltd."
 									formControlName="company"
 							></app-input>
-						</div>
-						<div>
-							<app-label htmlFor="firstName">
-								First Name
-							</app-label>
+						</app-form-field>
+
+						<app-form-field label="First Name" fieldId="firstName">
 							<app-input
 									id="firstName"
 									type="text"
 									placeholder="James"
 									formControlName="firstName"
 							></app-input>
-						</div>
+						</app-form-field>
 
-						<div>
-							<app-label htmlFor="lastName">
-								Last Name
-							</app-label>
+						<app-form-field label="Last Name" fieldId="lastName">
 							<app-input
 									id="lastName"
 									type="text"
 									placeholder="Anderson"
 									formControlName="lastName"
 							></app-input>
-						</div>
+						</app-form-field>
 
-						<div>
-							<app-label htmlFor="email">
-								Email Address
-							</app-label>
+						<app-form-field label="Email Address" fieldId="email">
 							<app-input
 									id="email"
 									type="email"
 									placeholder="james@example.com"
 									formControlName="email"
 							></app-input>
-						</div>
-
-
+						</app-form-field>
 					</div>
 				</app-card>
 
@@ -117,73 +104,55 @@ import { Router } from '@angular/router';
 					</app-card-header>
 
 					<div [formGroup]="leadForm" class="space-y-8">
-						<div>
-							<app-label htmlFor="leadSource">
-								Lead Source
-							</app-label>
+						<app-form-field label="Lead Source" fieldId="leadSource">
 							<app-select
 									id="leadSource"
 									[options]="leadSourceOptions"
 									formControlName="leadSource"
 							></app-select>
-						</div>
+						</app-form-field>
             
-						<div>
-							<app-label htmlFor="contactDate">
-								Contact Date
-							</app-label>
+						<app-form-field label="Contact Date" fieldId="contactDate">
 							<app-input
 									id="contactDate"
 									type="date"
 									formControlName="contactDate"
 							></app-input>
-						</div>
+						</app-form-field>
             
-						<div>
-							<app-label htmlFor="contactType">
-								Contact Type
-							</app-label>
+						<app-form-field label="Contact Type" fieldId="contactType">
 							<app-select
 									id="contactType"
 									[options]="contactTypeOptions"
 									formControlName="contactType"
 							></app-select>
-						</div>
+						</app-form-field>
 
-						<div>
-							<app-label>
-								Was this lead a referral?
-							</app-label>
+						<app-form-field label="Was this lead a referral?" fieldId="isReferral">
 							<app-radio-group
 									name="isReferral"
 									[options]="referralOptions"
 									formControlName="isReferral"
 							></app-radio-group>
-						</div>
+						</app-form-field>
 
-						<div>
-							<app-label htmlFor="referrer">
-								If so, by whom?
-							</app-label>
+						<app-form-field label="If so, by whom?" fieldId="referrer">
 							<app-input
 									id="referrer"
 									type="text"
 									placeholder="John Smith"
 									formControlName="referrer"
 							></app-input>
-						</div>
+						</app-form-field>
 
-						<div>
-							<app-label htmlFor="leadDetails">
-								Details Shared
-							</app-label>
+						<app-form-field label="Details Shared" fieldId="leadDetails">
 							<app-textarea
 									id="leadDetails"
 									placeholder="Any additional details the lead shared..."
 									[rows]="4"
 									formControlName="leadDetails"
 							></app-textarea>
-						</div>
+						</app-form-field>
 					</div>
 				</app-card>
   `

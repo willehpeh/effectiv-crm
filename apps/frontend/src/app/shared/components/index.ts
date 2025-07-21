@@ -3,6 +3,7 @@ export * from './card/card.component';
 export * from './card/card-header.component';
 export * from './card/card-heading.directive';
 export * from './card/card-subheading.directive';
+export * from './form-field/form-field.component';
 export * from './icons/analytics-icon.component';
 export * from './icons/contacts-icon.component';
 export * from './icons/dashboard-icon.component';

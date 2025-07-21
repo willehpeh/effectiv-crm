@@ -7,6 +7,7 @@ import { CardHeadingDirective } from '../../../shared/components/card/card-headi
 import { CardHeaderComponent } from '../../../shared/components/card/card-header.component';
 import { TextareaComponent } from '../../../shared/components/textarea/textarea.component';
 import { SelectComponent, SelectOption } from '../../../shared/components/select/select.component';
+import { RadioGroupComponent, RadioOption } from '../../../shared/components/radio-group/radio-group.component';
 
 import { Router } from '@angular/router';
 
@@ -14,7 +15,7 @@ import { Router } from '@angular/router';
   selector: 'app-lead-capture-form',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CardComponent, LabelComponent, InputComponent, ButtonComponent, CardHeadingDirective, CardHeaderComponent, TextareaComponent, SelectComponent],
+  imports: [CardComponent, LabelComponent, InputComponent, ButtonComponent, CardHeadingDirective, CardHeaderComponent, TextareaComponent, SelectComponent, RadioGroupComponent],
   template: `
 			<div class="py-4 sm:py-8 sticky top-0 z-30 bg-slate-50 dark:bg-slate-950">
 				<div class="px-4 flex justify-between">
@@ -137,6 +138,29 @@ import { Router } from '@angular/router';
 						</div>
 
 						<div>
+							<app-label>
+								Was this lead a referral?
+							</app-label>
+							<app-radio-group
+									name="isReferral"
+									[options]="referralOptions"
+									[value]="selectedReferralOption"
+									(valueChange)="onReferralChange($event)"
+							></app-radio-group>
+						</div>
+
+						<div>
+							<app-label htmlFor="referrer">
+								If so, by whom?
+							</app-label>
+							<app-input
+									id="referrer"
+									type="text"
+									placeholder="John Smith"
+							></app-input>
+						</div>
+
+						<div>
 							<app-label htmlFor="leadDetails">
 								Details Shared
 							</app-label>
@@ -170,6 +194,17 @@ export class LeadCaptureFormComponent {
     { value: 'in-person', label: 'In Person' },
     { value: 'other', label: 'Other' }
   ];
+
+  referralOptions: RadioOption[] = [
+    { value: 'yes', label: 'Yes' },
+    { value: 'no', label: 'No' }
+  ];
+
+  selectedReferralOption = 'no';
+
+  onReferralChange(value: string): void {
+    this.selectedReferralOption = value;
+  }
 
   onCancel(): void {
     this.router.navigate(['/leads']);

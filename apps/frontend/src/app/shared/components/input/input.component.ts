@@ -1,26 +1,46 @@
-import { Component, ChangeDetectionStrategy, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, signal, forwardRef } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-input',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => InputComponent),
+      multi: true
+    }
+  ],
   template: `
-    <input 
-      [id]="id()"
-      [type]="type()"
-      [placeholder]="placeholder()"
-      [class]="inputClasses()"
-      [disabled]="disabled()"
-    />
+		<input
+				[id]="id()"
+				[type]="type()"
+				[placeholder]="placeholder()"
+				[class]="inputClasses()"
+				[disabled]="isDisabled()"
+				[value]="value()"
+				(input)="onInput($event)"
+				(blur)="onTouched()"
+		/>
   `
 })
-export class InputComponent {
+export class InputComponent implements ControlValueAccessor {
   id = input<string>('');
   type = input<string>('text');
   placeholder = input<string>('');
-  disabled = input<boolean>(false);
   size = input<'sm' | 'md' | 'lg'>('md');
   variant = input<'default' | 'error'>('default');
+
+  value = signal<string>('');
+  isDisabled = signal<boolean>(false);
+
+  protected onChange = (value: string) => {
+    // required method for ControlValueAccessor
+  };
+  protected onTouched = () => {
+    // required method for ControlValueAccessor
+  };
 
   inputClasses = computed(() => {
     const baseClasses = 'w-full rounded-xl border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 backdrop-blur-sm dark:bg-slate-900/50 dark:border-slate-700 dark:text-slate-50 placeholder-slate-500';
@@ -36,8 +56,32 @@ export class InputComponent {
       error: 'border-red-300 focus:border-red-500 focus:ring-red-500/30 dark:border-red-600 dark:focus:border-red-400 dark:focus:ring-red-400/30'
     };
 
-    const disabledClasses = this.disabled() ? 'opacity-50 cursor-not-allowed' : '';
+    const disabledClasses = this.isDisabled() ? 'opacity-50 cursor-not-allowed' : '';
 
     return `${baseClasses} ${sizeClasses[this.size()]} ${variantClasses[this.variant()]} ${disabledClasses}`;
   });
+
+  onInput(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const newValue = target.value;
+    this.value.set(newValue);
+    this.onChange(newValue);
+  }
+
+  // ControlValueAccessor implementation
+  writeValue(value: string): void {
+    this.value.set(value || '');
+  }
+
+  registerOnChange(fn: (value: string) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.isDisabled.set(isDisabled);
+  }
 }

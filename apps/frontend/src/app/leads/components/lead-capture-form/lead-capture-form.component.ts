@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   ButtonComponent,
   CardComponent,
@@ -19,7 +20,7 @@ import { Router } from '@angular/router';
   selector: 'app-lead-capture-form',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CardComponent, LabelComponent, InputComponent, ButtonComponent, CardHeadingDirective, CardHeaderComponent, TextareaComponent, SelectComponent, RadioGroupComponent],
+  imports: [CardComponent, LabelComponent, InputComponent, ButtonComponent, CardHeadingDirective, CardHeaderComponent, TextareaComponent, SelectComponent, RadioGroupComponent, ReactiveFormsModule],
   template: `
 			<div class="py-4 sm:py-8 sticky top-0 z-30 bg-slate-50 dark:bg-slate-950">
 				<div class="px-4 flex justify-between">
@@ -41,6 +42,7 @@ import { Router } from '@angular/router';
 								variant="primary"
 								size="sm"
 								class="flex-none"
+								[disabled]="leadForm.invalid"
 								(click)="onSave()"
 						>
 							Save
@@ -55,7 +57,7 @@ import { Router } from '@angular/router';
 						</h2>
 					</app-card-header>
           
-					<form class="space-y-8">
+					<div [formGroup]="leadForm" class="space-y-8">
 						<div>
 							<app-label htmlFor="company">
 								Company
@@ -64,6 +66,7 @@ import { Router } from '@angular/router';
 									id="company"
 									type="text"
 									placeholder="Better Fries Ltd."
+									formControlName="company"
 							></app-input>
 						</div>
 						<div>
@@ -74,6 +77,7 @@ import { Router } from '@angular/router';
 									id="firstName"
 									type="text"
 									placeholder="James"
+									formControlName="firstName"
 							></app-input>
 						</div>
 
@@ -85,6 +89,7 @@ import { Router } from '@angular/router';
 									id="lastName"
 									type="text"
 									placeholder="Anderson"
+									formControlName="lastName"
 							></app-input>
 						</div>
 
@@ -96,11 +101,12 @@ import { Router } from '@angular/router';
 									id="email"
 									type="email"
 									placeholder="james@example.com"
+									formControlName="email"
 							></app-input>
 						</div>
 
 
-					</form>
+					</div>
 				</app-card>
 
 				<app-card shadow="xl" class="block mt-6 mb-12">
@@ -110,7 +116,7 @@ import { Router } from '@angular/router';
 						</h2>
 					</app-card-header>
 
-					<form class="space-y-8">
+					<div [formGroup]="leadForm" class="space-y-8">
 						<div>
 							<app-label htmlFor="leadSource">
 								Lead Source
@@ -118,6 +124,7 @@ import { Router } from '@angular/router';
 							<app-select
 									id="leadSource"
 									[options]="leadSourceOptions"
+									formControlName="leadSource"
 							></app-select>
 						</div>
             
@@ -128,6 +135,7 @@ import { Router } from '@angular/router';
 							<app-input
 									id="contactDate"
 									type="date"
+									formControlName="contactDate"
 							></app-input>
 						</div>
             
@@ -138,6 +146,7 @@ import { Router } from '@angular/router';
 							<app-select
 									id="contactType"
 									[options]="contactTypeOptions"
+									formControlName="contactType"
 							></app-select>
 						</div>
 
@@ -148,8 +157,7 @@ import { Router } from '@angular/router';
 							<app-radio-group
 									name="isReferral"
 									[options]="referralOptions"
-									[value]="selectedReferralOption"
-									(valueChange)="onReferralChange($event)"
+									formControlName="isReferral"
 							></app-radio-group>
 						</div>
 
@@ -161,6 +169,7 @@ import { Router } from '@angular/router';
 									id="referrer"
 									type="text"
 									placeholder="John Smith"
+									formControlName="referrer"
 							></app-input>
 						</div>
 
@@ -172,14 +181,29 @@ import { Router } from '@angular/router';
 									id="leadDetails"
 									placeholder="Any additional details the lead shared..."
 									[rows]="4"
+									formControlName="leadDetails"
 							></app-textarea>
 						</div>
-					</form>
+					</div>
 				</app-card>
   `
 })
 export class LeadCaptureFormComponent {
   private router = inject(Router);
+  private fb = inject(FormBuilder);
+
+  leadForm: FormGroup = this.fb.group({
+    company: ['', Validators.required],
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    leadSource: ['', Validators.required],
+    contactDate: ['', Validators.required],
+    contactType: ['', Validators.required],
+    isReferral: [false],
+    referrer: [''],
+    leadDetails: ['']
+  });
 
   leadSourceOptions: SelectOption[] = [
     { value: 'website', label: 'Website' },
@@ -200,21 +224,18 @@ export class LeadCaptureFormComponent {
   ];
 
   referralOptions: RadioOption[] = [
-    { value: 'yes', label: 'Yes' },
-    { value: 'no', label: 'No' }
+    { value: true, label: 'Yes' },
+    { value: false, label: 'No' }
   ];
-
-  selectedReferralOption = 'no';
-
-  onReferralChange(value: string): void {
-    this.selectedReferralOption = value;
-  }
 
   onCancel(): void {
     this.router.navigate(['/leads']);
   }
 
   onSave(): void {
-    // TODO: Save lead
+    if (this.leadForm.valid) {
+      console.log('Form values:', this.leadForm.value);
+      // TODO: Save lead
+    }
   }
 }

@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, computed, input, signal, forwardRef
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 export interface RadioOption {
-  value: string;
+  value: string | boolean;
   label: string;
 }
 
@@ -43,10 +43,10 @@ export class RadioGroupComponent implements ControlValueAccessor {
   orientation = input<'horizontal' | 'vertical'>('horizontal');
   size = input<'sm' | 'md' | 'lg'>('md');
 
-  value = signal<string>('');
+  value = signal<string | boolean>('');
   isDisabled = signal<boolean>(false);
 
-  protected onChange = (value: string) => {
+  protected onChange = (value: string | boolean) => {
     // required method for ControlValueAccessor
   };
   protected onTouched = () => {
@@ -70,7 +70,7 @@ export class RadioGroupComponent implements ControlValueAccessor {
 
   radioClasses = computed(() => {
     const baseClasses = 'rounded-full border-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950';
-    
+
     const sizeClasses = {
       sm: 'w-4 h-4',
       md: 'w-5 h-5',
@@ -78,7 +78,7 @@ export class RadioGroupComponent implements ControlValueAccessor {
     };
 
     const colorClasses = 'border-slate-300 text-emerald-600 focus:border-emerald-500 focus:ring-emerald-500/30 dark:border-slate-600 dark:text-emerald-400 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/30';
-    
+
     const disabledClasses = this.isDisabled() ? 'cursor-not-allowed' : '';
 
     return `${baseClasses} ${sizeClasses[this.size()]} ${colorClasses} ${disabledClasses}`;
@@ -86,7 +86,7 @@ export class RadioGroupComponent implements ControlValueAccessor {
 
   textClasses = computed(() => {
     const baseClasses = 'select-none';
-    
+
     const sizeClasses = {
       sm: 'text-sm',
       md: 'text-base',
@@ -98,18 +98,18 @@ export class RadioGroupComponent implements ControlValueAccessor {
     return `${baseClasses} ${sizeClasses[this.size()]} ${colorClasses}`;
   });
 
-  onValueChange(value: string): void {
+  onValueChange(value: string | boolean): void {
     if (!this.isDisabled()) {
       this.value.set(value);
       this.onChange(value);
     }
   }
 
-  writeValue(value: string): void {
-    this.value.set(value || '');
+  writeValue(value: string | boolean): void {
+    this.value.set(value ?? '');
   }
 
-  registerOnChange(fn: (value: string) => void): void {
+  registerOnChange(fn: (value: string | boolean) => void): void {
     this.onChange = fn;
   }
 

@@ -11,7 +11,10 @@ import { LabelComponent } from './label/label.component';
       <app-label [htmlFor]="fieldId()">{{ label() }}</app-label>
       <ng-content></ng-content>
     </div>
-  `
+  `,
+  host: {
+    class: 'block'
+  }
 })
 export class FormFieldComponent {
   label = input.required<string>();

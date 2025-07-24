@@ -1,7 +1,7 @@
-export interface DomainEvent<T extends object> {
+export interface DomainEvent {
   readonly eventId: string;
   readonly aggregateId: string;
   readonly eventType: string;
   readonly occurredOn: Date;
-  readonly payload: T;
+  readonly payload: object;
 }

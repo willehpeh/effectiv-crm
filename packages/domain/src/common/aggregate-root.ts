@@ -3,7 +3,7 @@ import { ValueObject } from './value-object';
 
 export abstract class AggregateRoot {
   private _uncommittedEvents: DomainEvent[] = [];
-  private _version: number = 0;
+  private _version = 0;
 
   abstract id(): ValueObject<string>;
 

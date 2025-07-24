@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CaptureLeadCommand } from './capture-lead.command';
-import { EventStore, LeadCapturedEvent } from '@effectiv-crm/domain';
+import { EventStore, Lead } from '@effectiv-crm/domain';
 
 @CommandHandler(CaptureLeadCommand)
 export class CaptureLeadCommandHandler implements ICommandHandler<CaptureLeadCommand> {
@@ -9,8 +9,11 @@ export class CaptureLeadCommandHandler implements ICommandHandler<CaptureLeadCom
   }
 
   async execute(command: CaptureLeadCommand): Promise<any> {
-    const event = new LeadCapturedEvent('lead-1', 1, command.dto);
-    await this.eventStore.saveEvents('lead-1', [event]);
+    const lead = Lead.captureNew(command.dto);
+    const events = lead.getUncommittedEvents();
+    const leadId = lead.id().value();
+    await this.eventStore.saveEvents(leadId, events);
+    lead.markEventsAsCommitted();
   }
 
 }

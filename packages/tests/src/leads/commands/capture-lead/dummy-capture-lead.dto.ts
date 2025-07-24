@@ -1,6 +1,6 @@
 import { CaptureLeadDto } from '@effectiv-crm/application';
 
-export const dummyCaptureLeadDto: CaptureLeadDto = {
+export const createDummyCaptureLeadDto = (): CaptureLeadDto => ({
   contactInfo: {
     firstName: 'John',
     lastName: 'Doe',
@@ -14,4 +14,4 @@ export const dummyCaptureLeadDto: CaptureLeadDto = {
     referral: false,
     details: 'Interested in premium package'
   }
-};
+});

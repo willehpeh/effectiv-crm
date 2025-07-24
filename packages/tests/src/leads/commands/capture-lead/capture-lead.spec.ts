@@ -1,13 +1,22 @@
 import { FakeEventStore } from '../../../test-doubles/fake.event-store';
-import { CaptureLeadCommand, CaptureLeadCommandHandler, CaptureLeadDto } from '@effectiv-crm/application';
+import { CaptureLeadCommand, CaptureLeadCommandHandler } from '@effectiv-crm/application';
+import { createDummyCaptureLeadDto } from './dummy-capture-lead.dto';
 
 describe('Capture Lead', () => {
-  let dto: CaptureLeadDto;
-  let command: CaptureLeadCommand;
-  let handler: CaptureLeadCommandHandler;
   let eventStore: FakeEventStore;
 
-  it('placeholder', () => {
-    expect(true).toBe(true);
+  beforeEach(() => {
+    eventStore = new FakeEventStore();
+  });
+
+  it('should emit a LeadCaptured event when capturing a lead', async () => {
+    const dto = createDummyCaptureLeadDto();
+    const command = new CaptureLeadCommand(dto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await handler.execute(command);
+
+    expect(eventStore.events).toHaveLength(1);
+    expect(eventStore.events[0].eventType).toBe('LeadCaptured');
   });
 });

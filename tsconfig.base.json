@@ -19,16 +19,16 @@
     "baseUrl": ".",
     "paths": {
       "@effectiv-crm/application": [
-        "libs/application/src/index.ts"
+        "packages/application/src/index.ts"
       ],
       "@effectiv-crm/domain": [
-        "libs/domain/src/index.ts"
+        "packages/domain/src/index.ts"
       ],
       "@effectiv-crm/infrastructure": [
-        "libs/infrastructure/src/index.ts"
+        "packages/infrastructure/src/index.ts"
       ],
       "@effectiv-crm/tests": [
-        "libs/tests/src/index.ts"
+        "packages/tests/src/index.ts"
       ]
     }
   },

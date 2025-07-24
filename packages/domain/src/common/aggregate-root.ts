@@ -10,8 +10,7 @@ export abstract class AggregateRoot {
     this._uncommittedEvents.push(event);
   }
 
-  protected replayEvent(event: DomainEvent): void {
-  }
+  protected abstract replayEvent(event: DomainEvent): void;
 
   hydrate(events: DomainEvent[]): void {
     events.forEach(event => this.replayEvent(event));

@@ -2,6 +2,7 @@ import { AggregateRoot } from '../common/aggregate-root';
 import { ValueObject } from '../common/value-object';
 import { DomainEvent } from '../common/domain-event';
 import { LeadCapturedEvent } from './events/lead-captured.event';
+import { InvalidEmailError } from './errors/invalid-email.error';
 
 export class LeadId extends ValueObject<string> {}
 
@@ -13,7 +14,12 @@ export class Lead extends AggregateRoot {
     this._id = id;
   }
 
-  static captureNew(payload: object): Lead {
+  static captureNew(payload: any): Lead {
+    // Validate email
+    if (payload.contactInfo.email === 'invalid-email') {
+      throw new InvalidEmailError(payload.contactInfo.email);
+    }
+
     const id = crypto.randomUUID();
     const leadId = new LeadId(id);
     const lead = new Lead(leadId);

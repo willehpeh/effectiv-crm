@@ -30,6 +30,17 @@ describe('Capture Lead', () => {
     expect(eventStore.events[1].eventType).toBe('LeadCaptured');
   });
 
+  it('should emit ContactRegistered event with correct firstName in payload', async () => {
+    const dto = createDummyCaptureLeadDto();
+    const command = new CaptureLeadCommand(dto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await handler.execute(command);
+
+    const contactRegisteredEvent = eventStore.events[0];
+    expect((contactRegisteredEvent.payload as any).firstName).toBe('John');
+  });
+
   it('should throw error when capturing lead with invalid email', async () => {
     const dto = createDummyCaptureLeadDto();
     const invalidEmailDto = {

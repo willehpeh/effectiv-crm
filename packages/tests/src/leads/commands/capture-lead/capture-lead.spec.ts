@@ -1,7 +1,7 @@
 import { FakeEventStore } from '../../../test-doubles/fake.event-store';
 import { CaptureLeadCommand, CaptureLeadCommandHandler } from '@effectiv-crm/application';
 import { createDummyCaptureLeadDto } from './dummy-capture-lead.dto';
-import { InvalidEmailError } from '@effectiv-crm/domain';
+import { ContactRegisteredEvent, InvalidEmailError } from '@effectiv-crm/domain';
 
 describe('Capture Lead', () => {
   let eventStore: FakeEventStore;
@@ -37,8 +37,8 @@ describe('Capture Lead', () => {
 
     await handler.execute(command);
 
-    const contactRegisteredEvent = eventStore.events[0];
-    expect((contactRegisteredEvent.payload as any).firstName).toBe('John');
+    const contactRegisteredEvent = eventStore.events[0] as ContactRegisteredEvent;
+    expect(contactRegisteredEvent.payload.firstName).toBe(dto.contactInfo.firstName);
   });
 
   it('should throw error when capturing lead with invalid email', async () => {

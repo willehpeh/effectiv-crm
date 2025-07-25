@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CaptureLeadCommand } from './capture-lead.command';
-import { Contact, EmailAddress, EventStore, FirstName, Lead } from '@effectiv-crm/domain';
+import { Contact, EmailAddress, EventStore, FirstName, LastName, Company, Lead } from '@effectiv-crm/domain';
 
 @CommandHandler(CaptureLeadCommand)
 export class CaptureLeadCommandHandler implements ICommandHandler<CaptureLeadCommand> {
@@ -29,6 +29,8 @@ export class CaptureLeadCommandHandler implements ICommandHandler<CaptureLeadCom
   private registerContact(command: CaptureLeadCommand): Contact {
     const email = EmailAddress.fromString(command.dto.contactInfo.email);
     const firstName = FirstName.fromString(command.dto.contactInfo.firstName);
-    return Contact.register(email, firstName);
+    const lastName = LastName.fromString(command.dto.contactInfo.lastName);
+    const company = command.dto.contactInfo.company ? Company.fromString(command.dto.contactInfo.company) : undefined;
+    return Contact.register({ email: email, firstName: firstName, lastName: lastName, company: company });
   }
 }

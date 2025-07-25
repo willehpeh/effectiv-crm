@@ -3,6 +3,8 @@ import { DomainEvent } from '../../common/domain-event';
 export interface ContactRegisteredPayload {
   email: string;
   firstName: string;
+  lastName: string;
+  company?: string;
 }
 
 export class ContactRegisteredEvent implements DomainEvent {

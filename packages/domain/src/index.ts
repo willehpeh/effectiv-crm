@@ -9,3 +9,5 @@ export * from './leads/value-objects/email-address';
 export * from './contacts/contact';
 export * from './contacts/events/contact-registered.event';
 export * from './contacts/value-objects/first-name';
+export * from './contacts/value-objects/last-name';
+export * from './contacts/value-objects/company';

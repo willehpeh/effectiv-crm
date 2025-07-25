@@ -41,6 +41,46 @@ describe('Capture Lead', () => {
     expect(contactRegisteredEvent.payload.firstName).toBe(dto.contactInfo.firstName);
   });
 
+  it('should emit ContactRegistered event with correct lastName in payload', async () => {
+    const dto = createDummyCaptureLeadDto();
+    const command = new CaptureLeadCommand(dto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await handler.execute(command);
+
+    const contactRegisteredEvent = eventStore.events[0] as ContactRegisteredEvent;
+    expect(contactRegisteredEvent.payload.lastName).toBe(dto.contactInfo.lastName);
+  });
+
+  it('should emit ContactRegistered event with correct company in payload when company provided', async () => {
+    const dto = createDummyCaptureLeadDto();
+    const command = new CaptureLeadCommand(dto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await handler.execute(command);
+
+    const contactRegisteredEvent = eventStore.events[0] as ContactRegisteredEvent;
+    expect(contactRegisteredEvent.payload.company).toBe(dto.contactInfo.company);
+  });
+
+  it('should emit ContactRegistered event with undefined company in payload when company not provided', async () => {
+    const dto = createDummyCaptureLeadDto();
+    const dtoWithoutCompany = {
+      ...dto,
+      contactInfo: {
+        ...dto.contactInfo,
+        company: undefined
+      }
+    };
+    const command = new CaptureLeadCommand(dtoWithoutCompany);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await handler.execute(command);
+
+    const contactRegisteredEvent = eventStore.events[0] as ContactRegisteredEvent;
+    expect(contactRegisteredEvent.payload.company).toBeUndefined();
+  });
+
   it('should throw error when capturing lead with invalid email', async () => {
     const dto = createDummyCaptureLeadDto();
     const invalidEmailDto = {

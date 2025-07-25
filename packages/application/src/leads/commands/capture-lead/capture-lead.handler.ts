@@ -9,19 +9,26 @@ export class CaptureLeadCommandHandler implements ICommandHandler<CaptureLeadCom
   }
 
   async execute(command: CaptureLeadCommand): Promise<void> {
-    const email = EmailAddress.fromString(command.dto.contactInfo.email);
-    const firstName = FirstName.fromString(command.dto.contactInfo.firstName);
-    const contact = Contact.register(email, firstName);
-    const contactEvents = contact.getUncommittedEvents();
-    const contactId = contact.id().value();
-    await this.eventStore.saveEvents(contactId, contactEvents);
-    contact.markEventsAsCommitted();
+    const contact = this.registerContact(command);
+    const lead = this.captureLead(contact);
 
-    const lead = Lead.captureNew(contact.id());
-    const leadEvents = lead.getUncommittedEvents();
-    const leadId = lead.id().value();
-    await this.eventStore.saveEvents(leadId, leadEvents);
+    const allEvents = [
+      ...contact.getUncommittedEvents(),
+      ...lead.getUncommittedEvents()
+    ];
+    await this.eventStore.saveEvents(allEvents);
+
+    contact.markEventsAsCommitted();
     lead.markEventsAsCommitted();
   }
 
+  private captureLead(contact: Contact): Lead {
+    return Lead.captureNew(contact.id());
+  }
+
+  private registerContact(command: CaptureLeadCommand): Contact {
+    const email = EmailAddress.fromString(command.dto.contactInfo.email);
+    const firstName = FirstName.fromString(command.dto.contactInfo.firstName);
+    return Contact.register(email, firstName);
+  }
 }

@@ -1,11 +1,11 @@
 import { FakeEventStore } from '../../../test-doubles/fake.event-store';
 import { CaptureLeadCommand, CaptureLeadCommandHandler } from '@effectiv-crm/application';
-import { DummyCaptureLeadDtoFactory } from './dummy-capture-lead.dto';
+import { CaptureLeadDtoFactory } from './capture-lead-dto.factory';
 import { ContactRegisteredEvent, EmptyNameError, InvalidEmailError } from '@effectiv-crm/domain';
 
 describe('Capture Lead', () => {
   let eventStore: FakeEventStore;
-  const dtoFactory = new DummyCaptureLeadDtoFactory();
+  const dtoFactory = new CaptureLeadDtoFactory();
 
   beforeEach(() => {
     eventStore = new FakeEventStore();

@@ -1,6 +1,6 @@
 import { CaptureLeadDto } from '@effectiv-crm/application';
 
-export class DummyCaptureLeadDtoFactory {
+export class CaptureLeadDtoFactory {
   validDto(): CaptureLeadDto {
     return {
       contactInfo: {
@@ -13,7 +13,6 @@ export class DummyCaptureLeadDtoFactory {
         source: 'Website',
         contactDate: '2025-01-15',
         contactType: 'Online Form',
-        referral: false,
         details: 'Interested in premium package'
       }
     };

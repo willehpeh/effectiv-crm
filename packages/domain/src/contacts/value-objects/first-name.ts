@@ -4,10 +4,11 @@ import { EmptyNameError } from '../../leads/errors/empty-name.error';
 export class FirstName extends ValueObject<string> {
 
   static fromString(value: string): FirstName {
-    if (this.nameIsEmpty(value)) {
+    const trimmedValue = value.trim();
+    if (this.nameIsEmpty(trimmedValue)) {
       throw new EmptyNameError();
     }
-    return new FirstName(value);
+    return new FirstName(trimmedValue);
   }
 
   private static nameIsEmpty(value: string) {

@@ -88,7 +88,7 @@ describe('Capture Lead', () => {
     const command = new CaptureLeadCommand(emptyFirstNameDto);
     const handler = new CaptureLeadCommandHandler(eventStore);
 
-    await expect(handler.execute(command)).rejects.toBeInstanceOf(EmptyNameError);
+    await expectEmptyNameError(handler, command);
   });
 
   it('rejects a lead that has an empty last name', async () => {
@@ -96,6 +96,26 @@ describe('Capture Lead', () => {
     const command = new CaptureLeadCommand(emptyFirstNameDto);
     const handler = new CaptureLeadCommandHandler(eventStore);
 
-    await expect(handler.execute(command)).rejects.toBeInstanceOf(EmptyNameError);
+    await expectEmptyNameError(handler, command);
+  });
+
+  it('rejects a lead that has a first name that is only whitespace', async () => {
+    const whitespaceFirstNameDto = dtoFactory.withFirstName(' \n\t ');
+    const command = new CaptureLeadCommand(whitespaceFirstNameDto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await expectEmptyNameError(handler, command);
+  });
+
+  it('rejects a lead that has a last name that is only whitespace', async () => {
+    const whitespaceFirstNameDto = dtoFactory.withLastName(' \n\t ');
+    const command = new CaptureLeadCommand(whitespaceFirstNameDto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await expectEmptyNameError(handler, command);
   });
 });
+
+function expectEmptyNameError(handler: CaptureLeadCommandHandler, command: CaptureLeadCommand) {
+  return expect(handler.execute(command)).rejects.toBeInstanceOf(EmptyNameError);
+}

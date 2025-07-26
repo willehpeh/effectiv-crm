@@ -3,24 +3,29 @@ import { ValueObject } from '../common/value-object';
 import { DomainEvent } from '../common/domain-event';
 import { LeadCapturedEvent } from './events/lead-captured.event';
 import { ContactId } from '../contacts/contact';
+import { LeadSource } from './value-objects/lead-source';
 
 export class LeadId extends ValueObject<string> {}
 
 export class Lead extends AggregateRoot {
   private readonly _id: LeadId;
   private readonly _contactId: ContactId;
+  private readonly _source: LeadSource;
 
-  private constructor(id: LeadId, contactId: ContactId) {
+  private constructor(id: LeadId,
+                      contactId: ContactId,
+                      source: LeadSource) {
     super();
     this._id = id;
     this._contactId = contactId;
+    this._source = source;
   }
 
-  static captureNew(contactId: ContactId): Lead {
+  static captureNew(contactId: ContactId, source: LeadSource): Lead {
     const id = crypto.randomUUID();
     const leadId = new LeadId(id);
-    const lead = new Lead(leadId, contactId);
-    const event = new LeadCapturedEvent(id, { contactId: contactId.value() });
+    const lead = new Lead(leadId, contactId, source);
+    const event = new LeadCapturedEvent(id, { contactId: contactId.value(), source: 'website' });
     lead.apply(event);
     return lead;
   }

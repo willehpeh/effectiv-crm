@@ -2,6 +2,7 @@ import { DomainEvent } from '../../common/domain-event';
 
 export interface LeadCapturedPayload {
   contactId: string;
+  source: 'website';
 }
 
 export class LeadCapturedEvent implements DomainEvent {

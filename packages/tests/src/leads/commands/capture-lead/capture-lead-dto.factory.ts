@@ -10,7 +10,7 @@ export class CaptureLeadDtoFactory {
         company: 'Example Corp'
       },
       leadDetails: {
-        source: 'Website',
+        source: 'website',
         contactDate: '2025-01-15',
         contactType: 'Online Form',
         details: 'Interested in premium package'
@@ -42,6 +42,13 @@ export class CaptureLeadDtoFactory {
   withLastName(lastName: string): CaptureLeadDto {
     const dto = this.validDto();
     dto.contactInfo.lastName = lastName;
+
+    return dto;
+  }
+
+  withSource(source: string): CaptureLeadDto {
+    const dto = this.validDto();
+    dto.leadDetails.source = source;
 
     return dto;
   }

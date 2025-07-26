@@ -1,7 +1,7 @@
 import { FakeEventStore } from '../../../test-doubles/fake.event-store';
 import { CaptureLeadCommand, CaptureLeadCommandHandler } from '@effectiv-crm/application';
 import { DummyCaptureLeadDtoFactory } from './dummy-capture-lead.dto';
-import { ContactRegisteredEvent, InvalidEmailError } from '@effectiv-crm/domain';
+import { ContactRegisteredEvent, EmptyNameError, InvalidEmailError } from '@effectiv-crm/domain';
 
 describe('Capture Lead', () => {
   let eventStore: FakeEventStore;
@@ -81,5 +81,13 @@ describe('Capture Lead', () => {
     const handler = new CaptureLeadCommandHandler(eventStore);
 
     await expect(handler.execute(command)).rejects.toBeInstanceOf(InvalidEmailError);
+  });
+
+  it('rejects a lead that has an empty first name', async () => {
+    const emptyFirstNameDto = dtoFactory.withFirstName('');
+    const command = new CaptureLeadCommand(emptyFirstNameDto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await expect(handler.execute(command)).rejects.toBeInstanceOf(EmptyNameError);
   });
 });

@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CaptureLeadCommand } from './capture-lead.command';
-import { Contact, EmailAddress, EventStore, FirstName, LastName, Company, Lead } from '@effectiv-crm/domain';
+import { Company, Contact, EmailAddress, EventStore, FirstName, LastName, Lead } from '@effectiv-crm/domain';
 
 @CommandHandler(CaptureLeadCommand)
 export class CaptureLeadCommandHandler implements ICommandHandler<CaptureLeadCommand> {

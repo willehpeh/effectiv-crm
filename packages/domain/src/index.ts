@@ -5,6 +5,7 @@ export * from './leads/events/lead-captured.event';
 export * from './leads/lead';
 export * from './common/event-store';
 export * from './leads/errors/invalid-email.error';
+export * from './leads/errors/empty-name.error';
 export * from './leads/value-objects/email-address';
 export * from './contacts/contact';
 export * from './contacts/events/contact-registered.event';

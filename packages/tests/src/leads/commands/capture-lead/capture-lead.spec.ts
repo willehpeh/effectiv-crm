@@ -90,4 +90,12 @@ describe('Capture Lead', () => {
 
     await expect(handler.execute(command)).rejects.toBeInstanceOf(EmptyNameError);
   });
+
+  it('rejects a lead that has an empty last name', async () => {
+    const emptyFirstNameDto = dtoFactory.withLastName('');
+    const command = new CaptureLeadCommand(emptyFirstNameDto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await expect(handler.execute(command)).rejects.toBeInstanceOf(EmptyNameError);
+  });
 });

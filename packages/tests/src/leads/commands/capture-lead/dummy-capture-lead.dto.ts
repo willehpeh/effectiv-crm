@@ -39,4 +39,11 @@ export class DummyCaptureLeadDtoFactory {
 
     return dto;
   }
+
+  withLastName(lastName: string): CaptureLeadDto {
+    const dto = this.validDto();
+    dto.contactInfo.lastName = lastName;
+
+    return dto;
+  }
 }

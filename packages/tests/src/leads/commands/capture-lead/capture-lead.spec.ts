@@ -1,17 +1,18 @@
 import { FakeEventStore } from '../../../test-doubles/fake.event-store';
 import { CaptureLeadCommand, CaptureLeadCommandHandler } from '@effectiv-crm/application';
-import { createDummyCaptureLeadDto } from './dummy-capture-lead.dto';
+import { DummyCaptureLeadDtoFactory } from './dummy-capture-lead.dto';
 import { ContactRegisteredEvent, InvalidEmailError } from '@effectiv-crm/domain';
 
 describe('Capture Lead', () => {
   let eventStore: FakeEventStore;
+  const dtoFactory = new DummyCaptureLeadDtoFactory();
 
   beforeEach(() => {
     eventStore = new FakeEventStore();
   });
 
   it('registers the contact details when a lead is captured', async () => {
-    const dto = createDummyCaptureLeadDto();
+    const dto = dtoFactory.validDto();
     const command = new CaptureLeadCommand(dto);
     const handler = new CaptureLeadCommandHandler(eventStore);
 
@@ -21,7 +22,7 @@ describe('Capture Lead', () => {
   });
 
   it('records the newly captured lead', async () => {
-    const dto = createDummyCaptureLeadDto();
+    const dto = dtoFactory.validDto();
     const command = new CaptureLeadCommand(dto);
     const handler = new CaptureLeadCommandHandler(eventStore);
 
@@ -31,7 +32,7 @@ describe('Capture Lead', () => {
   });
 
   it('saves the contact\'s first name', async () => {
-    const dto = createDummyCaptureLeadDto();
+    const dto = dtoFactory.validDto();
     const command = new CaptureLeadCommand(dto);
     const handler = new CaptureLeadCommandHandler(eventStore);
 
@@ -42,7 +43,7 @@ describe('Capture Lead', () => {
   });
 
   it('saves the contact\'s last name', async () => {
-    const dto = createDummyCaptureLeadDto();
+    const dto = dtoFactory.validDto();
     const command = new CaptureLeadCommand(dto);
     const handler = new CaptureLeadCommandHandler(eventStore);
 
@@ -53,7 +54,7 @@ describe('Capture Lead', () => {
   });
 
   it('stores the company name when it is supplied', async () => {
-    const dto = createDummyCaptureLeadDto();
+    const dto = dtoFactory.validDto();
     const command = new CaptureLeadCommand(dto);
     const handler = new CaptureLeadCommandHandler(eventStore);
 
@@ -64,14 +65,7 @@ describe('Capture Lead', () => {
   });
 
   it('leaves the company blank when none is supplied', async () => {
-    const dto = createDummyCaptureLeadDto();
-    const dtoWithoutCompany = {
-      ...dto,
-      contactInfo: {
-        ...dto.contactInfo,
-        company: undefined
-      }
-    };
+    const dtoWithoutCompany = dtoFactory.withNoCompany();
     const command = new CaptureLeadCommand(dtoWithoutCompany);
     const handler = new CaptureLeadCommandHandler(eventStore);
 
@@ -82,14 +76,7 @@ describe('Capture Lead', () => {
   });
 
   it('rejects a lead that has an invalid email address', async () => {
-    const dto = createDummyCaptureLeadDto();
-    const invalidEmailDto = {
-      ...dto,
-      contactInfo: {
-        ...dto.contactInfo,
-        email: 'invalid-email'
-      }
-    };
+    const invalidEmailDto = dtoFactory.withInvalidEmail();
     const command = new CaptureLeadCommand(invalidEmailDto);
     const handler = new CaptureLeadCommandHandler(eventStore);
 

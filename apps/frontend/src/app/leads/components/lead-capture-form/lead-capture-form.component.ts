@@ -109,20 +109,20 @@ import { Router } from '@angular/router';
 							></app-select>
 						</app-form-field>
             
-						<app-form-field label="Contact Date" fieldId="contactDate">
-							<app-input
-									id="contactDate"
-									type="date"
-									formControlName="contactDate"
-							></app-input>
-						</app-form-field>
-
 						<app-form-field label="If referral, by whom?" fieldId="referrer">
 							<app-input
 									id="referrer"
 									type="text"
 									placeholder="John Smith"
 									formControlName="referrer"
+							></app-input>
+						</app-form-field>
+
+						<app-form-field label="Contact Date" fieldId="contactDate">
+							<app-input
+							id="contactDate"
+							type="date"
+							formControlName="contactDate"
 							></app-input>
 						</app-form-field>
             

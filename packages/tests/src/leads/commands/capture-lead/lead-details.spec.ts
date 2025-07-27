@@ -13,7 +13,8 @@ describe('Capture Lead - Lead Details', () => {
 
   it.each([
     'website',
-    'social-media'
+    'social-media',
+    'referral'
   ])('should save the lead source when it is valid', async (source) => {
     const dto = dtoFactory.withSource(source);
     const command = new CaptureLeadCommand(dto);

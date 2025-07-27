@@ -17,7 +17,7 @@ export class LeadSource extends ValueObject<ValidLeadSource> {
   }
 }
 
-const VALID_LEAD_SOURCES = ['website', 'social-media'] as const;
+const VALID_LEAD_SOURCES = ['website', 'social-media', 'referral'] as const;
 
 type ValidLeadSource = typeof VALID_LEAD_SOURCES[number];
 

@@ -11,7 +11,10 @@ describe('Capture Lead - Lead Details', () => {
     eventStore = new FakeEventStore();
   });
 
-  it.each(['website'])('should save the lead source when it is valid', async (source) => {
+  it.each([
+    'website',
+    'social-media'
+  ])('should save the lead source when it is valid', async (source) => {
     const dto = dtoFactory.withSource(source);
     const command = new CaptureLeadCommand(dto);
     const handler = new CaptureLeadCommandHandler(eventStore);

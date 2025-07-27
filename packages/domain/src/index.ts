@@ -13,3 +13,4 @@ export * from './contacts/events/contact-registered.event';
 export * from './contacts/value-objects/first-name';
 export * from './contacts/value-objects/last-name';
 export * from './contacts/value-objects/company';
+export { InvalidLeadSourceError } from './leads/errors/invalid-lead-source.error';

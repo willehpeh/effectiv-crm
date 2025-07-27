@@ -25,7 +25,7 @@ export class Lead extends AggregateRoot {
     const id = crypto.randomUUID();
     const leadId = new LeadId(id);
     const lead = new Lead(leadId, contactId, source);
-    const event = new LeadCapturedEvent(id, { contactId: contactId.value(), source: 'website' });
+    const event = new LeadCapturedEvent(id, { contactId: contactId.value(), source: source.value() });
     lead.apply(event);
     return lead;
   }

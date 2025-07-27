@@ -55,4 +55,12 @@ describe('Capture Lead - Lead Details', () => {
 
     await expect(handler.execute(command)).rejects.toBeInstanceOf(InvalidContactDateError);
   });
+
+  it('should reject the lead if the contact date has an invalid month', async () => {
+    const dto = dtoFactory.withContactDate('2025-13-15');
+    const command = new CaptureLeadCommand(dto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await expect(handler.execute(command)).rejects.toBeInstanceOf(InvalidContactDateError);
+  });
 });

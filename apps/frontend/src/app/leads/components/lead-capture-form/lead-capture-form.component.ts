@@ -7,8 +7,6 @@ import {
   CardHeadingDirective,
   FormFieldComponent,
   InputComponent,
-  RadioGroupComponent,
-  RadioOption,
   SelectComponent,
   SelectOption,
   TextareaComponent
@@ -20,7 +18,7 @@ import { Router } from '@angular/router';
   selector: 'app-lead-capture-form',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CardComponent, FormFieldComponent, InputComponent, ButtonComponent, CardHeadingDirective, CardHeaderComponent, TextareaComponent, SelectComponent, RadioGroupComponent, ReactiveFormsModule],
+  imports: [CardComponent, FormFieldComponent, InputComponent, ButtonComponent, CardHeadingDirective, CardHeaderComponent, TextareaComponent, SelectComponent, ReactiveFormsModule],
   template: `
 			<div class="py-4 sm:py-8 sticky top-0 z-30 bg-slate-50 dark:bg-slate-950">
 				<div class="px-4 flex justify-between">
@@ -118,30 +116,22 @@ import { Router } from '@angular/router';
 									formControlName="contactDate"
 							></app-input>
 						</app-form-field>
-            
-						<app-form-field label="Contact Type" fieldId="contactType">
-							<app-select
-									id="contactType"
-									[options]="contactTypeOptions"
-									formControlName="contactType"
-							></app-select>
-						</app-form-field>
 
-						<app-form-field label="Was this lead a referral?" fieldId="isReferral">
-							<app-radio-group
-									name="isReferral"
-									[options]="referralOptions"
-									formControlName="isReferral"
-							></app-radio-group>
-						</app-form-field>
-
-						<app-form-field label="If so, by whom?" fieldId="referrer">
+						<app-form-field label="If referral, by whom?" fieldId="referrer">
 							<app-input
 									id="referrer"
 									type="text"
 									placeholder="John Smith"
 									formControlName="referrer"
 							></app-input>
+						</app-form-field>
+            
+						<app-form-field label="Contact Type" fieldId="contactType">
+							<app-select
+							id="contactType"
+							[options]="contactTypeOptions"
+							formControlName="contactType"
+							></app-select>
 						</app-form-field>
 
 						<app-form-field label="Details Shared" fieldId="leadDetails">
@@ -183,15 +173,10 @@ export class LeadCaptureFormComponent {
   ];
 
   contactTypeOptions: SelectOption[] = [
-    { value: 'phone', label: 'Phone' },
+    { value: 'call', label: 'Call' },
     { value: 'email', label: 'Email' },
     { value: 'in-person', label: 'In Person' },
     { value: 'other', label: 'Other' }
-  ];
-
-  referralOptions: RadioOption[] = [
-    { value: true, label: 'Yes' },
-    { value: false, label: 'No' }
   ];
 
   onCancel(): void {

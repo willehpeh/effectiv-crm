@@ -63,4 +63,34 @@ describe('Capture Lead - Lead Details', () => {
 
     await expect(handler.execute(command)).rejects.toBeInstanceOf(InvalidContactDateError);
   });
+
+  it.each([
+    nextYear(),
+    nextMonth(),
+    tomorrow()
+  ])('should reject the lead if the contact date is in the future: %s', async (futureDate) => {
+    const dto = dtoFactory.withContactDate(futureDate);
+    const command = new CaptureLeadCommand(dto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await expect(handler.execute(command)).rejects.toBeInstanceOf(InvalidContactDateError);
+  });
 });
+
+function tomorrow(): string {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return tomorrow.toISOString().split('T')[0];
+}
+
+function nextMonth(): string {
+  const nextMonth = new Date();
+  nextMonth.setMonth(nextMonth.getMonth() + 1);
+  return nextMonth.toISOString().split('T')[0];
+}
+
+function nextYear() {
+  const nextYear = new Date();
+  nextYear.setFullYear(nextYear.getFullYear() + 1);
+  return nextYear.toISOString().split('T')[0];
+}

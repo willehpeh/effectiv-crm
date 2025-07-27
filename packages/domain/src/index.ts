@@ -8,6 +8,7 @@ export * from './leads/errors/invalid-email.error';
 export * from './leads/errors/empty-name.error';
 export * from './leads/value-objects/email-address';
 export * from './leads/value-objects/lead-source';
+export * from './leads/value-objects/contact-date';
 export * from './contacts/contact';
 export * from './contacts/events/contact-registered.event';
 export * from './contacts/value-objects/first-name';

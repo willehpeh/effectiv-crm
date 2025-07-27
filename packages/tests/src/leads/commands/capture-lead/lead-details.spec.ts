@@ -36,4 +36,15 @@ describe('Capture Lead - Lead Details', () => {
 
     await expect(handler.execute(command)).rejects.toBeInstanceOf(InvalidLeadSourceError);
   });
+
+  it('should save the lead contact date when it is valid', async () => {
+    const dto = dtoFactory.validDto();
+    const command = new CaptureLeadCommand(dto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await handler.execute(command);
+
+    const event = eventStore.events[1] as LeadCapturedEvent;
+    expect(event.payload.contactDate).toBe(dto.leadDetails.contactDate);
+  });
 });

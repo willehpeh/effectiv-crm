@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CaptureLeadCommand } from './capture-lead.command';
 import {
   Company,
-  Contact,
+  Contact, ContactDate,
   EmailAddress,
   EventStore,
   FirstName,
@@ -20,7 +20,8 @@ export class CaptureLeadCommandHandler implements ICommandHandler<CaptureLeadCom
   async execute(command: CaptureLeadCommand): Promise<void> {
     const contact = this.registerContact(command);
     const leadSource = LeadSource.fromString(command.dto.leadDetails.source);
-    const lead = this.captureLead(contact, leadSource);
+    const contactDate = ContactDate.fromString(command.dto.leadDetails.contactDate);
+    const lead = this.captureLead(contact, leadSource, contactDate);
 
     const allEvents = [
       ...contact.getUncommittedEvents(),
@@ -32,8 +33,8 @@ export class CaptureLeadCommandHandler implements ICommandHandler<CaptureLeadCom
     lead.markEventsAsCommitted();
   }
 
-  private captureLead(contact: Contact, source: LeadSource): Lead {
-    return Lead.captureNew(contact.id(), source);
+  private captureLead(contact: Contact, source: LeadSource, contactDate: ContactDate): Lead {
+    return Lead.captureNew(contact.id(), source, contactDate);
   }
 
   private registerContact(command: CaptureLeadCommand): Contact {

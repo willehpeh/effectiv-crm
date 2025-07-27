@@ -52,4 +52,11 @@ export class CaptureLeadDtoFactory {
 
     return dto;
   }
+
+  withContactDate(date: string): CaptureLeadDto {
+    const dto = this.validDto();
+    dto.leadDetails.contactDate = date;
+
+    return dto;
+  }
 }

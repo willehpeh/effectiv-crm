@@ -179,9 +179,7 @@ export class LeadCaptureFormComponent {
     { value: 'referral', label: 'Referral' },
     { value: 'email-campaign', label: 'Email Campaign' },
     { value: 'cold-call', label: 'Cold Call' },
-    { value: 'trade-show', label: 'Trade Show' },
-    { value: 'advertising', label: 'Advertising' },
-    { value: 'other', label: 'Other' }
+    { value: 'conference', label: 'Conference' },
   ];
 
   contactTypeOptions: SelectOption[] = [

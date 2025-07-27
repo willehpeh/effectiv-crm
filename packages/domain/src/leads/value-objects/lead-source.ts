@@ -22,7 +22,8 @@ const VALID_LEAD_SOURCES = [
   'social-media',
   'referral',
   'email-campaign',
-  'cold-call'
+  'cold-call',
+  'conference'
 ] as const;
 
 type ValidLeadSource = typeof VALID_LEAD_SOURCES[number];

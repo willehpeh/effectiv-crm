@@ -15,9 +15,9 @@ export class ContactDate extends ValueObject<string> {
   }
 
   private static isValidDate(value: string): boolean {
+    // try/catch here ensures InvalidContactDateError is returned and not RangeError
     try {
-      const date = new Date(value);
-      return date.toISOString().split('T')[0] === value;
+      return new Date(value).toISOString().split('T')[0] === value;
     } catch {
       return false;
     }

@@ -1,7 +1,7 @@
 import { FakeEventStore } from '../../../test-doubles/fake.event-store';
 import { CaptureLeadDtoFactory } from './capture-lead-dto.factory';
 import { CaptureLeadCommand, CaptureLeadCommandHandler } from '@effectiv-crm/application';
-import { LeadCapturedEvent } from '@effectiv-crm/domain';
+import { InvalidLeadSourceError, LeadCapturedEvent } from '@effectiv-crm/domain';
 
 describe('Capture Lead - Lead Details', () => {
   let eventStore: FakeEventStore;
@@ -23,5 +23,13 @@ describe('Capture Lead - Lead Details', () => {
 
     const leadCapturedEvent = eventStore.events[1] as LeadCapturedEvent;
     expect(leadCapturedEvent.payload.source).toBe(source);
+  });
+
+  it('should reject the lead if the source is not valid', async () => {
+    const dto = dtoFactory.withSource('invalid-source');
+    const command = new CaptureLeadCommand(dto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await expect(handler.execute(command)).rejects.toBeInstanceOf(InvalidLeadSourceError);
   });
 });

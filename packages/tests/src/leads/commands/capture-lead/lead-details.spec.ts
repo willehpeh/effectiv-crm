@@ -1,7 +1,7 @@
 import { FakeEventStore } from '../../../test-doubles/fake.event-store';
 import { CaptureLeadDtoFactory } from './capture-lead-dto.factory';
 import { CaptureLeadCommand, CaptureLeadCommandHandler } from '@effectiv-crm/application';
-import { InvalidLeadSourceError, LeadCapturedEvent } from '@effectiv-crm/domain';
+import { InvalidContactDateError, InvalidLeadSourceError, LeadCapturedEvent } from '@effectiv-crm/domain';
 
 describe('Capture Lead - Lead Details', () => {
   let eventStore: FakeEventStore;
@@ -46,5 +46,13 @@ describe('Capture Lead - Lead Details', () => {
 
     const event = eventStore.events[1] as LeadCapturedEvent;
     expect(event.payload.contactDate).toBe(dto.leadDetails.contactDate);
+  });
+
+  it('should reject the lead if the contact date format is invalid', async () => {
+    const dto = dtoFactory.withContactDate('01/15/2025');
+    const command = new CaptureLeadCommand(dto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await expect(handler.execute(command)).rejects.toBeInstanceOf(InvalidContactDateError);
   });
 });

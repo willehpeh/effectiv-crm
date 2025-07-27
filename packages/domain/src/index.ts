@@ -15,3 +15,4 @@ export * from './contacts/value-objects/first-name';
 export * from './contacts/value-objects/last-name';
 export * from './contacts/value-objects/company';
 export { InvalidLeadSourceError } from './leads/errors/invalid-lead-source.error';
+export { InvalidContactDateError } from './leads/errors/invalid-contact-date.error';

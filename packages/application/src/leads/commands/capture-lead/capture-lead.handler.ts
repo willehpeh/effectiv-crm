@@ -2,13 +2,15 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CaptureLeadCommand } from './capture-lead.command';
 import {
   Company,
-  Contact, ContactDate,
+  Contact,
+  ContactDate,
   EmailAddress,
   EventStore,
   FirstName,
   LastName,
   Lead,
-  LeadSource
+  LeadSource,
+  Referrer
 } from '@effectiv-crm/domain';
 
 @CommandHandler(CaptureLeadCommand)
@@ -34,7 +36,8 @@ export class CaptureLeadCommandHandler implements ICommandHandler<CaptureLeadCom
   private captureLead(contact: Contact, command: CaptureLeadCommand): Lead {
     const source = LeadSource.fromString(command.dto.leadDetails.source);
     const contactDate = ContactDate.fromString(command.dto.leadDetails.contactDate);
-    return Lead.captureNew(contact.id(), source, contactDate);
+    const referrer = Referrer.fromString(command.dto.leadDetails.referrer);
+    return Lead.captureNew({ contactId: contact.id(), source, contactDate, referrer });
   }
 
   private registerContact(command: CaptureLeadCommand): Contact {

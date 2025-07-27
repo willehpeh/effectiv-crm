@@ -49,6 +49,9 @@ export class CaptureLeadDtoFactory {
   withSource(source: string): CaptureLeadDto {
     const dto = this.validDto();
     dto.leadDetails.source = source;
+    if (source === 'referral') {
+      dto.leadDetails.referrer = 'John';
+    }
 
     return dto;
   }
@@ -57,6 +60,13 @@ export class CaptureLeadDtoFactory {
     const dto = this.validDto();
     dto.leadDetails.contactDate = date;
 
+    return dto;
+  }
+
+  withNoReferrer(): CaptureLeadDto {
+    const dto = this.validDto();
+    dto.leadDetails.source = 'referral';
+    dto.leadDetails.referrer = undefined;
     return dto;
   }
 }

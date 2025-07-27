@@ -15,6 +15,10 @@ export class LeadSource extends ValueObject<ValidLeadSource> {
   static fromString(value: string): LeadSource {
     return new LeadSource(value);
   }
+
+  isReferral(): boolean {
+    return this.value() === 'referral';
+  }
 }
 
 const VALID_LEAD_SOURCES = [

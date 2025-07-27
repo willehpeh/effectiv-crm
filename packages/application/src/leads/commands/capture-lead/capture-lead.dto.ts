@@ -9,7 +9,7 @@ export type CaptureLeadDto = {
     source: string,
     contactDate: string,
     contactType: string,
-    referredBy?: string,
+    referrer?: string,
     details: string
   }
 };

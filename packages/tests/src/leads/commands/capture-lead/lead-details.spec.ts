@@ -1,7 +1,7 @@
 import { FakeEventStore } from '../../../test-doubles/fake.event-store';
 import { CaptureLeadDtoFactory } from './capture-lead-dto.factory';
 import { CaptureLeadCommand, CaptureLeadCommandHandler } from '@effectiv-crm/application';
-import { InvalidContactDateError, InvalidLeadSourceError, LeadCapturedEvent } from '@effectiv-crm/domain';
+import { InvalidContactDateError, InvalidLeadSourceError, MissingReferrerError, LeadCapturedEvent } from '@effectiv-crm/domain';
 
 describe('Capture Lead - Lead Details', () => {
   let eventStore: FakeEventStore;
@@ -82,6 +82,14 @@ describe('Capture Lead - Lead Details', () => {
     const handler = new CaptureLeadCommandHandler(eventStore);
 
     await expect(handler.execute(command)).rejects.toBeInstanceOf(InvalidContactDateError);
+  });
+
+  it('should reject the lead if source is referral but no referrer is provided', async () => {
+    const dto = dtoFactory.withNoReferrer();
+    const command = new CaptureLeadCommand(dto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await expect(handler.execute(command)).rejects.toBeInstanceOf(MissingReferrerError);
   });
 });
 

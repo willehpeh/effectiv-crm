@@ -75,6 +75,14 @@ describe('Capture Lead - Lead Details', () => {
 
     await expect(handler.execute(command)).rejects.toBeInstanceOf(InvalidContactDateError);
   });
+
+  it.each(invalidDayDates())('should reject the lead if the contact date has an invalid day: %s', async (invalidDate) => {
+    const dto = dtoFactory.withContactDate(invalidDate);
+    const command = new CaptureLeadCommand(dto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await expect(handler.execute(command)).rejects.toBeInstanceOf(InvalidContactDateError);
+  });
 });
 
 function tomorrow(): string {
@@ -93,4 +101,21 @@ function nextYear() {
   const nextYear = new Date();
   nextYear.setFullYear(nextYear.getFullYear() + 1);
   return nextYear.toISOString().split('T')[0];
+}
+
+function invalidDayDates(): string[] {
+  return [
+    '2024-01-32',
+    '2024-02-30',
+    '2024-03-32',
+    '2024-04-31',
+    '2024-05-32',
+    '2024-06-31',
+    '2024-07-32',
+    '2024-08-32',
+    '2024-09-31',
+    '2024-10-32',
+    '2024-11-31',
+    '2024-12-32'
+  ];
 }

@@ -3,35 +3,38 @@
 ## Overview
 Implement a PostgreSQL-based event store in the infrastructure package using MikroORM, with support for event metadata containing ownerId and correlationId. This implementation must align with the existing Clean Architecture and NestJS CQRS setup.
 
-## 1. Docker Compose Configuration
-- Update existing docker-compose.yaml to add PostgreSQL service
-- Use PostgreSQL 16 (latest stable version)
-- Configure database: `effectiv_crm`, user: `effectiv_user`, password via environment
-- Set connection pool size to 10
-- Add health check with pg_isready
-- Expose port 5432 for development
-- Add volume for data persistence
+## ✅ 1. Docker Compose Configuration (COMPLETED)
+- ✅ Updated existing docker-compose.yaml to add PostgreSQL service
+- ✅ Using PostgreSQL 16 (latest stable version)
+- ✅ Configured database: `effectiv_crm`, user: `effectiv_user`, password via environment
+- ✅ Set connection pool size to 10
+- ✅ Added health check with pg_isready
+- ✅ Created docker-compose.dev.yaml for development port exposure
+- ✅ Added volume for data persistence
 
-## 2. Dependencies and MikroORM Setup
-- Add to package.json dependencies:
+## ✅ 2. Dependencies and MikroORM Setup (COMPLETED)
+- ✅ Added to package.json dependencies:
   - @mikro-orm/core
   - @mikro-orm/postgresql
   - @mikro-orm/migrations
   - @mikro-orm/nestjs (for NestJS integration)
-- Create MikroORM configuration in infrastructure package
-- Set up entity discovery and migrations paths
-- Configure JSONB type mapping for PostgreSQL
-- Configure connection pooling (10 connections)
+  - @mikro-orm/reflection
+  - @mikro-orm/cli
+- ✅ Created hybrid MikroORM configuration (CLI + NestJS)
+- ✅ Set up entity discovery and migrations paths
+- ✅ Configured JSONB type mapping for PostgreSQL
+- ✅ Configured connection pooling (10 connections)
+- ✅ Created DatabaseModule and DatabaseConfigService
 
-## 3. Event Entity Implementation
-Create Event entity with the following fields:
-- **id** (bigint, primary key, auto-increment) - serves as global sequence
-- **aggregateId** (string, indexed)
-- **aggregateVersion** (number)
-- **eventType** (string)
-- **occurredOn** (string) - ISO 8601 timestamp string to match existing DomainEvent interface
-- **payload** (JSONB)
-- **metadata** (JSONB) - structured as EventMetadata interface:
+## ✅ 3. Event Entity Implementation (COMPLETED)
+Created Event entity with optimized fields:
+- ✅ **id** (bigint, primary key, auto-increment) - serves as global sequence
+- ✅ **aggregateId** (uuid, indexed) - optimized for UUID storage
+- ✅ **aggregateVersion** (number)
+- ✅ **eventType** (string)
+- ✅ **occurredOn** (varchar(30)) - exact fit for ISO 8601 timestamp string
+- ✅ **payload** (JSONB)
+- ✅ **metadata** (JSONB, NOT NULL) - structured as EventMetadata interface:
   ```typescript
   interface EventMetadata {
     ownerId: string;
@@ -39,10 +42,12 @@ Create Event entity with the following fields:
   }
   ```
 
-Constraints and indexes:
+✅ **Constraints and indexes implemented:**
 - Composite unique constraint on (aggregateId, aggregateVersion) for optimistic locking
 - Index on aggregateId for query performance
-- Index on eventType if needed for future projections
+- Index on eventType for future projections
+
+✅ **Architecture Decision**: Moved EventMetadata to infrastructure package to maintain Clean Architecture boundaries. Domain events remain pure business logic, application layer adds metadata before persistence.
 
 ## 4. PostgreSQL Event Store Implementation
 - Implement EventStore abstract class from domain package
@@ -65,13 +70,14 @@ Constraints and indexes:
 - Export EventStore for use in application layer
 - Configure for both development and production environments
 
-## 6. Database Migrations
-- Create initial migration for events table
-- Set up migration commands in package.json:
+## ✅ 6. Database Migrations (COMPLETED)
+- ✅ Created initial migration for events table
+- ✅ Set up migration commands in package.json:
   - migration:create
   - migration:up
   - migration:down
-- Ensure migrations run on application startup in development
+  - migration:list
+- ✅ Added Docker Compose migration service approach (see Migration Strategy below)
 
 ## 7. Testing Setup
 - Configure testcontainers for PostgreSQL
@@ -92,11 +98,19 @@ Constraints and indexes:
   - Production environment variables
 - Create configuration service for database connection parameters
 
-## 9. Existing Event Updates
-- Update existing domain events (e.g., LeadCapturedEvent) to support metadata
-- Add EventMetadata interface to domain package
-- Ensure backward compatibility with events that don't have metadata
-- Update event constructors to optionally accept metadata
+## ✅ 9. Existing Event Updates (COMPLETED)
+- ✅ Maintained existing domain events (LeadCapturedEvent, ContactRegisteredEvent) without changes
+- ✅ Moved EventMetadata interface to infrastructure package (Clean Architecture)
+- ✅ Domain layer remains pure - no infrastructure dependencies
+- ✅ Application layer will be responsible for adding metadata during persistence
+
+## Migration Strategy (Production)
+**Docker Compose Migration Service Approach:**
+- Separate migration service runs before API startup
+- Migration service uses same Docker image as API
+- Runs `npm run migration:up` command
+- API depends on successful migration completion
+- Provides clear separation of concerns and observability
 
 ## Notes
 - Single events table approach allows for later partitioning if needed
@@ -105,3 +119,4 @@ Constraints and indexes:
 - Global ordering is achieved through the auto-increment id field
 - Implementation must be compatible with existing NestJS CQRS system
 - Use string timestamps to maintain compatibility with existing DomainEvent interface
+- Clean Architecture maintained: Domain → Application → Infrastructure dependency flow

@@ -25,6 +25,25 @@ services:
       -c wal_buffers=16MB
       -c default_statistics_target=100
 
+  migrations:
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    command: ["npm", "run", "migration:up"]
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=effectiv_user
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-effectiv_password}
+      - DB_NAME=effectiv_crm
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+    profiles:
+      - migration
+
   api:
     build:
       context: .
@@ -38,7 +57,13 @@ services:
         condition: service_started
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://effectiv_user:${POSTGRES_PASSWORD:-effectiv_password}@postgres:5432/effectiv_crm
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=effectiv_user
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-effectiv_password}
+      - DB_NAME=effectiv_crm
+    profiles:
+      - app
 
   frontend:
     build:
@@ -48,6 +73,8 @@ services:
       - "8081:80"
     environment:
       - NODE_ENV=production
+    profiles:
+      - app
 
 volumes:
   postgres_data:

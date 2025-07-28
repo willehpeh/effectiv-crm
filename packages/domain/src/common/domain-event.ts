@@ -4,5 +4,4 @@ export interface DomainEvent {
   readonly eventType: string;
   readonly occurredOn: string;
   readonly payload: object;
-  readonly metadata?: object;
 }

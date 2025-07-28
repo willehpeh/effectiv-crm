@@ -9,7 +9,10 @@
     "migration:list": "npx mikro-orm migration:list",
     "schema:drop": "npx mikro-orm schema:drop --run",
     "schema:create": "npx mikro-orm schema:create --run",
-    "schema:update": "npx mikro-orm schema:update --run"
+    "schema:update": "npx mikro-orm schema:update --run",
+    "deploy:migrate": "docker-compose --profile migration up migrations",
+    "deploy:start": "docker-compose --profile app up -d",
+    "deploy:full": "npm run deploy:migrate && npm run deploy:start"
   },
   "private": true,
   "dependencies": {

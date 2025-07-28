@@ -102,6 +102,17 @@ describe('Capture Lead - Lead Details', () => {
     const leadCapturedEvent = eventStore.events[1] as LeadCapturedEvent;
     expect(leadCapturedEvent.payload.referrer).toBe('John Smith');
   });
+
+  it('should not include referrer field when source is not referral', async () => {
+    const dto = dtoFactory.withSource('website');
+    const command = new CaptureLeadCommand(dto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await handler.execute(command);
+
+    const leadCapturedEvent = eventStore.events[1] as LeadCapturedEvent;
+    expect(leadCapturedEvent.payload).not.toHaveProperty('referrer');
+  });
 });
 
 function tomorrow(): string {

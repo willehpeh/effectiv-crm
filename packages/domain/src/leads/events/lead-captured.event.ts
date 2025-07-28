@@ -4,7 +4,7 @@ export interface LeadCapturedPayload {
   contactId: string;
   source: string;
   contactDate: string;
-  referrer: string;
+  referrer?: string;
 }
 
 export class LeadCapturedEvent implements DomainEvent {

@@ -1,7 +1,7 @@
 import { AggregateRoot } from '../common/aggregate-root';
 import { ValueObject } from '../common/value-object';
 import { DomainEvent } from '../common/domain-event';
-import { LeadCapturedEvent } from './events/lead-captured.event';
+import { LeadCapturedEvent, LeadCapturedPayload } from './events/lead-captured.event';
 import { ContactId } from '../contacts/contact';
 import { LeadSource } from './value-objects/lead-source';
 import { ContactDate } from './value-objects/contact-date';
@@ -49,12 +49,15 @@ export class Lead extends AggregateRoot {
     const id = crypto.randomUUID();
     const leadId = new LeadId(id);
     const lead = new Lead(leadId, contactId, source, contactDate, referrer);
-    const event = new LeadCapturedEvent(id, {
+    const payload: LeadCapturedPayload = {
       contactId: contactId.value(),
       source: source.value(),
-      contactDate: contactDate.value(),
-      referrer: referrer.value()
-    });
+      contactDate: contactDate.value()
+    };
+    if (source.isReferral()) {
+      payload.referrer = referrer.value();
+    }
+    const event = new LeadCapturedEvent(id, payload);
     lead.apply(event);
     return lead;
   }

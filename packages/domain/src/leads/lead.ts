@@ -52,7 +52,8 @@ export class Lead extends AggregateRoot {
     const event = new LeadCapturedEvent(id, {
       contactId: contactId.value(),
       source: source.value(),
-      contactDate: contactDate.value()
+      contactDate: contactDate.value(),
+      referrer: referrer.value()
     });
     lead.apply(event);
     return lead;

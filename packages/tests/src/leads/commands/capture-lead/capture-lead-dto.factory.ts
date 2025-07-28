@@ -69,4 +69,11 @@ export class CaptureLeadDtoFactory {
     dto.leadDetails.referrer = undefined;
     return dto;
   }
+
+  withSourceAndReferrer(source: string, referrer: string): CaptureLeadDto {
+    const dto = this.validDto();
+    dto.leadDetails.source = source;
+    dto.leadDetails.referrer = referrer;
+    return dto;
+  }
 }

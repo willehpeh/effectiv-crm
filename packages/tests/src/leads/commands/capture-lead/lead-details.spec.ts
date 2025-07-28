@@ -91,6 +91,17 @@ describe('Capture Lead - Lead Details', () => {
 
     await expect(handler.execute(command)).rejects.toBeInstanceOf(MissingReferrerError);
   });
+
+  it('should save the referrer when source is referral', async () => {
+    const dto = dtoFactory.withSourceAndReferrer('referral', 'John Smith');
+    const command = new CaptureLeadCommand(dto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await handler.execute(command);
+
+    const leadCapturedEvent = eventStore.events[1] as LeadCapturedEvent;
+    expect(leadCapturedEvent.payload.referrer).toBe('John Smith');
+  });
 });
 
 function tomorrow(): string {

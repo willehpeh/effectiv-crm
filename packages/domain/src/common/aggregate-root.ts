@@ -23,7 +23,7 @@ export abstract class AggregateRoot {
   hydrate(events: DomainEvent[]): void {
     events.forEach(event => {
       this.replayEvent(event);
-      this._version = event.version;
+      this._version = event.aggregateVersion;
     });
   }
 

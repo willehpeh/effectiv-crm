@@ -9,14 +9,14 @@ export interface ContactRegisteredPayload {
 
 export class ContactRegisteredEvent implements DomainEvent {
   readonly aggregateId: string;
-  readonly version: number;
+  readonly aggregateVersion: number;
   readonly eventType = 'ContactRegistered';
   readonly occurredOn: string;
   readonly payload: ContactRegisteredPayload;
 
   constructor(aggregateId: string, payload: ContactRegisteredPayload) {
     this.aggregateId = aggregateId;
-    this.version = 1;
+    this.aggregateVersion = 1;
     this.occurredOn = new Date().toISOString();
     this.payload = payload;
   }

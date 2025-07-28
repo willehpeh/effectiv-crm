@@ -10,14 +10,14 @@ export interface LeadCapturedPayload {
 
 export class LeadCapturedEvent implements DomainEvent {
   readonly aggregateId: string;
-  readonly version: number;
+  readonly aggregateVersion: number;
   readonly eventType: string = 'LeadCaptured';
   readonly occurredOn: string;
   readonly payload: LeadCapturedPayload;
 
   constructor(aggregateId: string, payload: LeadCapturedPayload, version = 1) {
     this.aggregateId = aggregateId;
-    this.version = version;
+    this.aggregateVersion = version;
     this.occurredOn = new Date().toISOString();
     this.payload = payload;
   }

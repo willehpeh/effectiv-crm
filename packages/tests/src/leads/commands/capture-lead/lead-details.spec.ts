@@ -113,6 +113,17 @@ describe('Capture Lead - Lead Details', () => {
     const leadCapturedEvent = eventStore.events[1] as LeadCapturedEvent;
     expect(leadCapturedEvent.payload).not.toHaveProperty('referrer');
   });
+
+  it('should save the lead details', async () => {
+    const dto = dtoFactory.validDto();
+    const command = new CaptureLeadCommand(dto);
+    const handler = new CaptureLeadCommandHandler(eventStore);
+
+    await handler.execute(command);
+
+    const leadCapturedEvent = eventStore.events[1] as LeadCapturedEvent;
+    expect(leadCapturedEvent.payload.details).toBe('Interested in premium package');
+  });
 });
 
 function tomorrow(): string {

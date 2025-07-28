@@ -4,6 +4,7 @@ export interface LeadCapturedPayload {
   contactId: string;
   source: string;
   contactDate: string;
+  details: string;
   referrer?: string;
 }
 

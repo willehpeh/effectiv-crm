@@ -18,11 +18,13 @@ export class Lead extends AggregateRoot {
   private readonly _contactDate: ContactDate;
   private readonly _referrer?: Referrer;
 
-  private constructor(id: LeadId,
-                      contactId: ContactId,
-                      source: LeadSource,
-                      contactDate: ContactDate,
-                      referrer: Referrer) {
+  private constructor({ id, contactId, source, contactDate, referrer }: {
+    id: LeadId,
+    contactId: ContactId,
+    source: LeadSource,
+    contactDate: ContactDate,
+    referrer: Referrer
+  }) {
     super();
     this.validate(source, referrer);
     this._id = id;
@@ -40,19 +42,27 @@ export class Lead extends AggregateRoot {
     }
   }
 
-  static captureNew({ contactId, source, contactDate, referrer }: {
+  static captureNew({ contactId, source, contactDate, referrer, details }: {
     contactId: ContactId,
     source: LeadSource,
     contactDate: ContactDate,
-    referrer: Referrer
+    referrer: Referrer,
+    details: string
   }): Lead {
     const id = crypto.randomUUID();
     const leadId = new LeadId(id);
-    const lead = new Lead(leadId, contactId, source, contactDate, referrer);
+    const lead = new Lead({
+      id: leadId,
+      contactId: contactId,
+      source: source,
+      contactDate: contactDate,
+      referrer: referrer
+    });
     const payload: LeadCapturedPayload = {
       contactId: contactId.value(),
       source: source.value(),
-      contactDate: contactDate.value()
+      contactDate: contactDate.value(),
+      details: details
     };
     if (source.isReferral()) {
       payload.referrer = referrer.value();

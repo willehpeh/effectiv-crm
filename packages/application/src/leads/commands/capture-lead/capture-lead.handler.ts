@@ -37,7 +37,7 @@ export class CaptureLeadCommandHandler implements ICommandHandler<CaptureLeadCom
     const source = LeadSource.fromString(command.dto.leadDetails.source);
     const contactDate = ContactDate.fromString(command.dto.leadDetails.contactDate);
     const referrer = Referrer.fromString(command.dto.leadDetails.referrer);
-    return Lead.captureNew({ contactId: contact.id(), source, contactDate, referrer });
+    return Lead.captureNew({ contactId: contact.id(), source, contactDate, referrer, details: command.dto.leadDetails.details });
   }
 
   private registerContact(command: CaptureLeadCommand): Contact {

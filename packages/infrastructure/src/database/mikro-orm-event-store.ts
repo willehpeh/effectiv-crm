@@ -11,7 +11,7 @@ import {
 import { EventEntity } from './entities/event.entity';
 
 @Injectable()
-export class PostgresEventStore extends EventStore {
+export class MikroOrmEventStore extends EventStore {
   constructor(
     @InjectRepository(EventEntity)
     private readonly eventRepository: EntityRepository<EventEntity>,

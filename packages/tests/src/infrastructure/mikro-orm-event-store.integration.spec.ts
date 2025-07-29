@@ -9,9 +9,9 @@ import {
   EventStore, 
   LeadCapturedEvent 
 } from '@effectiv-crm/domain';
-import { PostgresEventStore, EventEntity } from '@effectiv-crm/infrastructure';
+import { MikroOrmEventStore, EventEntity } from '@effectiv-crm/infrastructure';
 
-describe('PostgresEventStore Integration', () => {
+describe('MikroOrmEventStore Integration', () => {
   let container: StartedPostgreSqlContainer;
   let eventStore: EventStore;
   let module: TestingModule;
@@ -43,7 +43,7 @@ describe('PostgresEventStore Integration', () => {
       providers: [
         {
           provide: EventStore,
-          useClass: PostgresEventStore,
+          useClass: MikroOrmEventStore,
         },
       ],
     }).compile();

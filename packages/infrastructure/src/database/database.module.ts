@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { EventStore } from '@effectiv-crm/domain';
 import { DatabaseConfigService } from './database-config.service';
 import { EventEntity } from './entities/event.entity';
-import { PostgresEventStore } from './postgres-event-store';
+import { MikroOrmEventStore } from './mikro-orm-event-store';
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import { PostgresEventStore } from './postgres-event-store';
     DatabaseConfigService,
     {
       provide: EventStore,
-      useClass: PostgresEventStore,
+      useClass: MikroOrmEventStore,
     },
   ],
   exports: [MikroOrmModule, DatabaseConfigService, EventStore],

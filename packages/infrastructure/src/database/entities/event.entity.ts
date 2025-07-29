@@ -10,7 +10,6 @@ export class EventEntity {
   id!: string;
 
   @Property({ type: 'uuid' })
-  @Index()
   aggregateId!: string;
 
   @Property({ type: 'integer' })

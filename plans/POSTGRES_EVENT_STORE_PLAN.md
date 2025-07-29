@@ -49,26 +49,27 @@ Created Event entity with optimized fields:
 
 ✅ **Architecture Decision**: Moved EventMetadata to infrastructure package to maintain Clean Architecture boundaries. Domain events remain pure business logic, application layer adds metadata before persistence.
 
-## 4. PostgreSQL Event Store Implementation
-- Implement EventStore abstract class from domain package
-- Implement saveEvents method:
-  - Validate event versions for optimistic locking
-  - Batch insert events using MikroORM EntityManager
-  - Handle version conflicts appropriately
-- Implement getEventsForAggregate method:
-  - Query by aggregateId
-  - Order by id (global sequence)
-  - Deserialize JSONB payload and metadata
-  - Map back to DomainEvent interface
-- Handle serialization/deserialization of domain events
-- Implement proper error handling (propagate errors, no circuit breaker initially)
+## ✅ 4. PostgreSQL Event Store Implementation (COMPLETED)
+- ✅ Implement EventStore abstract class from domain package
+- ✅ Implement saveEvents method:
+  - ✅ Validate event versions for optimistic locking
+  - ✅ Batch insert events using MikroORM EntityManager
+  - ✅ Handle version conflicts appropriately
+- ✅ Implement getEventsForAggregate method:
+  - ✅ Query by aggregateId
+  - ✅ Order by id (global sequence)
+  - ✅ Deserialize JSONB payload and metadata
+  - ✅ Map back to DomainEvent interface
+- ✅ Handle serialization/deserialization of domain events
+- ✅ Implement proper error handling (propagate errors, no circuit breaker initially)
+- ✅ Added AuthContext and RequestContext parameters for metadata injection
 
-## 5. NestJS Integration
-- Create EventStoreModule in infrastructure package
-- Register MikroORM module with PostgreSQL configuration
-- Register PostgreSQL EventStore as provider implementing EventStore abstract class
-- Export EventStore for use in application layer
-- Configure for both development and production environments
+## ✅ 5. NestJS Integration (COMPLETED)
+- ✅ Create EventStoreModule in infrastructure package (DatabaseModule)
+- ✅ Register MikroORM module with PostgreSQL configuration
+- ✅ Register PostgreSQL EventStore as provider implementing EventStore abstract class
+- ✅ Export EventStore for use in application layer
+- ✅ Configure for both development and production environments
 
 ## ✅ 6. Database Migrations (COMPLETED)
 - ✅ Created initial migration for events table
@@ -98,11 +99,13 @@ Created Event entity with optimized fields:
   - Production environment variables
 - Create configuration service for database connection parameters
 
-## ✅ 9. Existing Event Updates (COMPLETED)
+## ✅ 9. Context Classes and Event Updates (COMPLETED)
 - ✅ Maintained existing domain events (LeadCapturedEvent, ContactRegisteredEvent) without changes
 - ✅ Moved EventMetadata interface to infrastructure package (Clean Architecture)
 - ✅ Domain layer remains pure - no infrastructure dependencies
 - ✅ Application layer will be responsible for adding metadata during persistence
+- ✅ Created AuthContext and RequestContext classes in domain layer
+- ✅ Updated EventStore interface to accept context parameters
 
 ## Migration Strategy (Production)
 **Docker Compose Migration Service Approach:**

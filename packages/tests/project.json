@@ -15,6 +15,15 @@
       "options": {
         "jestConfig": "packages/tests/jest.config.ts"
       }
+    },
+    "test:integration": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}-integration"
+      ],
+      "options": {
+        "jestConfig": "packages/tests/jest.integration.config.ts"
+      }
     }
   }
 }

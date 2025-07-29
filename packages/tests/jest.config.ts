@@ -7,4 +7,5 @@ export default {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/packages/tests',
+  testPathIgnorePatterns: ['.*\\.integration\\.spec\\.ts$'], // Exclude integration tests
 };

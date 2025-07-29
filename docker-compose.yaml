@@ -3,14 +3,14 @@ services:
     image: postgres:16
     container_name: effectiv-crm-postgres
     environment:
-      POSTGRES_DB: effectiv_crm
-      POSTGRES_USER: effectiv_user
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-effectiv_password}
+      POSTGRES_DB: ${DB_NAME:-effectiv_crm}
+      POSTGRES_USER: ${DB_USER:-effectiv_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-effectiv_password}
       POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U effectiv_user -d effectiv_crm"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-effectiv_user} -d ${DB_NAME:-effectiv_crm}"]
       interval: 10s
       timeout: 5s
       retries: 5

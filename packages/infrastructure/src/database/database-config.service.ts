@@ -19,16 +19,16 @@ export class DatabaseConfigService {
                this.configService.get<string>('POSTGRES_PASSWORD', 'effectiv_password'),
       dbName: this.configService.get<string>('DB_NAME', 'effectiv_crm'),
       
-      // Connection pooling - optimized for application use
+      // Connection pooling - configurable via environment
       pool: {
-        min: 2,
-        max: 10,
-        acquireTimeoutMillis: 30000,
-        createTimeoutMillis: 30000,
-        destroyTimeoutMillis: 5000,
-        idleTimeoutMillis: 30000,
-        reapIntervalMillis: 1000,
-        createRetryIntervalMillis: 200,
+        min: this.configService.get<number>('DB_POOL_MIN', 2),
+        max: this.configService.get<number>('DB_POOL_MAX', 10),
+        acquireTimeoutMillis: this.configService.get<number>('DB_POOL_ACQUIRE_TIMEOUT', 30000),
+        createTimeoutMillis: this.configService.get<number>('DB_POOL_CREATE_TIMEOUT', 30000),
+        destroyTimeoutMillis: this.configService.get<number>('DB_POOL_DESTROY_TIMEOUT', 5000),
+        idleTimeoutMillis: this.configService.get<number>('DB_POOL_IDLE_TIMEOUT', 30000),
+        reapIntervalMillis: this.configService.get<number>('DB_POOL_REAP_INTERVAL', 1000),
+        createRetryIntervalMillis: this.configService.get<number>('DB_POOL_CREATE_RETRY_INTERVAL', 200),
       },
       
       // Entity discovery
@@ -54,7 +54,7 @@ export class DatabaseConfigService {
       extensions: [Migrator],
       
       // Environment-specific settings
-      debug: this.configService.get<string>('NODE_ENV') === 'development',
+      debug: this.configService.get<boolean>('DB_DEBUG', this.configService.get<string>('NODE_ENV') === 'development'),
       
       // Schema settings
       schemaGenerator: {
@@ -70,8 +70,8 @@ export class DatabaseConfigService {
       validate: true,
       strict: true,
       
-      // Auto-load entities in development for convenience
-      ...(this.configService.get<string>('NODE_ENV') === 'development' && {
+      // Auto-load entities - configurable via environment
+      ...(this.configService.get<boolean>('DB_AUTO_LOAD_ENTITIES', this.configService.get<string>('NODE_ENV') === 'development') && {
         autoLoadEntities: true,
       }),
     };

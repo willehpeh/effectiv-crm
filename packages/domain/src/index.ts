@@ -3,6 +3,8 @@ export * from './common/aggregate-root';
 export * from './common/value-object';
 export * from './common/event-store';
 export * from './common/aggregate-version-conflict.error';
+export * from './common/auth-context';
+export * from './common/request-context';
 export * from './leads/events/lead-captured.event';
 export * from './leads/lead';
 export * from './leads/errors/invalid-email.error';

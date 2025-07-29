@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository, EntityManager } from '@mikro-orm/core';
-import { EventStore, DomainEvent, AggregateVersionConflictError } from '@effectiv-crm/domain';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import {
+  AggregateVersionConflictError,
+  AuthContext,
+  DomainEvent,
+  EventStore,
+  RequestContext
+} from '@effectiv-crm/domain';
 import { EventEntity } from './entities/event.entity';
-import { EventMetadata } from './event-metadata';
 
 @Injectable()
 export class PostgresEventStore extends EventStore {
@@ -15,7 +20,7 @@ export class PostgresEventStore extends EventStore {
     super();
   }
 
-  async saveEvents(events: DomainEvent[]): Promise<void> {
+  async saveEvents(events: DomainEvent[], authContext: AuthContext, requestContext: RequestContext): Promise<void> {
     if (events.length === 0) {
       return;
     }
@@ -29,7 +34,9 @@ export class PostgresEventStore extends EventStore {
     }
 
     // If all validations pass, persist the events
-    const eventEntities = events.map(event => this.domainEventToEntity(event));
+    const eventEntities = events.map(event =>
+      this.domainEventToEntity(event, authContext, requestContext)
+    );
 
     for (const entity of eventEntities) {
       this.em.persist(entity);
@@ -46,21 +53,17 @@ export class PostgresEventStore extends EventStore {
     return eventEntities.map(entity => this.entityToDomainEvent(entity));
   }
 
-  private domainEventToEntity(domainEvent: DomainEvent): EventEntity {
-    // For now, we'll use default metadata values
-    // In a real application, this would come from the current context
-    const metadata: EventMetadata = {
-      ownerId: 'system', // TODO: Get from current user context
-      correlationId: crypto.randomUUID() // TODO: Get from current request context
-    };
-
+  private domainEventToEntity(domainEvent: DomainEvent, authContext: AuthContext, requestContext: RequestContext): EventEntity {
     return new EventEntity(
       domainEvent.aggregateId,
       domainEvent.aggregateVersion,
       domainEvent.eventType,
       domainEvent.occurredOn,
       domainEvent.payload,
-      metadata
+      {
+        ownerId: authContext.userId(),
+        correlationId: requestContext.correlationId()
+      }
     );
   }
 
@@ -103,7 +106,7 @@ export class PostgresEventStore extends EventStore {
     // Use a more efficient query that only selects the version field
     const result = await this.eventRepository.findOne(
       { aggregateId },
-      { 
+      {
         fields: ['aggregateVersion'],
         orderBy: { aggregateVersion: 'DESC' }
       }

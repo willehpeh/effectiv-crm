@@ -1,6 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CaptureLeadCommand } from './capture-lead.command';
 import {
+  AuthContext,
   Company,
   Contact,
   ContactDate,
@@ -10,11 +11,14 @@ import {
   LastName,
   Lead,
   LeadSource,
-  Referrer
+  Referrer, RequestContext
 } from '@effectiv-crm/domain';
 
 @CommandHandler(CaptureLeadCommand)
 export class CaptureLeadCommandHandler implements ICommandHandler<CaptureLeadCommand> {
+
+  private authContext = new AuthContext('userId');
+  private requestContext = new RequestContext('correlationId');
 
   constructor(private readonly eventStore: EventStore) {
   }
@@ -27,7 +31,7 @@ export class CaptureLeadCommandHandler implements ICommandHandler<CaptureLeadCom
       ...contact.getUncommittedEvents(),
       ...lead.getUncommittedEvents()
     ];
-    await this.eventStore.saveEvents(allEvents);
+    await this.eventStore.saveEvents(allEvents, this.authContext, this.requestContext);
 
     contact.markEventsAsCommitted();
     lead.markEventsAsCommitted();

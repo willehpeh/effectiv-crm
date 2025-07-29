@@ -2,23 +2,23 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Options } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
+import { SqliteDriver } from '@mikro-orm/sqlite';
 import { Migrator } from '@mikro-orm/migrations';
 
 @Injectable()
 export class DatabaseConfigService {
   constructor(private configService: ConfigService) {}
 
-  createMikroOrmOptions(): Options {
+  createPostgreSqlOptions(): Options {
     return {
       driver: PostgreSqlDriver,
       host: this.configService.get<string>('DB_HOST', 'postgres'),
       port: this.configService.get<number>('DB_PORT', 5432),
       user: this.configService.get<string>('DB_USER', 'effectiv_user'),
-      password: this.configService.get<string>('DB_PASSWORD') || 
+      password: this.configService.get<string>('DB_PASSWORD') ||
                this.configService.get<string>('POSTGRES_PASSWORD', 'effectiv_password'),
       dbName: this.configService.get<string>('DB_NAME', 'effectiv_crm'),
-      
+
       // Connection pooling - configurable via environment
       pool: {
         min: this.configService.get<number>('DB_POOL_MIN', 2),
@@ -30,11 +30,10 @@ export class DatabaseConfigService {
         reapIntervalMillis: this.configService.get<number>('DB_POOL_REAP_INTERVAL', 1000),
         createRetryIntervalMillis: this.configService.get<number>('DB_POOL_CREATE_RETRY_INTERVAL', 200),
       },
-      
-      // Entity discovery
-      entities: ['dist/packages/infrastructure/src/database/entities/*.js'],
-      entitiesTs: ['packages/infrastructure/src/database/entities/*.ts'],
-      
+
+      // Use autoLoadEntities for NestJS module integration
+      autoLoadEntities: true,
+
       // Migrations
       migrations: {
         path: 'packages/infrastructure/src/database/migrations',
@@ -46,33 +45,66 @@ export class DatabaseConfigService {
           disableForeignKeys: false,
         }),
       },
-      
-      // Metadata provider for TypeScript reflection
-      metadataProvider: TsMorphMetadataProvider,
-      
+
+      // Use default metadata provider (reflection) to avoid webpack issues
+
       // Extensions
       extensions: [Migrator],
-      
+
       // Environment-specific settings
       debug: this.configService.get<boolean>('DB_DEBUG', this.configService.get<string>('NODE_ENV') === 'development'),
-      
+
       // Schema settings
       schemaGenerator: {
         disableForeignKeys: false,
         createForeignKeyConstraints: true,
       },
-      
+
       // PostgreSQL specific settings
       timezone: 'UTC',
-      
+
       // Performance and reliability settings
       forceEntityConstructor: true,
       validate: true,
       strict: true,
-      
+
       // Auto-load entities - configurable via environment
       ...(this.configService.get<boolean>('DB_AUTO_LOAD_ENTITIES', this.configService.get<string>('NODE_ENV') === 'development') && {
         autoLoadEntities: true,
+      }),
+    };
+  }
+
+  createSqliteOptions(): Options {
+    const isInMemory = this.configService.get<boolean>('SQLITE_IN_MEMORY', false);
+    const dbPath = this.configService.get<string>('SQLITE_DB_PATH', './data/effectiv-crm-dev.db');
+
+    return {
+      driver: SqliteDriver,
+      dbName: isInMemory ? ':memory:' : dbPath,
+
+      // SQLite doesn't use migrations in development - use schema generation
+      schemaGenerator: {
+        disableForeignKeys: false,
+        createForeignKeyConstraints: true,
+      },
+
+      // Environment-specific settings
+      debug: this.configService.get<boolean>('DB_DEBUG', this.configService.get<string>('NODE_ENV') === 'development'),
+
+      // Performance and reliability settings
+      forceEntityConstructor: true,
+      validate: true,
+      strict: true,
+
+      // Auto-load entities and sync schema for development
+      ...(this.configService.get<boolean>('DB_AUTO_LOAD_ENTITIES', this.configService.get<string>('NODE_ENV') === 'development') && {
+        autoLoadEntities: true,
+      }),
+
+      // Enable schema synchronization for SQLite in development
+      ...(this.isDevelopment() && {
+        synchronize: true,
       }),
     };
   }
@@ -83,5 +115,9 @@ export class DatabaseConfigService {
 
   isProduction(): boolean {
     return this.configService.get<string>('NODE_ENV') === 'production';
+  }
+
+  getDatabaseType(): string {
+    return this.configService.get<string>('DB_TYPE', 'postgresql');
   }
 }

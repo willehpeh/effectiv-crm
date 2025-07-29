@@ -48,3 +48,9 @@ Thumbs.db
 .env.*
 !.env.example
 !.env.development
+!.env.test
+
+# SQLite databases
+data/
+*.db
+*.sqlite

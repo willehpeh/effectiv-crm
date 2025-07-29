@@ -1,7 +1,11 @@
-import { IsString, IsNumber, IsOptional, IsBoolean, Min, Max } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsBoolean, Min, Max, IsIn } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class DatabaseConfigValidation {
+  @IsString()
+  @IsIn(['postgresql', 'sqlite'])
+  @IsOptional()
+  DB_TYPE?: string;
   @IsString()
   @IsOptional()
   DB_HOST?: string;
@@ -74,4 +78,13 @@ export class DatabaseConfigValidation {
   @Type(() => Boolean)
   @IsOptional()
   DB_AUTO_LOAD_ENTITIES?: boolean;
+
+  @IsString()
+  @IsOptional()
+  SQLITE_DB_PATH?: string;
+
+  @IsBoolean()
+  @Type(() => Boolean)
+  @IsOptional()
+  SQLITE_IN_MEMORY?: boolean;
 }

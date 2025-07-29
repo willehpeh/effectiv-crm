@@ -14,7 +14,7 @@ import { MikroOrmEventStore } from './mikro-orm-event-store';
       providers: [DatabaseConfigService],
       inject: [DatabaseConfigService],
       useFactory: (databaseConfigService: DatabaseConfigService) => 
-        databaseConfigService.createPostgreSqlOptions(),
+        databaseConfigService.createSqliteOptions(),
     }),
     MikroOrmModule.forFeature([EventEntity]),
   ],
@@ -27,4 +27,4 @@ import { MikroOrmEventStore } from './mikro-orm-event-store';
   ],
   exports: [MikroOrmModule, DatabaseConfigService, EventStore],
 })
-export class DatabaseModule {}
+export class SqliteDatabaseModule {}

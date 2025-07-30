@@ -1,13 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule, SqliteDatabaseModule } from '@effectiv-crm/infrastructure';
+import { getDatabaseModule } from '@effectiv-crm/infrastructure';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-
-// Choose database module based on environment
-const DatabaseModuleToUse = process.env.DB_TYPE === 'sqlite' 
-  ? SqliteDatabaseModule 
-  : DatabaseModule;
+import { LeadsModule } from './leads/leads.module';
 
 @Module({
   imports: [
@@ -20,7 +16,8 @@ const DatabaseModuleToUse = process.env.DB_TYPE === 'sqlite'
         '.env'
       ],
     }),
-    DatabaseModuleToUse,
+    getDatabaseModule(),
+    LeadsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

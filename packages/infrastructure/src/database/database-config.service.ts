@@ -76,12 +76,13 @@ export class DatabaseConfigService {
   }
 
   createSqliteOptions(): Options {
-    const isInMemory = this.configService.get<boolean>('SQLITE_IN_MEMORY', false);
     const dbPath = this.configService.get<string>('SQLITE_DB_PATH', './data/effectiv-crm-dev.db');
+
+    console.log('DBPATH: ', dbPath);
 
     return {
       driver: SqliteDriver,
-      dbName: isInMemory ? ':memory:' : dbPath,
+      dbName: dbPath,
 
       // SQLite doesn't use migrations in development - use schema generation
       schemaGenerator: {

@@ -8,6 +8,8 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { appRoutes } from './app.routes';
 import { UiFacade } from './core/ui/facades/ui.facade';
 import { InMemoryUiFacade } from './core/ui/facades/in-memory.ui.facade';
+import { provideStore } from '@ngrx/store';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +20,10 @@ export const appConfig: ApplicationConfig = {
     {
       provide: UiFacade,
       useClass: InMemoryUiFacade,
-    }
+    },
+    provideStore(),
+    provideStoreDevtools({
+      maxAge: 25
+    })
   ],
 };

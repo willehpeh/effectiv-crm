@@ -25,6 +25,14 @@ const config: Options = {
   entities: ['dist/packages/infrastructure/src/database/entities/*.js'],
   entitiesTs: ['packages/infrastructure/src/database/entities/*.ts'],
 
+  // Schema synchronization
+  ...(!isSqlite && {
+    schemaGenerator: {
+      disableForeignKeys: false,
+      createForeignKeyConstraints: true,
+    },
+  }),
+
   // Migrations configuration (not used for SQLite)
   ...(!isSqlite && {
     migrations: {

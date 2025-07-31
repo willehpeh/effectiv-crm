@@ -8,10 +8,12 @@ import { leadsFeatureKey, leadsReducer } from '../../src/app/leads/state/leads.r
 import { provideEffects } from '@ngrx/effects';
 import { LeadsEffects } from '../../src/app/leads/state/leads.effects';
 import { LeadsApiService } from '../../src/app/leads/services/leads-api.service';
+import { Router } from '@angular/router';
 
 describe('Capture Lead', () => {
   let facade: ApiLeadsFacade;
   let httpCtrl: HttpTestingController;
+  const fakeRouter = { navigate: jest.fn() };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -26,7 +28,8 @@ describe('Capture Lead', () => {
           name: leadsFeatureKey,
           reducer: leadsReducer
         }),
-        provideEffects([LeadsEffects])
+        provideEffects([LeadsEffects]),
+        { provide: Router, useValue: fakeRouter }
       ]
     });
     facade = TestBed.inject(ApiLeadsFacade);
@@ -52,6 +55,27 @@ describe('Capture Lead', () => {
     const req = httpCtrl.expectOne('/api/leads/capture');
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(dto);
+  });
+
+  it('should redirect to the leads list page on success', () => {
+    const dto: CaptureLeadDto = {
+      contactInfo: {
+        lastName: 'Alexander',
+        firstName: 'Will',
+        email: 'will@will.com',
+        company: 'Effectiv Tech'
+      },
+      leadDetails: {
+        source: 'website',
+        contactType: 'email',
+        contactDate: new Date().toISOString(),
+        details: 'This is a test lead'
+      }
+    };
+    facade.captureLead(dto);
+    httpCtrl.expectOne('/api/leads/capture').flush({});
+
+    expect(fakeRouter.navigate).toHaveBeenCalledWith(['/leads']);
   });
 
   afterEach(() => {

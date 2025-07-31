@@ -10,12 +10,14 @@ import { UiFacade } from './core/ui/facades/ui.facade';
 import { InMemoryUiFacade } from './core/ui/facades/in-memory.ui.facade';
 import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
+    provideHttpClient(),
     provideAnimations(),
     {
       provide: UiFacade,

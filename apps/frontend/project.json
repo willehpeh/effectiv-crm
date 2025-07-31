@@ -58,13 +58,15 @@
     "serve": {
       "continuous": true,
       "executor": "@angular/build:dev-server",
+      "options": {
+        "proxyConfig": "apps/frontend/src/proxy.conf.json"
+      },
       "configurations": {
         "production": {
           "buildTarget": "frontend:build:production"
         },
         "development": {
-          "buildTarget": "frontend:build:development",
-          "proxyConfig": "apps/frontend/src/proxy.conf.json"
+          "buildTarget": "frontend:build:development"
         }
       },
       "defaultConfiguration": "development"

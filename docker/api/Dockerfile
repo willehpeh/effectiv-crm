@@ -3,7 +3,7 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 
 COPY . .
-RUN npm ci --legacy-peer-deps
+RUN npm ci
 RUN npx nx build api
 
 # Stage 2: Run
@@ -13,6 +13,6 @@ WORKDIR /app
 COPY --from=builder /app/dist/apps/api ./dist
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/package-lock.json ./
-RUN npm ci --legacy-peer-deps --omit=dev
+RUN npm ci --omit=dev
 
 CMD ["node", "dist/main.js"]

@@ -58,7 +58,7 @@ export default [
               onlyDependOnLibsWithTags: [
                 'scope:frontend',
                 'scope:api',
-                'scope-application'
+                'scope:application'
               ]
             }
           ]

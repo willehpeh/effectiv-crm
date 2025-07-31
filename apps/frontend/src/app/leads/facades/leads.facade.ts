@@ -1,5 +1,5 @@
-import { NewLead } from '../types/new-lead';
+import { CaptureLeadDto } from '@effectiv-crm/application';
 
 export abstract class LeadsFacade {
-  abstract saveNewLead(newLead: NewLead): void;
+  abstract saveNewLead(leadDto: CaptureLeadDto): void;
 }

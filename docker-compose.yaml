@@ -1,49 +1,4 @@
 services:
-  postgres:
-    image: postgres:16
-    container_name: effectiv-crm-postgres
-    environment:
-      POSTGRES_DB: ${DB_NAME:-effectiv_crm}
-      POSTGRES_USER: ${DB_USER:-effectiv_user}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-effectiv_password}
-      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-effectiv_user} -d ${DB_NAME:-effectiv_crm}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-    command: >
-      postgres 
-      -c max_connections=20
-      -c shared_buffers=256MB
-      -c effective_cache_size=1GB
-      -c maintenance_work_mem=64MB
-      -c checkpoint_completion_target=0.9
-      -c wal_buffers=16MB
-      -c default_statistics_target=100
-
-  migrations:
-    build:
-      context: .
-      dockerfile: docker/api/Dockerfile
-    command: ["npm", "run", "migration:up"]
-    environment:
-      - NODE_ENV=production
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=effectiv_user
-      - DB_PASSWORD=${POSTGRES_PASSWORD:-effectiv_password}
-      - DB_NAME=effectiv_crm
-    depends_on:
-      postgres:
-        condition: service_healthy
-    restart: "no"
-    profiles:
-      - migration
-
   api:
     build:
       context: .
@@ -51,17 +6,17 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      postgres:
-        condition: service_healthy
       frontend:
         condition: service_started
     environment:
       - NODE_ENV=production
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=effectiv_user
-      - DB_PASSWORD=${POSTGRES_PASSWORD:-effectiv_password}
-      - DB_NAME=effectiv_crm
+      - DB_HOST=${PGHOST:-postgres}
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_USER=${PGUSER:-effectiv_user}
+      - DB_PASSWORD=${PGPASSWORD:-effectiv_password}
+      - DB_NAME=${PGDATABASE:-effectiv_crm}
+      - PGSSLMODE=${PGSSLMODE:-disable}
+      - PGCHANNELBINDING=${PGCHANNELBINDING:-disable}
     profiles:
       - app
 
@@ -76,5 +31,4 @@ services:
     profiles:
       - app
 
-volumes:
-  postgres_data:
+

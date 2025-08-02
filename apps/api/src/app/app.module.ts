@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { getDatabaseModule } from '@effectiv-crm/infrastructure';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AuthContext, getDatabaseModule, RequestContext } from '@effectiv-crm/infrastructure';
 import { LeadsModule } from './leads/leads.module';
 
 @Module({
@@ -19,7 +17,9 @@ import { LeadsModule } from './leads/leads.module';
     getDatabaseModule(),
     LeadsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AuthContext,
+    RequestContext
+  ],
 })
 export class AppModule {}

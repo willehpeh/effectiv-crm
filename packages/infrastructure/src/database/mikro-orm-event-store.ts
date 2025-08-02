@@ -3,39 +3,38 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import {
   AggregateVersionConflictError,
-  AuthContext,
   DomainEvent,
   EventStore,
-  RequestContext
 } from '@effectiv-crm/domain';
 import { EventEntity } from './entities/event.entity';
+import { AuthContext } from '../context/auth.context';
+import { RequestContext } from '../context/request.context';
 
 @Injectable()
 export class MikroOrmEventStore extends EventStore {
   constructor(
     @InjectRepository(EventEntity)
     private readonly eventRepository: EntityRepository<EventEntity>,
-    private readonly em: EntityManager
+    private readonly em: EntityManager,
+    private readonly authContext: AuthContext,
+    private readonly requestContext: RequestContext
   ) {
     super();
   }
 
-  async saveEvents(events: DomainEvent[], authContext: AuthContext, requestContext: RequestContext): Promise<void> {
+  async saveEvents(events: DomainEvent[]): Promise<void> {
     if (events.length === 0) {
       return;
     }
 
-    // Group events by aggregate ID
     const eventsByAggregate = this.groupEventsByAggregate(events);
 
-    // Validate versions for each aggregate
     for (const [aggregateId, aggregateEvents] of eventsByAggregate) {
       await this.validateAggregateVersions(aggregateId, aggregateEvents);
     }
 
-    // If all validations pass, persist the events
     const eventEntities = events.map(event =>
-      this.domainEventToEntity(event, authContext, requestContext)
+      this.domainEventToEntity(event)
     );
 
     for (const entity of eventEntities) {
@@ -53,7 +52,7 @@ export class MikroOrmEventStore extends EventStore {
     return eventEntities.map(entity => this.entityToDomainEvent(entity));
   }
 
-  private domainEventToEntity(domainEvent: DomainEvent, authContext: AuthContext, requestContext: RequestContext): EventEntity {
+  private domainEventToEntity(domainEvent: DomainEvent): EventEntity {
     return new EventEntity(
       domainEvent.aggregateId,
       domainEvent.aggregateVersion,
@@ -61,8 +60,8 @@ export class MikroOrmEventStore extends EventStore {
       domainEvent.occurredOn,
       domainEvent.payload,
       {
-        ownerId: authContext.userId(),
-        correlationId: requestContext.correlationId()
+        ownerId: this.authContext.userId(),
+        correlationId: this.requestContext.correlationId()
       }
     );
   }

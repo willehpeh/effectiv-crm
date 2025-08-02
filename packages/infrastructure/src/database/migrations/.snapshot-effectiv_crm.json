@@ -17,13 +17,12 @@
         },
         "aggregate_id": {
           "name": "aggregate_id",
-          "type": "varchar(255)",
+          "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 255,
-          "mappedType": "string"
+          "mappedType": "uuid"
         },
         "aggregate_version": {
           "name": "aggregate_version",
@@ -44,14 +43,24 @@
           "length": 255,
           "mappedType": "string"
         },
-        "occurred_on": {
-          "name": "occurred_on",
-          "type": "varchar(50)",
+        "aggregate_type": {
+          "name": "aggregate_type",
+          "type": "varchar(100)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 50,
+          "length": 100,
+          "mappedType": "string"
+        },
+        "occurred_on": {
+          "name": "occurred_on",
+          "type": "varchar(30)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 30,
           "mappedType": "string"
         },
         "payload": {
@@ -69,7 +78,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
+          "nullable": false,
           "mappedType": "json"
         }
       },
@@ -77,11 +86,11 @@
       "schema": "public",
       "indexes": [
         {
+          "keyName": "events_aggregate_type_index",
           "columnNames": [
-            "aggregate_id"
+            "aggregate_type"
           ],
           "composite": false,
-          "keyName": "events_aggregate_id_index",
           "constraint": false,
           "primary": false,
           "unique": false

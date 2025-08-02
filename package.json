@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "migration:create": "npx mikro-orm migration:create",
-    "migration:up": "npx mikro-orm migration:up",
-    "migration:down": "npx mikro-orm migration:down",
-    "migration:list": "npx mikro-orm migration:list",
-    "schema:drop": "npx mikro-orm schema:drop --run",
-    "schema:create": "npx mikro-orm schema:create --run",
-    "schema:update": "npx mikro-orm schema:update --run",
+    "migration:create": "dotenv -- npx mikro-orm migration:create",
+    "migration:up": "dotenv -- npx mikro-orm migration:up",
+    "migration:down": "dotenv -- npx mikro-orm migration:down",
+    "migration:list": "dotenv -- npx mikro-orm migration:list",
+    "schema:drop": "dotenv -- npx mikro-orm schema:drop --run",
+    "schema:create": "dotenv -- npx mikro-orm schema:create --run",
+    "schema:update": "dotenv -- npx mikro-orm schema:update --run",
     "deploy:migrate": "docker-compose --profile migration up migrations",
     "deploy:start": "docker-compose --profile app up -d",
     "deploy:full": "npm run deploy:migrate && npm run deploy:start",
@@ -33,7 +33,6 @@
     "@mikro-orm/nestjs": "^6.0.2",
     "@mikro-orm/postgresql": "^6.4.2",
     "@mikro-orm/reflection": "^6.4.2",
-
     "@nestjs/common": "^11.0.0",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.0",
@@ -88,12 +87,14 @@
     "@types/pg": "^8.11.6",
     "@typescript-eslint/utils": "^8.29.0",
     "angular-eslint": "^20.0.0",
+    "dotenv-cli": "^10.0.0",
     "eslint": "^9.8.0",
     "eslint-plugin-playwright": "^1.6.2",
     "jest": "30.0.5",
     "jest-environment-jsdom": "30.0.5",
     "jest-environment-node": "^29.7.0",
     "jest-preset-angular": "15.0.0",
+    "jest-util": "30.0.5",
     "nx": "21.3.10",
     "testcontainers": "^11.4.0",
     "ts-jest": "29.4.0",
@@ -101,7 +102,6 @@
     "tslib": "^2.3.0",
     "typescript": "~5.8.2",
     "typescript-eslint": "^8.29.0",
-    "webpack-cli": "^5.1.4",
-    "jest-util": "30.0.5"
+    "webpack-cli": "^5.1.4"
   }
 }

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AuthContext, getDatabaseModule, RequestContext } from '@effectiv-crm/infrastructure';
+import { DatabaseModule } from '@effectiv-crm/infrastructure';
 import { LeadsModule } from './leads/leads.module';
 
 @Module({
@@ -8,18 +8,11 @@ import { LeadsModule } from './leads/leads.module';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: [
-        '.env.local',
-        '.env.development',
-        '.env.test',
         '.env'
       ],
     }),
-    getDatabaseModule(),
+    DatabaseModule,
     LeadsModule,
-  ],
-  providers: [
-    AuthContext,
-    RequestContext
   ],
 })
 export class AppModule {}

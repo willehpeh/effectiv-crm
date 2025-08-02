@@ -1,5 +1,5 @@
 export { DatabaseModule } from './database/database.module';
-export { SqliteDatabaseModule } from './database/sqlite-database.module';
+
 export { getDatabaseModule } from './database/database-module.factory';
 export { DatabaseConfigService } from './database/database-config.service';
 export { DatabaseConfigValidation } from './database/database-config.validation';

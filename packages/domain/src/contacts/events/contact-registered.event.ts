@@ -12,6 +12,7 @@ export class ContactRegisteredEvent implements DomainEvent {
   readonly aggregateVersion: number;
   readonly eventType = 'ContactRegistered';
   readonly occurredOn: string;
+  readonly aggregateType = 'Contact';
   readonly payload: ContactRegisteredPayload;
 
   constructor(aggregateId: string, payload: ContactRegisteredPayload) {

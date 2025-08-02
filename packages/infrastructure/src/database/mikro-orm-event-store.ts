@@ -52,15 +52,6 @@ export class MikroOrmEventStore extends EventStore {
     return eventEntities.map(entity => this.entityToDomainEvent(entity));
   }
 
-  async getEventsByAggregateType(aggregateType: string): Promise<DomainEvent[]> {
-    const eventEntities = await this.eventRepository.find(
-      { aggregateType },
-      { orderBy: { occurredOn: 'ASC' } }
-    );
-
-    return eventEntities.map(entity => this.entityToDomainEvent(entity));
-  }
-
   private domainEventToEntity(domainEvent: DomainEvent): EventEntity {
     return new EventEntity(
       domainEvent.aggregateId,

@@ -13,6 +13,7 @@ export class LeadCapturedEvent implements DomainEvent {
   readonly aggregateVersion: number;
   readonly eventType: string = 'LeadCaptured';
   readonly occurredOn: string;
+  readonly aggregateType: string = 'Lead';
   readonly payload: LeadCapturedPayload;
 
   constructor(aggregateId: string, payload: LeadCapturedPayload, version = 1) {

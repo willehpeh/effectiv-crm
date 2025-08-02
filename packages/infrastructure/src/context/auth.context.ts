@@ -1,20 +1,23 @@
-import { Injectable, Scope } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { AsyncLocalStorage } from 'async_hooks';
 
-@Injectable({
-  scope: Scope.REQUEST
-})
+interface AuthStore {
+  userId: string;
+}
+
+@Injectable()
 export class AuthContext {
+  private readonly asyncLocalStorage = new AsyncLocalStorage<AuthStore>();
 
-  private _userId?: string;
-
-  setUserId(userId: string) {
-    this._userId = userId;
+  run<T>(store: AuthStore, callback: () => T): T {
+    return this.asyncLocalStorage.run(store, callback);
   }
 
   userId(): string {
-    if (!this._userId) {
+    const store = this.asyncLocalStorage.getStore();
+    if (!store?.userId) {
       throw new Error('User id is not set');
     }
-    return this._userId;
+    return store.userId;
   }
 }

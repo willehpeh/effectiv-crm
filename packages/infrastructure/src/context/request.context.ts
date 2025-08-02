@@ -1,19 +1,23 @@
-import { Injectable, Scope } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { AsyncLocalStorage } from 'async_hooks';
 
-@Injectable({
-  scope: Scope.REQUEST
-})
+interface RequestStore {
+  correlationId: string;
+}
+
+@Injectable()
 export class RequestContext {
-  private _correlationId?: string;
+  private readonly asyncLocalStorage = new AsyncLocalStorage<RequestStore>();
 
-  setCorrelationId(correlationId: string) {
-    this._correlationId = correlationId;
+  run<T>(store: RequestStore, callback: () => T): T {
+    return this.asyncLocalStorage.run(store, callback);
   }
 
   correlationId(): string {
-    if (!this._correlationId) {
+    const store = this.asyncLocalStorage.getStore();
+    if (!store?.correlationId) {
       throw new Error('Correlation id is not set');
     }
-    return this._correlationId;
+    return store.correlationId;
   }
 }

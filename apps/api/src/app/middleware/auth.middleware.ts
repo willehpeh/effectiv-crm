@@ -7,8 +7,9 @@ export class AuthMiddleware implements NestMiddleware {
   constructor(private readonly authContext: AuthContext) {
   }
   use(req: Request, res: Response, next: NextFunction): void {
-    this.authContext.setUserId('temp-user-id');
-    next();
+    this.authContext.run({ userId: 'temp-user-id' }, () => {
+      next();
+    });
   }
 
 }

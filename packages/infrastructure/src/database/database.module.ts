@@ -29,6 +29,6 @@ import { RequestContext } from '../context/request.context';
     AuthContext,
     RequestContext
   ],
-  exports: [MikroOrmModule, DatabaseConfigService, EventStore],
+  exports: [MikroOrmModule, DatabaseConfigService, EventStore, AuthContext, RequestContext],
 })
 export class DatabaseModule {}

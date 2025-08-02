@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AuthContext, DatabaseModule, RequestContext } from '@effectiv-crm/infrastructure';
+import { DatabaseModule } from '@effectiv-crm/infrastructure';
 import { LeadsModule } from './leads/leads.module';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { CorrelationMiddleware } from './middleware/correlation.middleware';
@@ -16,10 +16,6 @@ import { CorrelationMiddleware } from './middleware/correlation.middleware';
     DatabaseModule,
     LeadsModule,
   ],
-  providers: [
-    AuthContext,
-    RequestContext
-  ]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

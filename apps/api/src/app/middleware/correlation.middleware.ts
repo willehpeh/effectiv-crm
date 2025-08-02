@@ -7,8 +7,9 @@ export class CorrelationMiddleware implements NestMiddleware {
   constructor(private readonly requestContext: RequestContext) {
   }
   use(req: Request, res: Response, next: NextFunction): void {
-    this.requestContext.setCorrelationId(crypto.randomUUID());
-    next();
+    this.requestContext.run({ correlationId: crypto.randomUUID() }, () => {
+      next();
+    });
   }
 
 }

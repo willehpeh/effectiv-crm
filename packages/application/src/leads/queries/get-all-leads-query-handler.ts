@@ -1,13 +1,13 @@
-import { LeadReadModel } from './lead-read-model';
+import { LeadReadModel } from '../read-models/lead-read-model';
 import { GetAllLeadsQuery } from './get-all-leads-query';
-import { LeadRepository } from '../repositories/lead-repository';
+import { LeadsProjection } from '../projections/leads-projection';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 @QueryHandler(GetAllLeadsQuery)
 export class GetAllLeadsQueryHandler implements IQueryHandler<GetAllLeadsQuery> {
-  constructor(private readonly leadRepository: LeadRepository) {}
+  constructor(private readonly leadsProjection: LeadsProjection) {}
 
   async execute(query: GetAllLeadsQuery): Promise<LeadReadModel[]> {
-    return this.leadRepository.getAllLeads();
+    return this.leadsProjection.getAllLeads();
   }
 }

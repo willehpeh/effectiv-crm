@@ -1,30 +1,38 @@
+import { Injectable } from '@nestjs/common';
+import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { LeadCapturedEvent } from '@effectiv-crm/domain';
-import { LeadReadModel } from '../queries/lead-read-model';
-import { ContactRepository } from '../../contacts';
-import { LeadRepository } from '../repositories/lead-repository';
+import { LeadReadModel } from '../read-models/lead-read-model';
+import { LeadsProjection } from '../projections/leads-projection';
+import { ContactProjection } from '../../contacts';
 
-export class LeadProjector {
+@Injectable()
+@EventsHandler(LeadCapturedEvent)
+export class LeadProjector implements IEventHandler<LeadCapturedEvent> {
   constructor(
-    private readonly leadRepository: LeadRepository,
-    private readonly contactRepository: ContactRepository
+    private readonly leadsProjection: LeadsProjection,
+    private readonly contactProjection: ContactProjection,
   ) {}
 
+  async handle(event: LeadCapturedEvent): Promise<void> {
+    await this.handleLeadCaptured(event);
+  }
+
   async handleLeadCaptured(event: LeadCapturedEvent): Promise<void> {
-    const contact = await this.contactRepository.getContactById(event.payload.contactId);
+    const contact = this.contactProjection.getContactById(event.payload.contactId);
 
-    if (contact) {
-      const completeLead: LeadReadModel = {
-        id: event.aggregateId,
-        firstName: contact.firstName,
-        lastName: contact.lastName,
-        email: contact.email,
-        company: contact.company,
-        status: 'new',
-        lastContacted: event.payload.contactDate,
-        details: event.payload.details
-      };
-
-      await this.leadRepository.save(completeLead);
+    if (!contact) {
+      throw new Error(`Contact with id ${event.payload.contactId} not found`);
     }
+
+    const lead: LeadReadModel = {
+      id: event.aggregateId,
+      contactId: event.payload.contactId,
+      contactName: contact.name,
+      contactEmail: contact.email,
+      source: event.payload.source,
+      capturedAt: event.payload.contactDate,
+    };
+
+    this.leadsProjection.addLead(lead);
   }
 }

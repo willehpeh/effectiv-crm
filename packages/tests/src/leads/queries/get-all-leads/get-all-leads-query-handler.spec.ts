@@ -1,14 +1,15 @@
 import { GetAllLeadsQueryHandler, GetAllLeadsQuery, LeadReadModel } from '@effectiv-crm/application';
 import { dummyLeads } from '../data/dummy.lead-read-models';
-import { FakeLeadRepository } from '../../repositories/fakes/fake-lead-repository';
+import { FakeLeadsProjection } from '../../projections/fakes/fake-leads-projection';
 
 describe('GetAllLeadsQueryHandler', () => {
   let handler: GetAllLeadsQueryHandler;
-  let fakeRepository: FakeLeadRepository;
+  let fakeProjection: FakeLeadsProjection;
 
   beforeEach(() => {
-    fakeRepository = new FakeLeadRepository(dummyLeads);
-    handler = new GetAllLeadsQueryHandler(fakeRepository);
+    fakeProjection = new FakeLeadsProjection();
+    dummyLeads.forEach(lead => fakeProjection.addLead(lead));
+    handler = new GetAllLeadsQueryHandler(fakeProjection);
   });
 
   describe('execute', () => {

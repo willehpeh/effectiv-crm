@@ -2,13 +2,16 @@ import { FakeEventStore } from '../../../test-doubles/fake.event-store';
 import { CaptureLeadDtoFactory } from './capture-lead-dto.factory';
 import { CaptureLeadCommand, CaptureLeadCommandHandler } from '@effectiv-crm/application';
 import { InvalidContactDateError, InvalidLeadSourceError, MissingReferrerError, LeadCapturedEvent } from '@effectiv-crm/domain';
+import { FakeEventPublisher } from '../../../test-doubles/fake-event-publisher';
 
 describe('Capture Lead - Lead Details', () => {
   let eventStore: FakeEventStore;
+  let eventPublisher: FakeEventPublisher;
   const dtoFactory = new CaptureLeadDtoFactory();
 
   beforeEach(() => {
     eventStore = new FakeEventStore();
+    eventPublisher = new FakeEventPublisher();
   });
 
   it.each([
@@ -21,7 +24,7 @@ describe('Capture Lead - Lead Details', () => {
   ])('should save the lead source when it is valid', async (source) => {
     const dto = dtoFactory.withSource(source);
     const command = new CaptureLeadCommand(dto);
-    const handler = new CaptureLeadCommandHandler(eventStore);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await handler.execute(command);
 
@@ -32,7 +35,7 @@ describe('Capture Lead - Lead Details', () => {
   it('should reject the lead if the source is not valid', async () => {
     const dto = dtoFactory.withSource('invalid-source');
     const command = new CaptureLeadCommand(dto);
-    const handler = new CaptureLeadCommandHandler(eventStore);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await expect(handler.execute(command)).rejects.toBeInstanceOf(InvalidLeadSourceError);
   });
@@ -40,7 +43,7 @@ describe('Capture Lead - Lead Details', () => {
   it('should save the lead contact date when it is valid', async () => {
     const dto = dtoFactory.validDto();
     const command = new CaptureLeadCommand(dto);
-    const handler = new CaptureLeadCommandHandler(eventStore);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await handler.execute(command);
 
@@ -51,7 +54,7 @@ describe('Capture Lead - Lead Details', () => {
   it('should reject the lead if the contact date format is invalid', async () => {
     const dto = dtoFactory.withContactDate('01/15/2025');
     const command = new CaptureLeadCommand(dto);
-    const handler = new CaptureLeadCommandHandler(eventStore);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await expect(handler.execute(command)).rejects.toBeInstanceOf(InvalidContactDateError);
   });
@@ -59,7 +62,7 @@ describe('Capture Lead - Lead Details', () => {
   it('should reject the lead if the contact date has an invalid month', async () => {
     const dto = dtoFactory.withContactDate('2025-13-15');
     const command = new CaptureLeadCommand(dto);
-    const handler = new CaptureLeadCommandHandler(eventStore);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await expect(handler.execute(command)).rejects.toBeInstanceOf(InvalidContactDateError);
   });
@@ -71,7 +74,7 @@ describe('Capture Lead - Lead Details', () => {
   ])('should reject the lead if the contact date is in the future: %s', async (futureDate) => {
     const dto = dtoFactory.withContactDate(futureDate);
     const command = new CaptureLeadCommand(dto);
-    const handler = new CaptureLeadCommandHandler(eventStore);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await expect(handler.execute(command)).rejects.toBeInstanceOf(InvalidContactDateError);
   });
@@ -79,7 +82,7 @@ describe('Capture Lead - Lead Details', () => {
   it.each(invalidDayDates())('should reject the lead if the contact date has an invalid day: %s', async (invalidDate) => {
     const dto = dtoFactory.withContactDate(invalidDate);
     const command = new CaptureLeadCommand(dto);
-    const handler = new CaptureLeadCommandHandler(eventStore);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await expect(handler.execute(command)).rejects.toBeInstanceOf(InvalidContactDateError);
   });
@@ -87,7 +90,7 @@ describe('Capture Lead - Lead Details', () => {
   it('should reject the lead if source is referral but no referrer is provided', async () => {
     const dto = dtoFactory.withNoReferrer();
     const command = new CaptureLeadCommand(dto);
-    const handler = new CaptureLeadCommandHandler(eventStore);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await expect(handler.execute(command)).rejects.toBeInstanceOf(MissingReferrerError);
   });
@@ -95,7 +98,7 @@ describe('Capture Lead - Lead Details', () => {
   it('should save the referrer when source is referral', async () => {
     const dto = dtoFactory.withSourceAndReferrer('referral', 'John Smith');
     const command = new CaptureLeadCommand(dto);
-    const handler = new CaptureLeadCommandHandler(eventStore);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await handler.execute(command);
 
@@ -106,7 +109,7 @@ describe('Capture Lead - Lead Details', () => {
   it('should not include referrer field when source is not referral', async () => {
     const dto = dtoFactory.withSource('website');
     const command = new CaptureLeadCommand(dto);
-    const handler = new CaptureLeadCommandHandler(eventStore);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await handler.execute(command);
 
@@ -117,7 +120,7 @@ describe('Capture Lead - Lead Details', () => {
   it('should save the lead details', async () => {
     const dto = dtoFactory.validDto();
     const command = new CaptureLeadCommand(dto);
-    const handler = new CaptureLeadCommandHandler(eventStore);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await handler.execute(command);
 

@@ -12,11 +12,15 @@ import {
   LeadSource,
   Referrer
 } from '@effectiv-crm/domain';
+import { EventPublisher } from '../../../common';
 
 @CommandHandler(CaptureLeadCommand)
 export class CaptureLeadCommandHandler implements ICommandHandler<CaptureLeadCommand> {
 
-  constructor(private readonly eventStore: EventStore) {
+  constructor(
+    private readonly eventStore: EventStore,
+    private readonly eventPublisher: EventPublisher
+  ) {
   }
 
   async execute(command: CaptureLeadCommand): Promise<void> {

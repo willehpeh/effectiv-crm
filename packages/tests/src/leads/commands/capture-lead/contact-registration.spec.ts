@@ -2,19 +2,22 @@ import { FakeEventStore } from '../../../test-doubles/fake.event-store';
 import { CaptureLeadCommand, CaptureLeadCommandHandler } from '@effectiv-crm/application';
 import { CaptureLeadDtoFactory } from './capture-lead-dto.factory';
 import { ContactRegisteredEvent } from '@effectiv-crm/domain';
+import { FakeEventPublisher } from '../../../test-doubles/fake-event-publisher';
 
 describe('Capture Lead - Contact Registration', () => {
   let eventStore: FakeEventStore;
+  let eventPublisher: FakeEventPublisher;
   const dtoFactory = new CaptureLeadDtoFactory();
 
   beforeEach(() => {
     eventStore = new FakeEventStore();
+    eventPublisher = new FakeEventPublisher();
   });
 
   it('registers the contact details when a lead is captured', async () => {
     const dto = dtoFactory.validDto();
     const command = new CaptureLeadCommand(dto);
-    const handler = new CaptureLeadCommandHandler(eventStore);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await handler.execute(command);
 
@@ -24,7 +27,7 @@ describe('Capture Lead - Contact Registration', () => {
   it('saves the contact\'s first name', async () => {
     const dto = dtoFactory.validDto();
     const command = new CaptureLeadCommand(dto);
-    const handler = new CaptureLeadCommandHandler(eventStore);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await handler.execute(command);
 
@@ -35,7 +38,7 @@ describe('Capture Lead - Contact Registration', () => {
   it('saves the contact\'s last name', async () => {
     const dto = dtoFactory.validDto();
     const command = new CaptureLeadCommand(dto);
-    const handler = new CaptureLeadCommandHandler(eventStore);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await handler.execute(command);
 
@@ -46,7 +49,7 @@ describe('Capture Lead - Contact Registration', () => {
   it('stores the company name when it is supplied', async () => {
     const dto = dtoFactory.validDto();
     const command = new CaptureLeadCommand(dto);
-    const handler = new CaptureLeadCommandHandler(eventStore);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await handler.execute(command);
 
@@ -57,7 +60,7 @@ describe('Capture Lead - Contact Registration', () => {
   it('leaves the company blank when none is supplied', async () => {
     const dtoWithoutCompany = dtoFactory.withNoCompany();
     const command = new CaptureLeadCommand(dtoWithoutCompany);
-    const handler = new CaptureLeadCommandHandler(eventStore);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await handler.execute(command);
 

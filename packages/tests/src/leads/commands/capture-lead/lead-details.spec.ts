@@ -14,6 +14,16 @@ describe('Capture Lead - Lead Details', () => {
     eventPublisher = new FakeEventPublisher();
   });
 
+  it('records the newly captured lead', async () => {
+    const dto = dtoFactory.validDto();
+    const command = new CaptureLeadCommand(dto);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
+
+    await handler.execute(command);
+
+    expect(eventStore.events[1].eventType).toBe('LeadCaptured');
+  });
+
   it.each([
     'website',
     'social-media',

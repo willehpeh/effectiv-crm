@@ -13,17 +13,17 @@ describe('Capture Lead - Orchestration', () => {
     eventPublisher = new FakeEventPublisher();
   });
 
-  it('records the newly captured lead', async () => {
+  it('should publish the correct number of events', async () => {
     const dto = dtoFactory.validDto();
     const command = new CaptureLeadCommand(dto);
     const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
 
     await handler.execute(command);
 
-    expect(eventStore.events[1].eventType).toBe('LeadCaptured');
-  });
+    expect(eventPublisher.publishedEvents.length).toBe(2);
+  })
 
-  it('publishes ContactRegistered event to event publisher', async () => {
+  it('publishes ContactRegistered event', async () => {
     const dto = dtoFactory.validDto();
     const command = new CaptureLeadCommand(dto);
     const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
@@ -43,6 +43,32 @@ describe('Capture Lead - Orchestration', () => {
         lastName: dto.contactInfo.lastName,
         email: dto.contactInfo.email,
         company: dto.contactInfo.company,
+      },
+      version: 1
+    });
+  });
+
+  it('publishes LeadCaptured event', async () => {
+    const dto = dtoFactory.validDto();
+    const command = new CaptureLeadCommand(dto);
+    const handler = new CaptureLeadCommandHandler(eventStore, eventPublisher);
+
+    await handler.execute(command);
+
+    const leadCapturedEvents = eventPublisher.getPublishedEventsOfType('LeadCaptured');
+    expect(leadCapturedEvents).toHaveLength(1);
+    expect(leadCapturedEvents[0]).toEqual({
+      aggregateId: expect.any(String),
+      eventType: 'LeadCaptured',
+      aggregateType: 'Lead',
+      aggregateVersion: 1,
+      occurredOn: expect.any(String),
+      payload: {
+        contactId: expect.any(String),
+        source: dto.leadDetails.source,
+        contactDate: dto.leadDetails.contactDate,
+        details: dto.leadDetails.details,
+        referrer: dto.leadDetails.referrer,
       },
       version: 1
     });

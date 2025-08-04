@@ -1,29 +1,22 @@
 import { EventPublisher } from '@effectiv-crm/application';
-
-export interface PublishedEvent {
-  eventType: string;
-  payload: unknown;
-}
+import { DomainEvent } from '@effectiv-crm/domain';
 
 export class FakeEventPublisher implements EventPublisher {
-  public publishedEvents: PublishedEvent[] = [];
+  public publishedEvents: DomainEvent[] = [];
 
-  async publish(eventType: string, payload: unknown): Promise<void> {
-    this.publishedEvents.push({
-      eventType,
-      payload
-    });
+  async publish(event: DomainEvent): Promise<void> {
+    this.publishedEvents.push(event);
   }
 
   clear(): void {
     this.publishedEvents = [];
   }
 
-  getLastPublishedEvent(): PublishedEvent | undefined {
+  getLastPublishedEvent(): DomainEvent | undefined {
     return this.publishedEvents[this.publishedEvents.length - 1];
   }
 
-  getPublishedEventsOfType(eventType: string): PublishedEvent[] {
+  getPublishedEventsOfType(eventType: string): DomainEvent[] {
     return this.publishedEvents.filter(event => event.eventType === eventType);
   }
 }

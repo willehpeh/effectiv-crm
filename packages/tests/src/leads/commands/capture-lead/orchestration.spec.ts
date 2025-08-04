@@ -32,12 +32,19 @@ describe('Capture Lead - Orchestration', () => {
 
     const contactRegisteredEvents = eventPublisher.getPublishedEventsOfType('ContactRegistered');
     expect(contactRegisteredEvents).toHaveLength(1);
-    expect(contactRegisteredEvents[0].payload).toEqual({
-      contactId: expect.any(String),
-      firstName: dto.contactInfo.firstName,
-      lastName: dto.contactInfo.lastName,
-      email: dto.contactInfo.email,
-      company: dto.contactInfo.company,
+    expect(contactRegisteredEvents[0]).toEqual({
+      aggregateId: expect.any(String),
+      eventType: 'ContactRegistered',
+      aggregateType: 'Contact',
+      aggregateVersion: 1,
+      occurredOn: expect.any(String),
+      payload: {
+        firstName: dto.contactInfo.firstName,
+        lastName: dto.contactInfo.lastName,
+        email: dto.contactInfo.email,
+        company: dto.contactInfo.company,
+      },
+      version: 1
     });
   });
 });

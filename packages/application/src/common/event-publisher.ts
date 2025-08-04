@@ -1,3 +1,5 @@
+import { DomainEvent } from '@effectiv-crm/domain';
+
 export interface EventPublisher {
-  publish(eventType: string, payload: unknown): Promise<void>;
+  publish(event: DomainEvent): Promise<void>;
 }

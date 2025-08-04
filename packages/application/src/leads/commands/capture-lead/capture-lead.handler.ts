@@ -33,6 +33,8 @@ export class CaptureLeadCommandHandler implements ICommandHandler<CaptureLeadCom
     ];
     await this.eventStore.saveEvents(allEvents);
 
+    allEvents.forEach(event => this.eventPublisher.publish(event));
+
     contact.markEventsAsCommitted();
     lead.markEventsAsCommitted();
   }

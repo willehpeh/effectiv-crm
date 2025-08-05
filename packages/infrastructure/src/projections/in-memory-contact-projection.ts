@@ -12,4 +12,8 @@ export class InMemoryContactProjection implements ContactProjection {
   addContact(contact: ContactReadModel): void {
     this.contacts.set(contact.id, contact);
   }
+
+  clear(): void {
+    this.contacts.clear();
+  }
 }

@@ -14,11 +14,8 @@ describe('ContactRegisteredHandler', () => {
 
   describe('handle', () => {
     it('should add contact to projection when ContactRegisteredEvent is handled', () => {
-      // Arrange
-      const contactRegisteredEvent = contactEvents.johnDoeRegistered();
-
       // Act
-      contactRegisteredHandler.handle(contactRegisteredEvent);
+      contactRegisteredHandler.handle(contactEvents.johnDoeRegistered());
 
       // Assert
       const savedContact = fakeContactProjection.getContactById(contactTestData.johnDoe.id);

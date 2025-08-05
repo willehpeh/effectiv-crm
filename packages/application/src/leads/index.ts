@@ -3,4 +3,4 @@ export * from './read-models/lead-read-model';
 export * from './queries/get-all-leads-query';
 export * from './queries/get-all-leads-query-handler';
 export * from './projections/leads-projection';
-export * from './projectors/lead-projector';
+export * from './handlers';

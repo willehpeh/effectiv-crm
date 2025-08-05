@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { 
   ContactProjection,
-  ContactProjector
+  ContactRegisteredHandler
 } from '@effectiv-crm/application';
 import { InMemoryContactProjection } from '@effectiv-crm/infrastructure';
 
@@ -15,8 +15,8 @@ import { InMemoryContactProjection } from '@effectiv-crm/infrastructure';
       useClass: InMemoryContactProjection,
     },
     
-    // Projector (Event Handler)
-    ContactProjector,
+    // Event Handler
+    ContactRegisteredHandler,
   ],
   exports: [ContactProjection],
 })

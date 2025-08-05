@@ -1,23 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { LeadCapturedEvent } from '@effectiv-crm/domain';
+import { LeadCapturedEvent, DomainEvent } from '@effectiv-crm/domain';
 import { LeadReadModel } from '../read-models/lead-read-model';
 import { LeadsProjection } from '../projections/leads-projection';
 import { ContactProjection } from '../../contacts';
 
 @Injectable()
 @EventsHandler(LeadCapturedEvent)
-export class LeadProjector implements IEventHandler<LeadCapturedEvent> {
+export class LeadCapturedHandler implements IEventHandler<LeadCapturedEvent> {
   constructor(
     private readonly leadsProjection: LeadsProjection,
     private readonly contactProjection: ContactProjection,
   ) {}
 
   async handle(event: LeadCapturedEvent): Promise<void> {
-    await this.handleLeadCaptured(event);
-  }
-
-  async handleLeadCaptured(event: LeadCapturedEvent): Promise<void> {
     const contact = this.contactProjection.getContactById(event.payload.contactId);
 
     if (!contact) {
@@ -34,5 +30,13 @@ export class LeadProjector implements IEventHandler<LeadCapturedEvent> {
     };
 
     this.leadsProjection.addLead(lead);
+  }
+
+  async rebuild(events: DomainEvent[]): Promise<void> {
+    const leadCapturedEvents = events.filter(event => event.eventType === 'LeadCaptured');
+    
+    for (const event of leadCapturedEvents) {
+      await this.handle(event as LeadCapturedEvent);
+    }
   }
 }

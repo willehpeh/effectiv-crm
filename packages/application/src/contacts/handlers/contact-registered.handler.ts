@@ -6,10 +6,10 @@ import { ContactReadModel } from '../read-models/contact-read-model';
 
 @Injectable()
 @EventsHandler(ContactRegisteredEvent)
-export class ContactProjector implements IEventHandler<ContactRegisteredEvent> {
+export class ContactRegisteredHandler implements IEventHandler<ContactRegisteredEvent> {
   constructor(private readonly contactProjection: ContactProjection) {}
 
-  handleContactRegistered(event: ContactRegisteredEvent): void {
+  handle(event: ContactRegisteredEvent): void {
     const contactReadModel: ContactReadModel = {
       id: event.aggregateId,
       name: `${event.payload.firstName} ${event.payload.lastName}`,
@@ -19,16 +19,10 @@ export class ContactProjector implements IEventHandler<ContactRegisteredEvent> {
     this.contactProjection.addContact(contactReadModel);
   }
 
-  handle(event: ContactRegisteredEvent): void {
-    this.handleContactRegistered(event);
-  }
-
-  async rebuild(events: DomainEvent[]): Promise<void> {
-    this.contactProjection.clear();
+  rebuild(events: DomainEvent[]): void {
+    const contactRegisteredEvents = events.filter(event => event.eventType === 'ContactRegistered');
     
-    const contactEvents = events.filter(event => event.eventType === 'ContactRegistered');
-    
-    for (const event of contactEvents) {
+    for (const event of contactRegisteredEvents) {
       this.handle(event as ContactRegisteredEvent);
     }
   }

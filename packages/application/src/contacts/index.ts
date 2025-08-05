@@ -1,3 +1,3 @@
 export * from './read-models/contact-read-model';
 export * from './projections/contact-projection';
-export * from './projectors/contact-projector';
+export * from './handlers';

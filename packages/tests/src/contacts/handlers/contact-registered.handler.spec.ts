@@ -1,17 +1,17 @@
-import { ContactProjector } from '@effectiv-crm/application';
+import { ContactRegisteredHandler } from '@effectiv-crm/application';
 import { ContactRegisteredEvent, DomainEvent } from '@effectiv-crm/domain';
 import { FakeContactProjection } from '../projections/fakes/fake-contact-projection';
 
-describe('ContactProjector', () => {
-  let contactProjector: ContactProjector;
+describe('ContactRegisteredHandler', () => {
+  let contactRegisteredHandler: ContactRegisteredHandler;
   let fakeContactProjection: FakeContactProjection;
 
   beforeEach(() => {
     fakeContactProjection = new FakeContactProjection();
-    contactProjector = new ContactProjector(fakeContactProjection);
+    contactRegisteredHandler = new ContactRegisteredHandler(fakeContactProjection);
   });
 
-  describe('handleContactRegistered', () => {
+  describe('handle', () => {
     it('should add contact to projection when ContactRegisteredEvent is handled', () => {
       // Arrange
       const contactRegisteredEvent = new ContactRegisteredEvent('contact-123', {
@@ -22,7 +22,7 @@ describe('ContactProjector', () => {
       });
 
       // Act
-      contactProjector.handleContactRegistered(contactRegisteredEvent);
+      contactRegisteredHandler.handle(contactRegisteredEvent);
 
       // Assert
       const savedContact = fakeContactProjection.getContactById('contact-123');
@@ -35,7 +35,7 @@ describe('ContactProjector', () => {
   });
 
   describe('rebuild', () => {
-    it('should clear projection and rebuild from all ContactRegistered events', async () => {
+    it('should rebuild from all ContactRegistered events', () => {
       // Arrange
       const existingContact = { id: 'existing-123', name: 'Existing Contact', email: 'existing@example.com' };
       fakeContactProjection.addContact(existingContact);
@@ -65,10 +65,10 @@ describe('ContactProjector', () => {
       ];
 
       // Act
-      await contactProjector.rebuild(events);
+      contactRegisteredHandler.rebuild(events);
 
-      // Assert
-      expect(fakeContactProjection.getContactById('existing-123')).toBeUndefined();
+      // Assert - existing data should remain (handler doesn't clear)
+      expect(fakeContactProjection.getContactById('existing-123')).toBeDefined();
       expect(fakeContactProjection.getContactById('contact-1')).toEqual({
         id: 'contact-1',
         name: 'John Doe',

@@ -2,14 +2,15 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { 
   LeadsProjection,
-  LeadProjector,
+  LeadCapturedHandler,
   CaptureLeadCommandHandler,
   GetAllLeadsQueryHandler
 } from '@effectiv-crm/application';
 import { InMemoryLeadsProjection } from '@effectiv-crm/infrastructure';
+import { ContactsModule } from '../contacts/contacts.module';
 
 @Module({
-  imports: [CqrsModule],
+  imports: [CqrsModule, ContactsModule],
   providers: [
     // Projection
     {
@@ -17,8 +18,8 @@ import { InMemoryLeadsProjection } from '@effectiv-crm/infrastructure';
       useClass: InMemoryLeadsProjection,
     },
     
-    // Projector (Event Handler)
-    LeadProjector,
+    // Event Handler
+    LeadCapturedHandler,
     
     // Command & Query Handlers
     CaptureLeadCommandHandler,

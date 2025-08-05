@@ -1,7 +1,7 @@
-import { FakeEventStore } from '../../../test-doubles/fake.event-store';
+import { FakeEventStore } from '../../../common/fixtures/fake.event-store';
 import { CaptureLeadCommand, CaptureLeadCommandHandler } from '@effectiv-crm/application';
-import { CaptureLeadDtoFactory } from './capture-lead-dto.factory';
-import { FakeEventPublisher } from '../../../test-doubles/fake-event-publisher';
+import { CaptureLeadDtoFactory } from '../../fixtures/capture-lead-dto.factory';
+import { FakeEventPublisher } from '../../../common/fixtures/fake-event-publisher';
 
 describe('Capture Lead - Orchestration', () => {
   let eventStore: FakeEventStore;

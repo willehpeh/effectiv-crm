@@ -1,7 +1,7 @@
 import { DomainEvent } from '@effectiv-crm/domain';
 import { LeadCapturedHandler } from '@effectiv-crm/application';
-import { FakeContactProjection } from '../../contacts/projections/fakes/fake-contact-projection';
-import { FakeLeadsProjection } from '../projections/fakes/fake-leads-projection';
+import { FakeContactProjection } from '../../contacts/fixtures/fake-contact-projection';
+import { FakeLeadsProjection } from '../fixtures/fake-leads-projection';
 import { expectedLeadProjections, leadEvents, leadTestData } from '../fixtures/lead-test-data';
 
 describe('LeadCapturedHandler', () => {

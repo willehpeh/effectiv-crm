@@ -1,8 +1,8 @@
-import { FakeEventStore } from '../../../test-doubles/fake.event-store';
-import { CaptureLeadDtoFactory } from './capture-lead-dto.factory';
+import { FakeEventStore } from '../../../common/fixtures/fake.event-store';
+import { CaptureLeadDtoFactory } from '../../fixtures/capture-lead-dto.factory';
 import { CaptureLeadCommand, CaptureLeadCommandHandler } from '@effectiv-crm/application';
 import { InvalidContactDateError, InvalidLeadSourceError, MissingReferrerError, LeadCapturedEvent } from '@effectiv-crm/domain';
-import { FakeEventPublisher } from '../../../test-doubles/fake-event-publisher';
+import { FakeEventPublisher } from '../../../common/fixtures/fake-event-publisher';
 
 describe('Capture Lead - Lead Details', () => {
   let eventStore: FakeEventStore;

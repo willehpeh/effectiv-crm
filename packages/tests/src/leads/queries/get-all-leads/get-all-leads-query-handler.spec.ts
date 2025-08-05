@@ -1,6 +1,6 @@
 import { GetAllLeadsQueryHandler, GetAllLeadsQuery, LeadReadModel } from '@effectiv-crm/application';
-import { dummyLeads } from '../data/dummy.lead-read-models';
-import { FakeLeadsProjection } from '../../projections/fakes/fake-leads-projection';
+import { dummyLeads } from '../../fixtures/dummy.lead-read-models';
+import { FakeLeadsProjection } from '../../fixtures/fake-leads-projection';
 
 describe('GetAllLeadsQueryHandler', () => {
   let handler: GetAllLeadsQueryHandler;

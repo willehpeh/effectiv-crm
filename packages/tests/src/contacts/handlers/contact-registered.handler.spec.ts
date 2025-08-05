@@ -1,6 +1,6 @@
 import { ContactRegisteredHandler } from '@effectiv-crm/application';
 import { DomainEvent } from '@effectiv-crm/domain';
-import { FakeContactProjection } from '../projections/fakes/fake-contact-projection';
+import { FakeContactProjection } from '../fixtures/fake-contact-projection';
 import { contactEvents, contactTestData, expectedContactProjections } from '../fixtures/contact-test-data';
 
 describe('ContactRegisteredHandler', () => {

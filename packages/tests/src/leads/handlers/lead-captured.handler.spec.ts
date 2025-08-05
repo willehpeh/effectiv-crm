@@ -20,23 +20,16 @@ describe('LeadCapturedHandler', () => {
       // Set up contact in contact projection
       contactProjection.addContact(leadTestData.contacts.johnDoe);
 
-      const leadCapturedEvent = leadEvents.lead456Captured();
+      await leadCapturedHandler.handle(leadEvents.lead456Captured());
 
-      await leadCapturedHandler.handle(leadCapturedEvent);
-
-      const savedLeads = leadsProjection.getSavedLeads();
-      expect(savedLeads).toHaveLength(1);
-      expect(savedLeads[0]).toEqual(expectedLeadProjections.lead456);
+      expect(leadsProjection.savedLeads()).toEqual([expectedLeadProjections.lead456]);
     });
 
     it('throws error if contact is not found', async () => {
-      const leadCapturedEvent = leadEvents.nonexistentContactLead();
-
-      await expect(leadCapturedHandler.handle(leadCapturedEvent))
+      await expect(leadCapturedHandler.handle(leadEvents.nonexistentContactLead()))
         .rejects.toThrow(`Contact with id ${leadTestData.nonexistentContactId} not found`);
 
-      const savedLeads = leadsProjection.getSavedLeads();
-      expect(savedLeads).toHaveLength(0);
+      expect(leadsProjection.savedLeads()).toHaveLength(0);
     });
   });
 
@@ -57,10 +50,7 @@ describe('LeadCapturedHandler', () => {
       await leadCapturedHandler.rebuild(events);
 
       // Assert
-      const savedLeads = leadsProjection.getSavedLeads();
-      expect(savedLeads).toHaveLength(2);
-      expect(savedLeads[0]).toEqual(expectedLeadProjections.lead1);
-      expect(savedLeads[1]).toEqual(expectedLeadProjections.lead2);
+      expect(leadsProjection.savedLeads()).toEqual([expectedLeadProjections.lead1, expectedLeadProjections.lead2]);
     });
   });
 });

@@ -12,7 +12,7 @@ export class FakeLeadsProjection implements LeadsProjection {
     this.leads.push(lead);
   }
 
-  getSavedLeads(): LeadReadModel[] {
+  savedLeads(): LeadReadModel[] {
     return [...this.leads];
   }
 

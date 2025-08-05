@@ -1,6 +1,6 @@
 import { LeadReadModel } from '../read-models/lead-read-model';
 
-export interface LeadsProjection {
-  getAllLeads(): LeadReadModel[];
-  addLead(lead: LeadReadModel): void;
+export abstract class LeadsProjection {
+  abstract getAllLeads(): LeadReadModel[];
+  abstract addLead(lead: LeadReadModel): void;
 }

@@ -1,5 +1,5 @@
 import { DomainEvent } from '@effectiv-crm/domain';
 
-export interface EventPublisher {
-  publish(event: DomainEvent): Promise<void>;
+export abstract class EventPublisher {
+  abstract publish(event: DomainEvent): Promise<void>;
 }

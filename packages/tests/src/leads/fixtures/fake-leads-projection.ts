@@ -1,7 +1,7 @@
-import { LeadsProjection } from '@effectiv-crm/application';
+import { LeadProjection } from '@effectiv-crm/application';
 import { LeadReadModel } from '@effectiv-crm/application';
 
-export class FakeLeadsProjection implements LeadsProjection {
+export class FakeLeadsProjection implements LeadProjection {
   private leads: LeadReadModel[] = [];
 
   getAllLeads(): LeadReadModel[] {

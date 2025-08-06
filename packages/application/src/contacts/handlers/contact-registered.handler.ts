@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ContactRegisteredEvent, DomainEvent } from '@effectiv-crm/domain';
-import { ContactProjection } from '../projections/contact-projection';
+import { ContactProjection } from '../projections/contact.projection';
 import { ContactReadModel } from '../read-models/contact.read-model';
 
 @Injectable()

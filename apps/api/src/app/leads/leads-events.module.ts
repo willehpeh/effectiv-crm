@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
-import { 
-  LeadsProjection,
+import {
+  LeadProjection,
   LeadCapturedHandler,
   CaptureLeadCommandHandler,
   GetAllLeadsQueryHandler
@@ -14,17 +14,17 @@ import { ContactsModule } from '../contacts/contacts.module';
   providers: [
     // Projection
     {
-      provide: LeadsProjection,
+      provide: LeadProjection,
       useClass: InMemoryLeadsProjection,
     },
-    
+
     // Event Handler
     LeadCapturedHandler,
-    
+
     // Command & Query Handlers
     CaptureLeadCommandHandler,
     GetAllLeadsQueryHandler,
   ],
-  exports: [LeadsProjection],
+  exports: [LeadProjection],
 })
 export class LeadsEventsModule {}

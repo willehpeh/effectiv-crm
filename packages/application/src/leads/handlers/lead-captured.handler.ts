@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { LeadCapturedEvent, DomainEvent } from '@effectiv-crm/domain';
 import { LeadReadModel } from '../read-models/lead.read-model';
-import { LeadsProjection } from '../projections/leads-projection';
+import { LeadProjection } from '../projections/lead.projection';
 import { ContactProjection } from '../../contacts';
 
 @Injectable()
 @EventsHandler(LeadCapturedEvent)
 export class LeadCapturedHandler implements IEventHandler<LeadCapturedEvent> {
   constructor(
-    private readonly leadsProjection: LeadsProjection,
+    private readonly leadsProjection: LeadProjection,
     private readonly contactProjection: ContactProjection,
   ) {}
 

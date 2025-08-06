@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { LeadsProjection, LeadReadModel } from '@effectiv-crm/application';
+import { LeadProjection, LeadReadModel } from '@effectiv-crm/application';
 
 @Injectable()
-export class InMemoryLeadsProjection implements LeadsProjection {
+export class InMemoryLeadsProjection implements LeadProjection {
   private readonly leads = new Map<string, LeadReadModel>();
 
   getAllLeads(): LeadReadModel[] {

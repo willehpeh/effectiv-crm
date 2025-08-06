@@ -1,4 +1,4 @@
-import { ContactReadModel } from '../read-models/contact-read-model';
+import { ContactReadModel } from '../read-models/contact.read-model';
 
 export abstract class ContactProjection {
   abstract getContactById(contactId: string): ContactReadModel | undefined;

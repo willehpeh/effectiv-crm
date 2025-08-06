@@ -1,5 +1,5 @@
-export interface ContactReadModel {
+export type ContactReadModel = {
   id: string;
   name: string;
   email: string;
-}
+};

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ContactRegisteredEvent, DomainEvent } from '@effectiv-crm/domain';
 import { ContactProjection } from '../projections/contact-projection';
-import { ContactReadModel } from '../read-models/contact-read-model';
+import { ContactReadModel } from '../read-models/contact.read-model';
 
 @Injectable()
 @EventsHandler(ContactRegisteredEvent)
@@ -21,7 +21,7 @@ export class ContactRegisteredHandler implements IEventHandler<ContactRegistered
 
   rebuild(events: DomainEvent[]): void {
     const contactRegisteredEvents = events.filter(event => event.eventType === 'ContactRegistered');
-    
+
     for (const event of contactRegisteredEvents) {
       this.handle(event as ContactRegisteredEvent);
     }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { LeadCapturedEvent, DomainEvent } from '@effectiv-crm/domain';
-import { LeadReadModel } from '../read-models/lead-read-model';
+import { LeadReadModel } from '../read-models/lead.read-model';
 import { LeadsProjection } from '../projections/leads-projection';
 import { ContactProjection } from '../../contacts';
 
@@ -34,7 +34,7 @@ export class LeadCapturedHandler implements IEventHandler<LeadCapturedEvent> {
 
   async rebuild(events: DomainEvent[]): Promise<void> {
     const leadCapturedEvents = events.filter(event => event.eventType === 'LeadCaptured');
-    
+
     for (const event of leadCapturedEvents) {
       await this.handle(event as LeadCapturedEvent);
     }

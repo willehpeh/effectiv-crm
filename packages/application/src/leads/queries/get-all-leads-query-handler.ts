@@ -8,6 +8,6 @@ export class GetAllLeadsQueryHandler implements IQueryHandler<GetAllLeadsQuery> 
   constructor(private readonly leadsProjection: LeadProjection) {}
 
   async execute(query: GetAllLeadsQuery): Promise<LeadReadModel[]> {
-    return this.leadsProjection.getAllLeads();
+    return this.leadsProjection.allLeads();
   }
 }

@@ -43,12 +43,17 @@ export class MikroOrmEventStore extends EventStore {
     await this.em.flush();
   }
 
-  async getEventsForAggregate(aggregateId: string): Promise<DomainEvent[]> {
+  async eventsForAggregate(aggregateId: string): Promise<DomainEvent[]> {
     const eventEntities = await this.eventRepository.find(
       { aggregateId },
       { orderBy: { aggregateVersion: 'ASC' } }
     );
 
+    return eventEntities.map(entity => this.entityToDomainEvent(entity));
+  }
+
+  async allEvents(): Promise<DomainEvent[]> {
+    const eventEntities = await this.eventRepository.findAll();
     return eventEntities.map(entity => this.entityToDomainEvent(entity));
   }
 

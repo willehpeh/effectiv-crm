@@ -5,7 +5,7 @@ import { LeadProjection, LeadReadModel } from '@effectiv-crm/application';
 export class InMemoryLeadsProjection implements LeadProjection {
   private readonly leads = new Map<string, LeadReadModel>();
 
-  getAllLeads(): LeadReadModel[] {
+  allLeads(): LeadReadModel[] {
     return Array.from(this.leads.values());
   }
 

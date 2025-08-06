@@ -1,22 +1,20 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
-import { 
-  ContactProjection,
-  ContactRegisteredHandler
-} from '@effectiv-crm/application';
+import { ContactProjection } from '@effectiv-crm/application';
 import { InMemoryContactProjection } from '@effectiv-crm/infrastructure';
+import { EventsModule } from '../events.module';
 
 @Module({
-  imports: [CqrsModule],
+  imports: [
+    CqrsModule,
+    EventsModule
+  ],
   providers: [
     // Projection
     {
       provide: ContactProjection,
       useClass: InMemoryContactProjection,
     },
-    
-    // Event Handler
-    ContactRegisteredHandler,
   ],
   exports: [ContactProjection],
 })

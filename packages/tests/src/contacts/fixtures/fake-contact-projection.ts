@@ -4,7 +4,7 @@ import { ContactReadModel } from '@effectiv-crm/application';
 export class FakeContactProjection implements ContactProjection {
   private contacts: ContactReadModel[] = [];
 
-  getContactById(contactId: string): ContactReadModel | undefined {
+  contactById(contactId: string): ContactReadModel | undefined {
     return this.contacts.find(contact => contact.id === contactId);
   }
 

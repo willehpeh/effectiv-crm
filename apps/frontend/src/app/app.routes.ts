@@ -1,5 +1,4 @@
 import { Route } from '@angular/router';
-import { leadsProviders } from './leads/leads.providers';
 import { contactsProviders } from './contacts/contacts.providers';
 
 export const appRoutes: Route[] = [
@@ -8,11 +7,7 @@ export const appRoutes: Route[] = [
     path: 'dashboard',
     loadChildren: () => import('./dashboard/dashboard.routes').then(m => m.dashboardRoutes)
   },
-  {
-    path: 'leads',
-    loadChildren: () => import('./leads/leads.routes').then(m => m.leadsRoutes),
-    providers: leadsProviders
-  },
+
   {
     path: 'contacts',
     loadChildren: () => import('./contacts/contacts.routes').then(m => m.contactsRoutes),

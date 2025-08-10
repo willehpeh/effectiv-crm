@@ -2,7 +2,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
 import { DatabaseModule } from '@effectiv-crm/infrastructure';
-import { LeadsModule } from './leads/leads.module';
+
 import { ContactsModule } from './contacts/contacts.module';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { CorrelationMiddleware } from './middleware/correlation.middleware';
@@ -18,7 +18,7 @@ import { CorrelationMiddleware } from './middleware/correlation.middleware';
     CqrsModule,
     DatabaseModule,
     ContactsModule,
-    LeadsModule,
+
   ]
 })
 export class AppModule implements NestModule {

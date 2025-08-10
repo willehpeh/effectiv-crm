@@ -7,13 +7,12 @@ export class Migration20250802205903_addAggregateTypeToEventsggregate extends Mi
     this.addSql(`alter table "events" add column "aggregate_type" varchar(100);`);
 
     // Populate existing rows by extracting aggregate type from event_type
-    // Assumes event types follow pattern like "ContactCreated", "LeadUpdated", etc.
+    // Assumes event types follow pattern like "ContactCreated", etc.
     this.addSql(`
       update "events" 
       set "aggregate_type" = 
         case 
           when "event_type" like 'Contact%' then 'Contact'
-          when "event_type" like 'Lead%' then 'Lead'
           else regexp_replace("event_type", '([A-Z][a-z]+).*', '\\1')
         end
       where "aggregate_type" is null;

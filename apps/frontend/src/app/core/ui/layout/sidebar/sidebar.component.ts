@@ -76,7 +76,7 @@ protected menuOpen = this.uiFacade.menuOpen();
 
   private baseMainMenuItems = [
     new MenuItem({ icon: 'dashboard', label: 'Dashboard', route: '/dashboard' }),
-    new MenuItem({ icon: 'leads', label: 'Leads', route: '/leads' }),
+    
     new MenuItem({ icon: 'contacts', label: 'Contacts', route: '/contacts' }),
     new MenuItem({ icon: 'projects', label: 'Projects', route: '/projects' }),
     new MenuItem({ icon: 'analytics', label: 'Analytics', route: '/analytics' }),

@@ -7,7 +7,7 @@ export * from './form-field/form-field.component';
 export * from './icons/analytics-icon.component';
 export * from './icons/contacts-icon.component';
 export * from './icons/dashboard-icon.component';
-export * from './icons/leads-icon.component';
+
 export * from './icons/light-theme-icon.component';
 export * from './icons/menu-icon.component';
 export * from './icons/projects-icon.component';

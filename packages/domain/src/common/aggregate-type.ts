@@ -1,1 +1,1 @@
-export type AggregateType = 'Contact' | 'Lead';
+export type AggregateType = 'Contact';

@@ -2,7 +2,7 @@ import { AggregateRoot } from '../common/aggregate-root';
 import { ValueObject } from '../common/value-object';
 import { DomainEvent } from '../common/domain-event';
 import { ContactRegisteredEvent } from './events/contact-registered.event';
-import { EmailAddress } from '../leads/value-objects/email-address';
+import { EmailAddress } from './value-objects/email-address';
 import { FirstName } from './value-objects/first-name';
 import { LastName } from './value-objects/last-name';
 import { Company } from './value-objects/company';

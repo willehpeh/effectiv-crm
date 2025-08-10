@@ -2,14 +2,14 @@ import { ChangeDetectionStrategy, Component, computed, inject, input } from '@an
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { UiFacade } from '../../../facades/ui.facade';
 import { DashboardIconComponent } from '../../../../../shared/components/icons/dashboard-icon.component';
-import { LeadsIconComponent } from '../../../../../shared/components/icons/leads-icon.component';
+
 import { ContactsIconComponent } from '../../../../../shared/components/icons/contacts-icon.component';
 import { ProjectsIconComponent } from '../../../../../shared/components/icons/projects-icon.component';
 import { AnalyticsIconComponent } from '../../../../../shared/components/icons/analytics-icon.component';
 import { SettingsIconComponent } from '../../../../../shared/components/icons/settings-icon.component';
 import { DeviceDetectorService } from 'ngx-device-detector';
 
-export type SidebarIcon = 'dashboard' | 'leads' | 'contacts' | 'projects' | 'analytics' | 'settings';
+export type SidebarIcon = 'dashboard' | 'contacts' | 'projects' | 'analytics' | 'settings';
 
 @Component({
   selector: 'app-sidebar-menu-item',
@@ -18,7 +18,7 @@ export type SidebarIcon = 'dashboard' | 'leads' | 'contacts' | 'projects' | 'ana
   imports: [
     RouterLink,
     DashboardIconComponent,
-    LeadsIconComponent,
+
     ContactsIconComponent,
     ProjectsIconComponent,
     AnalyticsIconComponent,
@@ -38,9 +38,7 @@ export type SidebarIcon = 'dashboard' | 'leads' | 'contacts' | 'projects' | 'ana
         @case ('dashboard') {
           <app-dashboard-icon [class]="iconClasses()"/>
         }
-        @case ('leads') {
-          <app-leads-icon [class]="iconClasses()"/>
-        }
+
         @case ('contacts') {
           <app-contacts-icon [class]="iconClasses()"/>
         }

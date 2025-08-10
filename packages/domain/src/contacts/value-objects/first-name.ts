@@ -1,5 +1,5 @@
 import { ValueObject } from '../../common/value-object';
-import { EmptyNameError } from '../../leads/errors/empty-name.error';
+import { EmptyNameError } from '../errors/empty-name.error';
 
 export class FirstName extends ValueObject<string> {
 

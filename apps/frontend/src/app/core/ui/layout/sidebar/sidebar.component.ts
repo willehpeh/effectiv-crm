@@ -34,17 +34,19 @@ import { MenuItem } from './menu-item';
 						}
 					</nav>
 
-					<div class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700/50">
-						<nav class="space-y-2">
-							@for (item of settingsMenuItems(); track item.icon) {
-								<app-sidebar-menu-item
-										[icon]="item.icon"
-										[label]="item.label"
-										[route]="item.route"
-										[active]="item.active"/>
-							}
-						</nav>
-					</div>
+					@if (settingsMenuItems().length > 0) {
+						<div class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700/50">
+							<nav class="space-y-2">
+								@for (item of settingsMenuItems(); track item.icon) {
+									<app-sidebar-menu-item
+											[icon]="item.icon"
+											[label]="item.label"
+											[route]="item.route"
+											[active]="item.active"/>
+								}
+							</nav>
+						</div>
+					}
 				</div>
 			</aside>
 		}
@@ -76,15 +78,10 @@ protected menuOpen = this.uiFacade.menuOpen();
 
   private baseMainMenuItems = [
     new MenuItem({ icon: 'dashboard', label: 'Dashboard', route: '/dashboard' }),
-    
     new MenuItem({ icon: 'contacts', label: 'Contacts', route: '/contacts' }),
-    new MenuItem({ icon: 'projects', label: 'Projects', route: '/projects' }),
-    new MenuItem({ icon: 'analytics', label: 'Analytics', route: '/analytics' }),
   ];
 
-  private baseSettingsMenuItems = [
-    new MenuItem({ icon: 'settings', label: 'Settings', route: '/settings' }),
-  ];
+  private baseSettingsMenuItems: MenuItem[] = [];
 
   protected mainMenuItems = computed(() => {
     const currentUrl = (this.currentRoute() as NavigationEnd)?.url || '/';

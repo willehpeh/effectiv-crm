@@ -40,6 +40,7 @@ export class InMemoryContactProjection implements ContactProjection {
       id: event.aggregateId,
       name: `${ event.payload.firstName } ${ event.payload.lastName }`,
       email: event.payload.email,
+      company: event.payload.company,
     };
     this.addContact(readModel);
   }

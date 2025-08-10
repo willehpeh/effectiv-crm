@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { RegisterContactDto } from '@effectiv-crm/application';
+import { RegisterContactDto, ContactReadModel } from '@effectiv-crm/application';
 
 export const RegisterContact = createAction(
   '[ContactsFacade] Register Contact',
@@ -12,5 +12,19 @@ export const RegisterContactSuccess = createAction(
 
 export const RegisterContactFailure = createAction(
   '[Contacts API] Register Contact Failure',
+  props<{ error: string }>()
+);
+
+export const LoadContacts = createAction(
+  '[ContactsFacade] Load Contacts'
+);
+
+export const LoadContactsSuccess = createAction(
+  '[Contacts API] Load Contacts Success',
+  props<{ contacts: ContactReadModel[] }>()
+);
+
+export const LoadContactsFailure = createAction(
+  '[Contacts API] Load Contacts Failure',
   props<{ error: string }>()
 );

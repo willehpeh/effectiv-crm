@@ -9,7 +9,8 @@ class FakeContactProjection extends ContactProjection {
     {
       id: '1',
       name: 'John Doe',
-      email: 'john@example.com'
+      email: 'john@example.com',
+      company: 'Acme Corp'
     },
     {
       id: '2',
@@ -62,7 +63,8 @@ describe('ContactsController - GET /contacts', () => {
     expect(result[0]).toEqual({
       id: '1',
       name: 'John Doe',
-      email: 'john@example.com'
+      email: 'john@example.com',
+      company: 'Acme Corp'
     });
     expect(result[1]).toEqual({
       id: '2',

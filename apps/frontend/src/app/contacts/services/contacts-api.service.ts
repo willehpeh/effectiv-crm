@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { RegisterContactDto } from '@effectiv-crm/application';
+import { RegisterContactDto, ContactReadModel } from '@effectiv-crm/application';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -9,5 +9,9 @@ export class ContactsApiService {
 
   registerContact(newContact: RegisterContactDto): Observable<void> {
     return this.http.post<void>('/api/contacts/register', newContact);
+  }
+
+  loadContacts(): Observable<ContactReadModel[]> {
+    return this.http.get<ContactReadModel[]>('/api/contacts');
   }
 }

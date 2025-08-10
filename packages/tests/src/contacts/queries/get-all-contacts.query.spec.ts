@@ -33,7 +33,8 @@ describe('GetAllContactsQueryHandler', () => {
     const contact1: ContactReadModel = {
       id: '1',
       name: 'John Doe',
-      email: 'john@example.com'
+      email: 'john@example.com',
+      company: 'Acme Corp'
     };
     const contact2: ContactReadModel = {
       id: '2',

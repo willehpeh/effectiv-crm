@@ -1,6 +1,7 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
 import { ContactReadModel } from '@effectiv-crm/application';
 import { CardComponent } from '../../../shared/components';
+import { ContactsFacade } from '../../facades/contacts.facade';
 
 @Component({
   selector: 'app-contacts-list',
@@ -14,11 +15,11 @@ import { CardComponent } from '../../../shared/components';
           All Contacts
         </h2>
         <span class="text-sm text-slate-500 dark:text-slate-400">
-          {{contacts.length}} contacts
+          {{contactsFacade.contacts().length}} contacts
         </span>
       </div>
 
-      @if (contacts.length === 0) {
+      @if (contactsFacade.contacts().length === 0 && !contactsFacade.loading()) {
         <app-card padding="lg">
           <div class="text-center py-8">
             <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
@@ -35,8 +36,18 @@ import { CardComponent } from '../../../shared/components';
           </div>
         </app-card>
       } @else {
-        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          @for (contact of contacts; track contact.id) {
+        @if (contactsFacade.loading()) {
+          <app-card padding="lg">
+            <div class="text-center py-8">
+              <div class="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <p class="mt-4 text-slate-600 dark:text-slate-400">Loading contacts...</p>
+            </div>
+          </app-card>
+        } @else {
+          <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            @for (contact of contactsFacade.contacts(); track contact.id) {
             <app-card padding="md" shadow="sm">
               <div class="flex items-start space-x-4">
                 <div class="flex-shrink-0">
@@ -51,57 +62,51 @@ import { CardComponent } from '../../../shared/components';
                   <p class="text-sm text-slate-600 dark:text-slate-400 truncate">
                     {{contact.email}}
                   </p>
-                  <div class="mt-2 flex items-center text-xs text-slate-500 dark:text-slate-500">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400">
-                      <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                      </svg>
-                      Active
-                    </span>
-                  </div>
+                  @if (contact.company) {
+                    <p class="text-xs text-slate-500 dark:text-slate-500 truncate mt-1">
+                      {{contact.company}}
+                    </p>
+                  }
                 </div>
               </div>
             </app-card>
-          }
-        </div>
+            }
+          </div>
+        }
+      }
+
+      @if (contactsFacade.error()) {
+        <app-card padding="lg">
+          <div class="text-center py-8">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
+              <svg class="w-8 h-8 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-medium text-slate-900 dark:text-slate-100 mb-2">
+              Error loading contacts
+            </h3>
+            <p class="text-slate-500 dark:text-slate-400 mb-4">
+              {{contactsFacade.error()}}
+            </p>
+            <button
+              (click)="contactsFacade.loadContacts()"
+              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Try again
+            </button>
+          </div>
+        </app-card>
       }
     </div>
   `
 })
-export class ContactsListComponent {
-  // Dummy data for now - this will be replaced with real data later
-  contacts: ContactReadModel[] = [
-    {
-      id: '1',
-      name: 'John Doe',
-      email: 'john.doe@example.com'
-    },
-    {
-      id: '2',
-      name: 'Jane Smith',
-      email: 'jane.smith@example.com'
-    },
-    {
-      id: '3',
-      name: 'Michael Johnson',
-      email: 'michael.johnson@example.com'
-    },
-    {
-      id: '4',
-      name: 'Emily Brown',
-      email: 'emily.brown@example.com'
-    },
-    {
-      id: '5',
-      name: 'David Wilson',
-      email: 'david.wilson@example.com'
-    },
-    {
-      id: '6',
-      name: 'Sarah Davis',
-      email: 'sarah.davis@example.com'
-    }
-  ];
+export class ContactsListComponent implements OnInit {
+  protected contactsFacade = inject(ContactsFacade);
+
+  ngOnInit(): void {
+    this.contactsFacade.loadContacts();
+  }
 
   getInitials(name: string): string {
     return name

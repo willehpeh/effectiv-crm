@@ -14,8 +14,6 @@ export class InMemoryUiFacade implements UiFacade {
   constructor() {
     // Apply theme changes to the document
     effect(() => {
-      if (!this.isBrowser()) return;
-      
       const theme = this._theme();
       if (theme === 'dark') {
         document.documentElement.classList.add('dark');
@@ -23,12 +21,7 @@ export class InMemoryUiFacade implements UiFacade {
         document.documentElement.classList.remove('dark');
       }
       // Persist theme preference
-      try {
-        localStorage.setItem('theme', theme);
-      } catch (error) {
-        // localStorage might not be available
-        console.warn('Could not save theme preference:', error);
-      }
+      localStorage.setItem('theme', theme);
     });
   }
 
@@ -54,31 +47,14 @@ export class InMemoryUiFacade implements UiFacade {
   }
 
   private getInitialTheme(): Theme {
-    if (!this.isBrowser()) {
-      return 'light'; // Default for SSR
+    // Check localStorage first
+    const savedTheme = localStorage.getItem('theme') as Theme;
+    if (savedTheme === 'light' || savedTheme === 'dark') {
+      return savedTheme;
     }
 
-    try {
-      // Check localStorage first
-      const savedTheme = localStorage.getItem('theme') as Theme;
-      if (savedTheme === 'light' || savedTheme === 'dark') {
-        return savedTheme;
-      }
-    } catch (error) {
-      // localStorage might not be available
-    }
-
-    try {
-      // Fall back to system preference
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      return prefersDark ? 'dark' : 'light';
-    } catch (error) {
-      // matchMedia might not be available
-      return 'light';
-    }
-  }
-
-  private isBrowser(): boolean {
-    return typeof window !== 'undefined' && typeof document !== 'undefined';
+    // Fall back to system preference
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return prefersDark ? 'dark' : 'light';
   }
 }

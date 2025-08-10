@@ -1,13 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { CommandBus } from '@nestjs/cqrs';
-import { RegisterContactCommand, RegisterContactDto } from '@effectiv-crm/application';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { RegisterContactCommand, RegisterContactDto, GetAllContactsQuery, ContactReadModel } from '@effectiv-crm/application';
 
 @Injectable()
 export class ContactsService {
-  constructor(private readonly commandBus: CommandBus) {}
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus
+  ) {}
 
   async registerContact(dto: RegisterContactDto): Promise<void> {
     const command = new RegisterContactCommand(dto);
     await this.commandBus.execute(command);
+  }
+
+  async getAllContacts(): Promise<ContactReadModel[]> {
+    const query = new GetAllContactsQuery();
+    return await this.queryBus.execute(query);
   }
 }

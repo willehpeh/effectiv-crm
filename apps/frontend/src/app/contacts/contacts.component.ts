@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonComponent } from '../shared/components/button/button.component';
 import { RouterLink } from '@angular/router';
+import { ContactsListComponent } from './components/contacts-list/contacts-list.component';
 
 @Component({
   selector: 'app-contacts',
@@ -8,7 +9,8 @@ import { RouterLink } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ButtonComponent,
-    RouterLink
+    RouterLink,
+    ContactsListComponent
   ],
   template: `
 		<div class="p-8">
@@ -26,11 +28,7 @@ import { RouterLink } from '@angular/router';
 				</app-button>
 			</div>
 
-			<div class="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-				<p class="text-slate-600 dark:text-slate-400">
-					Contact management coming soon...
-				</p>
-			</div>
+			<app-contacts-list />
 		</div>
   `
 })

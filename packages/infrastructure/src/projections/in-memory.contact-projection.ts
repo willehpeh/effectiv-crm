@@ -31,6 +31,10 @@ export class InMemoryContactProjection implements ContactProjection {
     return this.contacts.get(contactId);
   }
 
+  getAllContacts(): ContactReadModel[] {
+    return Array.from(this.contacts.values());
+  }
+
   private registerContact(event: ContactRegisteredEvent): void {
     const readModel: ContactReadModel = {
       id: event.aggregateId,

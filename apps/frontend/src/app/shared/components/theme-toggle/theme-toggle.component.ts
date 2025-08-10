@@ -54,15 +54,20 @@ export class ThemeToggleComponent {
   }
 
   protected toggleTheme(): void {
+    console.log('Theme toggle clicked!');
     if (typeof document !== 'undefined') {
       const html = document.documentElement;
       const newDarkMode = !html.classList.contains('dark');
+      
+      console.log('Current dark mode:', html.classList.contains('dark'), 'New dark mode:', newDarkMode);
       
       if (newDarkMode) {
         html.classList.add('dark');
       } else {
         html.classList.remove('dark');
       }
+      
+      console.log('HTML classes after toggle:', html.className);
       
       this.isDark.set(newDarkMode);
       

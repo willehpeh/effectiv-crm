@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 import { leadsProviders } from './leads/leads.providers';
+import { contactsProviders } from './contacts/contacts.providers';
 
 export const appRoutes: Route[] = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -14,7 +15,8 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'contacts',
-    loadChildren: () => import('./contacts/contacts.routes').then(m => m.contactsRoutes)
+    loadChildren: () => import('./contacts/contacts.routes').then(m => m.contactsRoutes),
+    providers: contactsProviders
   },
   {
     path: 'projects',

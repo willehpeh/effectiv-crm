@@ -1,0 +1,13 @@
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { RegisterContactDto } from '@effectiv-crm/application';
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class ContactsApiService {
+  private http = inject(HttpClient);
+
+  registerContact(newContact: RegisterContactDto): Observable<void> {
+    return this.http.post<void>('/api/contacts/register', newContact);
+  }
+}

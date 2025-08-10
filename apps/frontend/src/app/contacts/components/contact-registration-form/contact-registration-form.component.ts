@@ -10,6 +10,8 @@ import {
 } from '../../../shared/components';
 
 import { Router } from '@angular/router';
+import { ContactsFacade } from '../../facades/contacts.facade';
+import { RegisterContactDto } from '@effectiv-crm/application';
 
 @Component({
   selector: 'app-contact-registration-form',
@@ -94,6 +96,7 @@ import { Router } from '@angular/router';
 export class ContactRegistrationFormComponent {
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private contactsFacade = inject(ContactsFacade);
   
   contactForm: FormGroup = this.fb.group({
     firstName: ['', Validators.required],
@@ -111,6 +114,12 @@ export class ContactRegistrationFormComponent {
       return;
     }
     const formValue = this.contactForm.value;
-    console.log('Contact form submitted:', formValue);
+    const contact: RegisterContactDto = {
+      firstName: formValue.firstName,
+      lastName: formValue.lastName,
+      email: formValue.email,
+      company: formValue.company
+    };
+    this.contactsFacade.registerContact(contact);
   }
 }

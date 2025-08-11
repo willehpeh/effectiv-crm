@@ -3,5 +3,8 @@ export * from './projections/contact.projection';
 export * from './commands/register-contact/register-contact.command';
 export * from './commands/register-contact/register-contact.handler';
 export * from './commands/register-contact/register-contact.dto';
+export * from './commands/record-email-sent-to-contact/record-email-sent-to-contact.command';
+export * from './commands/record-email-sent-to-contact/record-email-sent-to-contact.handler';
+export * from './commands/record-email-sent-to-contact/record-email-sent-to-contact.dto';
 export * from './queries/get-all-contacts/get-all-contacts.query';
 export * from './queries/get-all-contacts/get-all-contacts.handler';

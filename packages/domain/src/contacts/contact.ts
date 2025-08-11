@@ -82,11 +82,12 @@ export class Contact extends AggregateRoot {
     switch (event.eventType) {
       case 'ContactRegistered':
         break;
-      case 'EmailSentToContact':
+      case 'EmailSentToContact': {
         const emailEvent = event as EmailSentToContactEvent;
         this._lastContactDate = emailEvent.payload.sentAt;
         this._communicationCount++;
         break;
+      }
     }
   }
 }

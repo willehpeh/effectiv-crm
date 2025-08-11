@@ -46,7 +46,7 @@ export class RadioGroupComponent implements ControlValueAccessor {
   value = signal<string | boolean>('');
   isDisabled = signal<boolean>(false);
 
-  protected onChange = (value: string | boolean) => {
+  protected onChange = (_value: string | boolean) => {
     // required method for ControlValueAccessor
   };
   protected onTouched = () => {

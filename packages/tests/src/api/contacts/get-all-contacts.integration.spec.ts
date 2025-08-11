@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CqrsModule } from '@nestjs/cqrs';
-import { ContactsController } from '../../../../../apps/api/src/app/contacts/contacts.controller';
-import { ContactsService } from '../../../../../apps/api/src/app/contacts/contacts.service';
+import { ContactsController, ContactsService } from '@effectiv-crm/api/contacts';
 import { ContactProjection, GetAllContactsQueryHandler, ContactReadModel } from '@effectiv-crm/application';
 
 class FakeContactProjection extends ContactProjection {

@@ -57,7 +57,7 @@ export class SelectComponent implements ControlValueAccessor {
   value = signal<string>('');
   isDisabled = signal<boolean>(false);
 
-  private onChangeCallback = (value: string) => {
+  private onChangeCallback = (_value: string) => {
     // required method for ControlValueAccessor
   };
   protected onTouched = () => {

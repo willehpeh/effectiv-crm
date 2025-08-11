@@ -29,6 +29,9 @@
       ],
       "@effectiv-crm/tests": [
         "packages/tests/src/index.ts"
+      ],
+      "@effectiv-crm/api/contacts": [
+        "apps/api/src/app/contacts/index.ts"
       ]
     }
   },

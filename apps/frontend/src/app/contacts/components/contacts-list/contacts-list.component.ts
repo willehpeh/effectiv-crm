@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
-import { ContactReadModel } from '@effectiv-crm/application';
 import { CardComponent } from '../../../shared/components';
 import { ContactsFacade } from '../../facades/contacts.facade';
 

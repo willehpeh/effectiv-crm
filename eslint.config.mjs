@@ -39,6 +39,8 @@ export default [
               sourceTag: 'scope:tests',
               onlyDependOnLibsWithTags: [
                 'scope:tests',
+                'scope:api',
+                'scope:frontend',
                 'scope:application',
                 'scope:domain',
                 'scope:infrastructure'

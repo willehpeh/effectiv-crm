@@ -9,7 +9,7 @@ import { ContactReadModel } from '../../read-models/contact.read-model';
 export class GetAllContactsQueryHandler implements IQueryHandler<GetAllContactsQuery> {
   constructor(private readonly contactProjection: ContactProjection) {}
 
-  async execute(query: GetAllContactsQuery): Promise<ContactReadModel[]> {
+  async execute(_query: GetAllContactsQuery): Promise<ContactReadModel[]> {
     return this.contactProjection.getAllContacts();
   }
 }

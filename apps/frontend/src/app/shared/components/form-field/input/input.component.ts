@@ -35,7 +35,7 @@ export class InputComponent implements ControlValueAccessor {
   value = signal<string>('');
   isDisabled = signal<boolean>(false);
 
-  protected onChange = (value: string) => {
+  protected onChange = (_value: string) => {
     // required method for ControlValueAccessor
   };
   protected onTouched = () => {

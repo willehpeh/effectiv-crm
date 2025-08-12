@@ -98,30 +98,27 @@ export interface RecordMessageFormData {
               formControlName="sentAt"
             ></app-input>
           </app-form-field>
-        </form>
-      </div>
 
-      <!-- Footer - Fixed -->
-      <div class="flex-shrink-0 p-4 sm:p-6 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
-        <div class="flex justify-end space-x-3">
-          <app-button
-            variant="outline"
-            type="button"
-            size="sm"
-            (click)="onCancel()"
-          >
-            Cancel
-          </app-button>
-          <app-button
-            variant="primary"
-            type="submit"
-            size="sm"
-            [disabled]="messageForm.invalid || isSubmitting"
-            (click)="onSubmit()"
-          >
-            {{isSubmitting ? 'Recording...' : 'Record Message'}}
-          </app-button>
-        </div>
+          <!-- Buttons inside scrollable content with 50vh bottom padding -->
+          <div class="flex justify-end space-x-3 pt-6" style="padding-bottom: 50vh;">
+            <app-button
+              variant="outline"
+              type="button"
+              size="sm"
+              (click)="onCancel()"
+            >
+              Cancel
+            </app-button>
+            <app-button
+              variant="primary"
+              type="submit"
+              size="sm"
+              [disabled]="messageForm.invalid || isSubmitting"
+            >
+              {{isSubmitting ? 'Recording...' : 'Record Message'}}
+            </app-button>
+          </div>
+        </form>
       </div>
     </div>
   `,

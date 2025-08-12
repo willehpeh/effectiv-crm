@@ -130,7 +130,9 @@ export class ContactsListComponent implements OnInit {
   onRecordMessage(contact: ContactReadModel): void {
     this.dialog.open(RecordMessageModalComponent, {
       data: { contact },
-      width: '500px',
+      width: '90vw',
+      maxWidth: '500px',
+      maxHeight: '90vh',
       disableClose: false,
     });
   }

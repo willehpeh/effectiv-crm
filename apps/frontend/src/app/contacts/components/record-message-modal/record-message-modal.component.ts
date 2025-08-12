@@ -41,16 +41,20 @@ export interface RecordMessageFormData {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="p-6 bg-white dark:bg-slate-800">
-      <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-4">
-        Record Message Sent
-      </h2>
-      <p class="text-sm text-slate-600 dark:text-slate-400 mb-6">
-        Recording message sent to <strong class="text-slate-900 dark:text-slate-100">{{data.contact.name}}</strong>
-      </p>
+    <div class="flex flex-col max-h-full bg-white dark:bg-slate-800">
+      <!-- Header - Fixed -->
+      <div class="flex-shrink-0 p-4 sm:p-6 border-b border-slate-200 dark:border-slate-700">
+        <h2 class="text-lg sm:text-xl font-semibold text-slate-900 dark:text-slate-100">
+          Record Message Sent
+        </h2>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">
+          Recording message sent to <strong class="text-slate-900 dark:text-slate-100">{{data.contact.name}}</strong>
+        </p>
+      </div>
 
-      <form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
-        <div class="space-y-6">
+      <!-- Scrollable Content -->
+      <div class="flex-1 overflow-y-auto p-4 sm:p-6">
+        <form [formGroup]="messageForm" (ngSubmit)="onSubmit()" class="space-y-4 sm:space-y-6">
           <app-form-field label="Message Channel" fieldId="messageChannel">
             <app-select
               id="messageChannel"
@@ -94,12 +98,16 @@ export interface RecordMessageFormData {
               formControlName="sentAt"
             ></app-input>
           </app-form-field>
-        </div>
+        </form>
+      </div>
 
-        <div class="flex justify-end space-x-3 mt-6">
+      <!-- Footer - Fixed -->
+      <div class="flex-shrink-0 p-4 sm:p-6 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
+        <div class="flex justify-end space-x-3">
           <app-button
             variant="outline"
             type="button"
+            size="sm"
             (click)="onCancel()"
           >
             Cancel
@@ -107,21 +115,35 @@ export interface RecordMessageFormData {
           <app-button
             variant="primary"
             type="submit"
+            size="sm"
             [disabled]="messageForm.invalid || isSubmitting"
+            (click)="onSubmit()"
           >
             {{isSubmitting ? 'Recording...' : 'Record Message'}}
           </app-button>
         </div>
-      </form>
+      </div>
     </div>
   `,
   styles: [`
     ::ng-deep .mat-mdc-dialog-container {
       background-color: white;
+      padding: 0 !important;
+      max-height: 90vh;
+      overflow: hidden;
     }
 
     ::ng-deep .dark .mat-mdc-dialog-container {
       background-color: rgb(30 41 59); /* slate-800 */
+    }
+
+    @media (max-width: 640px) {
+      ::ng-deep .mat-mdc-dialog-container {
+        margin: 8px;
+        max-height: calc(100vh - 16px);
+        width: calc(100vw - 16px) !important;
+        max-width: none !important;
+      }
     }
   `]
 })

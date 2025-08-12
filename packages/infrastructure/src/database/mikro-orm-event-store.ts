@@ -53,7 +53,8 @@ export class MikroOrmEventStore extends EventStore {
   }
 
   async allEvents(): Promise<DomainEvent[]> {
-    const eventEntities = await this.eventRepository.findAll();
+    const forkedEm = this.em.fork();
+    const eventEntities = await forkedEm.findAll(EventEntity);
     return eventEntities.map(entity => this.entityToDomainEvent(entity));
   }
 

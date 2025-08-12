@@ -55,4 +55,23 @@ describe('Record Email Sent To Contact', () => {
       })
     ]);
   });
+
+  it('throws an error when contact is not found', async () => {
+    const contactId = 'non-existent-contact-123';
+    
+    // Stub the event store to return empty array (no events for this contact)
+    jest.spyOn(eventStore, 'eventsForAggregate').mockResolvedValue([]);
+
+    const command = new RecordEmailSentToContactCommand({
+      contactId: contactId,
+      subject: 'Follow up meeting',
+      body: 'Thanks for the great meeting today.',
+      sentAt: new Date('2024-01-15T10:30:00Z'),
+      senderEmail: 'user@example.com',
+      notes: 'Follow up on project discussion'
+    });
+    const handler = new RecordEmailSentToContactCommandHandler(eventStore, eventPublisher);
+
+    await expect(handler.execute(command)).rejects.toThrow('Contact not found');
+  });
 });

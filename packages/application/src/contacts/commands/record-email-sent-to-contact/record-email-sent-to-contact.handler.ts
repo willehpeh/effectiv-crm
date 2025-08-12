@@ -14,6 +14,11 @@ export class RecordEmailSentToContactCommandHandler implements ICommandHandler<R
 
   async execute(command: RecordEmailSentToContactCommand): Promise<void> {
     const events = await this.eventStore.eventsForAggregate(command.dto.contactId);
+    
+    if (events.length === 0) {
+      throw new Error('Contact not found');
+    }
+    
     const contact = Contact.hydrate(events);
     
     contact.recordEmailSent({

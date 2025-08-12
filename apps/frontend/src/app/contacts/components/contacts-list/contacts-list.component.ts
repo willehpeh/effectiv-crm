@@ -66,6 +66,9 @@ import { ContactsFacade } from '../../facades/contacts.facade';
                       {{contact.company}}
                     </p>
                   }
+                  <p class="text-xs text-slate-500 dark:text-slate-500 truncate mt-1">
+                    Last contacted: {{formatLastContacted(contact.lastContacted)}}
+                  </p>
                 </div>
               </div>
             </app-card>
@@ -113,5 +116,14 @@ export class ContactsListComponent implements OnInit {
       .map(word => word.charAt(0).toUpperCase())
       .join('')
       .slice(0, 2);
+  }
+
+  formatLastContacted(lastContacted?: string): string {
+    if (!lastContacted) {
+      return 'not contacted yet';
+    }
+    
+    const date = new Date(lastContacted);
+    return date.toISOString().split('T')[0];
   }
 }

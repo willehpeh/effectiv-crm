@@ -3,4 +3,5 @@ export type ContactReadModel = {
   name: string;
   email: string;
   company?: string;
+  lastContacted?: string;
 };

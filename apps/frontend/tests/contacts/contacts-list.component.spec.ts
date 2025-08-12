@@ -14,7 +14,8 @@ describe('ContactsListComponent', () => {
       id: '1',
       name: 'John Doe',
       email: 'john.doe@example.com',
-      company: 'Acme Corporation'
+      company: 'Acme Corporation',
+      lastContacted: '2024-01-15T10:30:00Z'
     },
     {
       id: '2',
@@ -90,5 +91,30 @@ describe('ContactsListComponent', () => {
     // Michael Johnson doesn't have a company
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.textContent).toContain('Michael Johnson');
+  });
+
+  describe('formatLastContacted', () => {
+    it('should return "not contacted yet" when lastContacted is undefined', () => {
+      expect(component.formatLastContacted(undefined)).toBe('not contacted yet');
+    });
+
+    it('should return "not contacted yet" when lastContacted is empty string', () => {
+      expect(component.formatLastContacted('')).toBe('not contacted yet');
+    });
+
+    it('should return formatted date when lastContacted is provided', () => {
+      const dateString = '2024-01-15T10:30:00Z';
+      const expectedDate = '2024-01-15';
+      expect(component.formatLastContacted(dateString)).toBe(expectedDate);
+    });
+  });
+
+  it('should display last contacted information', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Last contacted:');
+    expect(compiled.textContent).toContain('not contacted yet'); // For contacts without lastContacted
+    // John Doe has lastContacted date, so it should display a formatted date
+    const expectedDate = '2024-01-15';
+    expect(compiled.textContent).toContain(expectedDate);
   });
 });

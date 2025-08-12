@@ -2,14 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { ContactProjection, ContactReadModel } from '@effectiv-crm/application';
 import { ProjectionEventStream } from '../events/projection.event-stream';
 import { filter, tap } from 'rxjs';
-import { ContactRegisteredEvent } from '@effectiv-crm/domain';
+import { ContactRegisteredEvent, MessageSentToContactEvent } from '@effectiv-crm/domain';
 
 @Injectable()
 export class InMemoryContactProjection implements ContactProjection {
   private readonly contacts = new Map<string, ContactReadModel>();
 
   private readonly handledEvents = [
-    'ContactRegistered'
+    'ContactRegistered',
+    'MessageSentToContact'
   ];
 
   constructor(private readonly events: ProjectionEventStream) {
@@ -19,6 +20,9 @@ export class InMemoryContactProjection implements ContactProjection {
         switch (event.eventType) {
           case 'ContactRegistered':
             this.registerContact(event as ContactRegisteredEvent);
+            break;
+          case 'MessageSentToContact':
+            this.updateLastContacted(event as MessageSentToContactEvent);
             break;
           default:
             return;
@@ -47,5 +51,16 @@ export class InMemoryContactProjection implements ContactProjection {
 
   private addContact(contact: ContactReadModel): void {
     this.contacts.set(contact.id, contact);
+  }
+
+  private updateLastContacted(event: MessageSentToContactEvent): void {
+    const existingContact = this.contacts.get(event.aggregateId);
+    if (existingContact) {
+      const updatedContact: ContactReadModel = {
+        ...existingContact,
+        lastContacted: event.payload.sentAt.toISOString()
+      };
+      this.contacts.set(event.aggregateId, updatedContact);
+    }
   }
 }

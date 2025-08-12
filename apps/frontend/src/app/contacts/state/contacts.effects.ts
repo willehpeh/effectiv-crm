@@ -1,6 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { RegisterContact, RegisterContactFailure, RegisterContactSuccess, LoadContacts, LoadContactsSuccess, LoadContactsFailure } from './contacts.actions';
+import { 
+  RegisterContact, 
+  RegisterContactFailure, 
+  RegisterContactSuccess, 
+  LoadContacts, 
+  LoadContactsSuccess, 
+  LoadContactsFailure,
+  RecordMessageSent,
+  RecordMessageSentSuccess,
+  RecordMessageSentFailure 
+} from './contacts.actions';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { ContactsApiService } from '../services/contacts-api.service';
 import { Router } from '@angular/router';
@@ -25,6 +35,16 @@ export class ContactsEffects {
       map(contacts => LoadContactsSuccess({ contacts })),
       catchError(error => of(LoadContactsFailure({ error: error.message })))
     ))
+  ));
+
+  recordMessageSent$ = createEffect(() => this.actions$.pipe(
+    ofType(RecordMessageSent),
+    switchMap(({ contactId, messageChannel, messageContent, sentAt }) => 
+      this.contactsApi.recordMessageSent({ contactId, messageChannel, messageContent, sentAt }).pipe(
+        map(() => RecordMessageSentSuccess({ contactId, sentAt })),
+        catchError(error => of(RecordMessageSentFailure({ error: error.message })))
+      )
+    )
   ));
 
   redirectToContacts$ = createEffect(() => this.actions$.pipe(

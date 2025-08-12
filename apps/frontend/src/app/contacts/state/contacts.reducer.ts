@@ -1,5 +1,15 @@
 import { createReducer, on } from '@ngrx/store';
-import { RegisterContact, RegisterContactFailure, RegisterContactSuccess, LoadContacts, LoadContactsSuccess, LoadContactsFailure } from './contacts.actions';
+import { 
+  RegisterContact, 
+  RegisterContactFailure, 
+  RegisterContactSuccess, 
+  LoadContacts, 
+  LoadContactsSuccess, 
+  LoadContactsFailure,
+  RecordMessageSent,
+  RecordMessageSentSuccess,
+  RecordMessageSentFailure 
+} from './contacts.actions';
 import { ContactReadModel } from '@effectiv-crm/application';
 
 export const contactsFeatureKey = 'contacts';
@@ -46,5 +56,24 @@ export const contactsReducer = createReducer(
     ...state,
     loading: false,
     errorMessage: action.error
+  })),
+  on(RecordMessageSent, (state, action) => ({
+    ...state,
+    contacts: state.contacts.map(contact =>
+      contact.id === action.contactId
+        ? { ...contact, lastContacted: action.sentAt }
+        : contact
+    ),
+    errorMessage: ''
+  })),
+  on(RecordMessageSentSuccess, state => ({
+    ...state,
+    // Optimistic update already applied, no changes needed
+  })),
+  on(RecordMessageSentFailure, (state, action) => ({
+    ...state,
+    errorMessage: action.error,
+    // Note: In a real app, you might want to revert the optimistic update here
+    // by re-loading contacts or storing the previous state
   })),
 );

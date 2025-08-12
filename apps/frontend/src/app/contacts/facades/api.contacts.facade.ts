@@ -2,7 +2,7 @@ import { inject, Injectable, Signal } from '@angular/core';
 import { ContactsFacade } from './contacts.facade';
 import { RegisterContactDto, ContactReadModel } from '@effectiv-crm/application';
 import { Store } from '@ngrx/store';
-import { RegisterContact, LoadContacts } from '../state/contacts.actions';
+import { RegisterContact, LoadContacts, RecordMessageSent } from '../state/contacts.actions';
 import { selectContacts, selectContactsLoading, selectContactsError } from '../state/contacts.selectors';
 
 @Injectable()
@@ -22,4 +22,13 @@ export class ApiContactsFacade implements ContactsFacade {
     this.store.dispatch(RegisterContact({ contact }));
   }
 
+  recordMessageSent(contactId: string, messageChannel: string, messageContent?: string, sentAt?: string): void {
+    const timestamp = sentAt || new Date().toISOString();
+    this.store.dispatch(RecordMessageSent({ 
+      contactId, 
+      messageChannel, 
+      messageContent, 
+      sentAt: timestamp 
+    }));
+  }
 }

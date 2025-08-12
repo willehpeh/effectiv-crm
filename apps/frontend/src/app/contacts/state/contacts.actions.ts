@@ -28,3 +28,18 @@ export const LoadContactsFailure = createAction(
   '[Contacts API] Load Contacts Failure',
   props<{ error: string }>()
 );
+
+export const RecordMessageSent = createAction(
+  '[ContactsFacade] Record Message Sent',
+  props<{ contactId: string; messageChannel: string; messageContent?: string; sentAt: string }>()
+);
+
+export const RecordMessageSentSuccess = createAction(
+  '[Contacts API] Record Message Sent Success',
+  props<{ contactId: string; sentAt: string }>()
+);
+
+export const RecordMessageSentFailure = createAction(
+  '[Contacts API] Record Message Sent Failure',
+  props<{ error: string }>()
+);

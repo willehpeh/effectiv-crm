@@ -1,10 +1,10 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { RecordEmailSentToContactCommand } from './record-email-sent-to-contact.command';
+import { RecordMessageSentToContactCommand } from './record-message-sent-to-contact.command';
 import { EventStore, Contact } from '@effectiv-crm/domain';
 import { EventPublisher } from '../../../common';
 
-@CommandHandler(RecordEmailSentToContactCommand)
-export class RecordEmailSentToContactCommandHandler implements ICommandHandler<RecordEmailSentToContactCommand> {
+@CommandHandler(RecordMessageSentToContactCommand)
+export class RecordMessageSentToContactCommandHandler implements ICommandHandler<RecordMessageSentToContactCommand> {
 
   constructor(
     private readonly eventStore: EventStore,
@@ -12,7 +12,7 @@ export class RecordEmailSentToContactCommandHandler implements ICommandHandler<R
   ) {
   }
 
-  async execute(command: RecordEmailSentToContactCommand): Promise<void> {
+  async execute(command: RecordMessageSentToContactCommand): Promise<void> {
     const events = await this.eventStore.eventsForAggregate(command.dto.contactId);
     
     if (events.length === 0) {
@@ -21,11 +21,11 @@ export class RecordEmailSentToContactCommandHandler implements ICommandHandler<R
     
     const contact = Contact.hydrate(events);
     
-    contact.recordEmailSent({
+    contact.recordMessageSent({
       subject: command.dto.subject,
       body: command.dto.body,
       sentAt: command.dto.sentAt,
-      senderEmail: command.dto.senderEmail,
+      messageChannel: command.dto.messageChannel,
       notes: command.dto.notes
     });
 

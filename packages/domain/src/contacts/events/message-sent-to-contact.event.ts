@@ -1,22 +1,22 @@
 import { DomainEvent } from '../../common/domain-event';
 
-export interface EmailSentToContactPayload {
+export interface MessageSentToContactPayload {
   subject: string;
   body?: string;
   sentAt: Date;
-  senderEmail: string;
+  messageChannel: string;
   notes?: string;
 }
 
-export class EmailSentToContactEvent implements DomainEvent {
+export class MessageSentToContactEvent implements DomainEvent {
   readonly aggregateId: string;
   readonly aggregateVersion: number;
-  readonly eventType = 'EmailSentToContact';
+  readonly eventType = 'MessageSentToContact';
   readonly occurredOn: string;
   readonly aggregateType = 'Contact';
-  readonly payload: EmailSentToContactPayload;
+  readonly payload: MessageSentToContactPayload;
 
-  constructor(aggregateId: string, aggregateVersion: number, payload: EmailSentToContactPayload) {
+  constructor(aggregateId: string, aggregateVersion: number, payload: MessageSentToContactPayload) {
     this.aggregateId = aggregateId;
     this.aggregateVersion = aggregateVersion;
     this.occurredOn = new Date().toISOString();

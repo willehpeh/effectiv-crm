@@ -1,5 +1,5 @@
 import { Controller, Post, Body, Get } from '@nestjs/common';
-import { RegisterContactDto, ContactReadModel } from '@effectiv-crm/application';
+import { RegisterContactDto, ContactReadModel, RecordMessageSentToContactDto } from '@effectiv-crm/application';
 import { ContactsService } from './contacts.service';
 
 @Controller('contacts')
@@ -14,5 +14,10 @@ export class ContactsController {
   @Get()
   async getAllContacts(): Promise<ContactReadModel[]> {
     return await this.contactsService.getAllContacts();
+  }
+
+  @Post('message-sent')
+  async recordMessageSentToContact(@Body() dto: RecordMessageSentToContactDto): Promise<void> {
+    await this.contactsService.recordMessageSentToContact(dto);
   }
 }

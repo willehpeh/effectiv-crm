@@ -2,7 +2,7 @@ import { AggregateRoot } from '../common/aggregate-root';
 import { ValueObject } from '../common/value-object';
 import { DomainEvent } from '../common/domain-event';
 import { ContactRegisteredEvent } from './events/contact-registered.event';
-import { EmailSentToContactEvent, EmailSentToContactPayload } from './events/email-sent-to-contact.event';
+import { MessageSentToContactEvent, MessageSentToContactPayload } from './events/message-sent-to-contact.event';
 import { EmailAddress } from './value-objects/email-address';
 import { FirstName } from './value-objects/first-name';
 import { LastName } from './value-objects/last-name';
@@ -73,8 +73,8 @@ export class Contact extends AggregateRoot {
     return this._id;
   }
 
-  recordEmailSent(payload: EmailSentToContactPayload): void {
-    const event = new EmailSentToContactEvent(this._id.value(), this.version + 1, payload);
+  recordMessageSent(payload: MessageSentToContactPayload): void {
+    const event = new MessageSentToContactEvent(this._id.value(), this.version + 1, payload);
     this.apply(event);
   }
 
@@ -82,9 +82,9 @@ export class Contact extends AggregateRoot {
     switch (event.eventType) {
       case 'ContactRegistered':
         break;
-      case 'EmailSentToContact': {
-        const emailEvent = event as EmailSentToContactEvent;
-        this._lastContactDate = emailEvent.payload.sentAt;
+      case 'MessageSentToContact': {
+        const messageEvent = event as MessageSentToContactEvent;
+        this._lastContactDate = messageEvent.payload.sentAt;
         this._communicationCount++;
         break;
       }

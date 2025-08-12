@@ -5,7 +5,7 @@ export * from './common/event-store';
 export * from './common/aggregate-version-conflict.error';
 export * from './contacts/contact';
 export * from './contacts/events/contact-registered.event';
-export * from './contacts/events/email-sent-to-contact.event';
+export * from './contacts/events/message-sent-to-contact.event';
 export * from './contacts/value-objects/first-name';
 export * from './contacts/value-objects/last-name';
 export * from './contacts/value-objects/company';

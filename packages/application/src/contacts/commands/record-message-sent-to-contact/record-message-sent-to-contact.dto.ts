@@ -1,8 +1,8 @@
-export interface RecordEmailSentToContactDto {
+export interface RecordMessageSentToContactDto {
   contactId: string;
   subject: string;
   body?: string;
   sentAt: Date;
-  senderEmail: string;
+  messageChannel: string;
   notes?: string;
 }

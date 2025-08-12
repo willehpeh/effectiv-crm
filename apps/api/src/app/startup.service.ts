@@ -6,6 +6,9 @@ export class StartupService implements OnApplicationBootstrap {
   constructor(private readonly projectionEventStream: ProjectionEventStream) {}
 
   async onApplicationBootstrap() {
-    this.projectionEventStream.rebuildAll();
+    // Add a small delay to ensure database connection is fully established
+    setTimeout(() => {
+      this.projectionEventStream.rebuildAll();
+    }, 1000);
   }
 }

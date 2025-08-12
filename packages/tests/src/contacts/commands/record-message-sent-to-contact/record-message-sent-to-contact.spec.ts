@@ -30,7 +30,7 @@ describe('Record Message Sent To Contact', () => {
       contactId: contactId,
       subject: 'Follow up meeting',
       body: 'Thanks for the great meeting today.',
-      sentAt: new Date('2024-01-15T10:30:00Z'),
+      sentAt: '2024-01-15T10:30:00Z',
       messageChannel: 'email',
       notes: 'Follow up on project discussion'
     });
@@ -48,7 +48,7 @@ describe('Record Message Sent To Contact', () => {
         payload: {
           subject: 'Follow up meeting',
           body: 'Thanks for the great meeting today.',
-          sentAt: new Date('2024-01-15T10:30:00Z'),
+          sentAt: '2024-01-15T10:30:00Z',
           messageChannel: 'email',
           notes: 'Follow up on project discussion'
         }
@@ -74,7 +74,7 @@ describe('Record Message Sent To Contact', () => {
       contactId: contactId,
       subject: 'Follow up meeting',
       body: 'Thanks for the great meeting today.',
-      sentAt: new Date('2024-01-15T10:30:00Z'),
+      sentAt: '2024-01-15T10:30:00Z',
       messageChannel: 'email',
       notes: 'Follow up on project discussion'
     });
@@ -93,7 +93,7 @@ describe('Record Message Sent To Contact', () => {
         payload: {
           subject: 'Follow up meeting',
           body: 'Thanks for the great meeting today.',
-          sentAt: new Date('2024-01-15T10:30:00Z'),
+          sentAt: '2024-01-15T10:30:00Z',
           messageChannel: 'email',
           notes: 'Follow up on project discussion'
         }
@@ -111,7 +111,7 @@ describe('Record Message Sent To Contact', () => {
       contactId: contactId,
       subject: 'Follow up meeting',
       body: 'Thanks for the great meeting today.',
-      sentAt: new Date('2024-01-15T10:30:00Z'),
+      sentAt: '2024-01-15T10:30:00Z',
       messageChannel: 'email',
       notes: 'Follow up on project discussion'
     });

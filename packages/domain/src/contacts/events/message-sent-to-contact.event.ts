@@ -3,7 +3,7 @@ import { DomainEvent } from '../../common/domain-event';
 export interface MessageSentToContactPayload {
   subject: string;
   body?: string;
-  sentAt: Date;
+  sentAt: string;
   messageChannel: string;
   notes?: string;
 }

@@ -37,14 +37,14 @@ describe('InMemoryContactProjection', () => {
       expect(contact?.lastContacted).toBeUndefined();
 
       // Act - Send a message to the contact
-      const sentDate = new Date('2024-01-15T10:30:00Z');
+      const sentDateString = '2024-01-15T10:30:00Z';
       const messageSentEvent = new MessageSentToContactEvent(
         'contact-123',
         2,
         {
           subject: 'Test message',
           body: 'Test body',
-          sentAt: sentDate,
+          sentAt: sentDateString,
           messageChannel: 'email',
           notes: 'Test notes'
         }
@@ -53,7 +53,7 @@ describe('InMemoryContactProjection', () => {
 
       // Assert
       contact = projection.contactById('contact-123');
-      expect(contact?.lastContacted).toBe(sentDate.toISOString());
+      expect(contact?.lastContacted).toBe(sentDateString);
     });
 
     it('should update lastContacted to the most recent message date', () => {
@@ -69,26 +69,26 @@ describe('InMemoryContactProjection', () => {
       eventStream.next(contactRegisteredEvent);
 
       // Send first message
-      const firstMessageDate = new Date('2024-01-10T09:00:00Z');
+      const firstMessageDateString = '2024-01-10T09:00:00Z';
       const firstMessageEvent = new MessageSentToContactEvent(
         'contact-456',
         2,
         {
           subject: 'First message',
-          sentAt: firstMessageDate,
+          sentAt: firstMessageDateString,
           messageChannel: 'phone'
         }
       );
       eventStream.next(firstMessageEvent);
 
       // Send second message with later date
-      const secondMessageDate = new Date('2024-01-20T14:00:00Z');
+      const secondMessageDateString = '2024-01-20T14:00:00Z';
       const secondMessageEvent = new MessageSentToContactEvent(
         'contact-456',
         3,
         {
           subject: 'Second message',
-          sentAt: secondMessageDate,
+          sentAt: secondMessageDateString,
           messageChannel: 'email'
         }
       );
@@ -96,7 +96,7 @@ describe('InMemoryContactProjection', () => {
 
       // Assert - should have the most recent date
       const contact = projection.contactById('contact-456');
-      expect(contact?.lastContacted).toBe(secondMessageDate.toISOString());
+      expect(contact?.lastContacted).toBe(secondMessageDateString);
     });
   });
 });

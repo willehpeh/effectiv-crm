@@ -16,7 +16,7 @@ export class Contact extends AggregateRoot {
   private readonly _firstName: FirstName;
   private readonly _lastName: LastName;
   private readonly _company?: Company;
-  private _lastContactDate?: Date;
+  private _lastContactDate?: string;
   private _communicationCount = 0;
 
   private constructor(id: ContactId, email: EmailAddress, firstName: FirstName, lastName: LastName, company?: Company) {

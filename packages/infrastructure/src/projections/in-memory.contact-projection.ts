@@ -58,7 +58,7 @@ export class InMemoryContactProjection implements ContactProjection {
     if (existingContact) {
       const updatedContact: ContactReadModel = {
         ...existingContact,
-        lastContacted: event.payload.sentAt.toISOString()
+        lastContacted: event.payload.sentAt
       };
       this.contacts.set(event.aggregateId, updatedContact);
     }

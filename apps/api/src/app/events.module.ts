@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule, EventStream, ProjectionEventStream, ProjectionStartupService } from '@effectiv-crm/infrastructure';
+import { DatabaseModule, EventStream, ProjectionEventStream } from '@effectiv-crm/infrastructure';
 import { EventPublisher } from '@effectiv-crm/application';
 import { CqrsModule } from '@nestjs/cqrs';
 
@@ -14,8 +14,7 @@ import { CqrsModule } from '@nestjs/cqrs';
       provide: EventPublisher,
       useExisting: EventStream,
     },
-    ProjectionEventStream,
-    ProjectionStartupService
+    ProjectionEventStream
   ],
   exports: [EventStream, ProjectionEventStream, EventPublisher, DatabaseModule]
 })

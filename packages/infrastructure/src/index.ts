@@ -11,4 +11,3 @@ export { InMemoryContactProjection } from './projections/in-memory.contact-proje
 
 export { EventStream } from './events/event-stream';
 export { ProjectionEventStream } from './events/projection.event-stream';
-export { ProjectionStartupService } from './events/projection-startup.service';

@@ -1,15 +1,19 @@
 import { Component, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { ContactReadModel } from '@effectiv-crm/application';
-import { ButtonComponent } from '../../../shared/components';
+import { 
+  ButtonComponent,
+  FormFieldComponent,
+  InputComponent,
+  SelectComponent,
+  TextareaComponent
+} from '../../../shared/components';
 import { ContactsFacade } from '../../facades/contacts.facade';
 import { Actions, ofType } from '@ngrx/effects';
 import { RecordMessageSentSuccess, RecordMessageSentFailure } from '../../state/contacts.actions';
 import { takeUntil, Subject } from 'rxjs';
+import { SelectOption } from '../../../shared/components/form-field/select/select.component';
 
 export interface RecordMessageModalData {
   contact: ContactReadModel;
@@ -29,9 +33,10 @@ export interface RecordMessageFormData {
   imports: [
     ReactiveFormsModule,
     MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
+    FormFieldComponent,
+    InputComponent,
+    SelectComponent,
+    TextareaComponent,
     ButtonComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,72 +50,55 @@ export interface RecordMessageFormData {
       </p>
 
       <form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
-        <div class="space-y-4">
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Message Channel</mat-label>
-            <mat-select formControlName="messageChannel" required>
-              <mat-option value="email">Email</mat-option>
-              <mat-option value="phone">Phone</mat-option>
-              <mat-option value="sms">SMS</mat-option>
-              <mat-option value="linkedin">LinkedIn</mat-option>
-              <mat-option value="in-person">In Person</mat-option>
-              <mat-option value="other">Other</mat-option>
-            </mat-select>
-            @if (messageForm.get('messageChannel')?.invalid && messageForm.get('messageChannel')?.touched) {
-              <mat-error>Message channel is required</mat-error>
-            }
-          </mat-form-field>
+        <div class="space-y-6">
+          <app-form-field label="Message Channel" fieldId="messageChannel">
+            <app-select
+              id="messageChannel"
+              placeholder="Select a channel"
+              [options]="channelOptions"
+              formControlName="messageChannel"
+            ></app-select>
+          </app-form-field>
 
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Subject</mat-label>
-            <input
-              matInput
-              formControlName="subject"
+          <app-form-field label="Subject" fieldId="subject">
+            <app-input
+              id="subject"
+              type="text"
               placeholder="Subject of the message"
-              required
-            />
-            @if (messageForm.get('subject')?.invalid && messageForm.get('subject')?.touched) {
-              <mat-error>Subject is required</mat-error>
-            }
-          </mat-form-field>
+              formControlName="subject"
+            ></app-input>
+          </app-form-field>
 
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Body (optional)</mat-label>
-            <textarea
-              matInput
-              formControlName="body"
-              rows="3"
+          <app-form-field label="Body (optional)" fieldId="body">
+            <app-textarea
+              id="body"
+              [rows]="3"
               placeholder="Content of the message..."
-            ></textarea>
-          </mat-form-field>
+              formControlName="body"
+            ></app-textarea>
+          </app-form-field>
 
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Notes (optional)</mat-label>
-            <textarea
-              matInput
-              formControlName="notes"
-              rows="2"
+          <app-form-field label="Notes (optional)" fieldId="notes">
+            <app-textarea
+              id="notes"
+              [rows]="2"
               placeholder="Additional notes about this message..."
-            ></textarea>
-          </mat-form-field>
+              formControlName="notes"
+            ></app-textarea>
+          </app-form-field>
 
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Date & Time Sent</mat-label>
-            <input
-              matInput
+          <app-form-field label="Date & Time Sent" fieldId="sentAt">
+            <app-input
+              id="sentAt"
               type="datetime-local"
               formControlName="sentAt"
-              required
-            />
-            @if (messageForm.get('sentAt')?.invalid && messageForm.get('sentAt')?.touched) {
-              <mat-error>Date and time is required</mat-error>
-            }
-          </mat-form-field>
+            ></app-input>
+          </app-form-field>
         </div>
 
         <div class="flex justify-end space-x-3 mt-6">
           <app-button
-            variant="ghost"
+            variant="outline"
             type="button"
             (click)="onCancel()"
           >
@@ -135,79 +123,6 @@ export interface RecordMessageFormData {
     ::ng-deep .dark .mat-mdc-dialog-container {
       background-color: rgb(30 41 59); /* slate-800 */
     }
-
-    ::ng-deep .mat-mdc-form-field {
-      --mdc-filled-text-field-container-color: transparent;
-      --mdc-outlined-text-field-outline-color: rgb(148 163 184);
-      --mdc-outlined-text-field-hover-outline-color: rgb(100 116 139);
-      --mdc-outlined-text-field-focus-outline-color: rgb(34 197 94);
-    }
-
-    ::ng-deep .dark .mat-mdc-form-field {
-      --mdc-outlined-text-field-outline-color: rgb(100 116 139);
-      --mdc-outlined-text-field-hover-outline-color: rgb(148 163 184);
-      --mdc-outlined-text-field-focus-outline-color: rgb(34 197 94);
-    }
-
-    ::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-select-arrow {
-      color: rgb(34 197 94);
-    }
-
-    ::ng-deep .mat-mdc-text-field-wrapper {
-      background-color: transparent;
-    }
-
-    ::ng-deep .mdc-text-field--outlined .mdc-text-field__input {
-      color: rgb(15 23 42);
-    }
-
-    ::ng-deep .dark .mdc-text-field--outlined .mdc-text-field__input {
-      color: rgb(248 250 252);
-    }
-
-    ::ng-deep .mat-mdc-form-field-label {
-      color: rgb(100 116 139);
-    }
-
-    ::ng-deep .dark .mat-mdc-form-field-label {
-      color: rgb(148 163 184);
-    }
-
-    ::ng-deep .mat-mdc-form-field-subscript-wrapper {
-      color: rgb(148 163 184);
-    }
-
-    ::ng-deep .dark .mat-mdc-form-field-subscript-wrapper {
-      color: rgb(148 163 184);
-    }
-
-    ::ng-deep .mat-mdc-form-field-error {
-      color: rgb(239 68 68) !important;
-    }
-
-    ::ng-deep .mat-mdc-select-panel {
-      background-color: white;
-    }
-
-    ::ng-deep .dark .mat-mdc-select-panel {
-      background-color: rgb(30 41 59);
-    }
-
-    ::ng-deep .mat-mdc-option {
-      color: rgb(15 23 42);
-    }
-
-    ::ng-deep .dark .mat-mdc-option {
-      color: rgb(248 250 252);
-    }
-
-    ::ng-deep .mat-mdc-option:hover {
-      background-color: rgb(241 245 249);
-    }
-
-    ::ng-deep .dark .mat-mdc-option:hover {
-      background-color: rgb(51 65 85);
-    }
   `]
 })
 export class RecordMessageModalComponent implements OnDestroy {
@@ -219,6 +134,15 @@ export class RecordMessageModalComponent implements OnDestroy {
 
   private destroy$ = new Subject<void>();
   isSubmitting = false;
+
+  channelOptions: SelectOption[] = [
+    { value: 'email', label: 'Email' },
+    { value: 'phone', label: 'Phone' },
+    { value: 'sms', label: 'SMS' },
+    { value: 'linkedin', label: 'LinkedIn' },
+    { value: 'in-person', label: 'In Person' },
+    { value: 'other', label: 'Other' }
+  ];
 
   messageForm: FormGroup = this.fb.group({
     messageChannel: ['email', Validators.required],

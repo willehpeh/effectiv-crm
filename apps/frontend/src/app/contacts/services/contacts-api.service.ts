@@ -15,7 +15,7 @@ export class ContactsApiService {
     return this.http.get<ContactReadModel[]>('/api/contacts');
   }
 
-  recordMessageSent(data: { contactId: string; messageChannel: string; messageContent?: string; sentAt: string }): Observable<void> {
+  recordMessageSent(data: { contactId: string; subject: string; body?: string; messageChannel: string; notes?: string; sentAt: string }): Observable<void> {
     return this.http.post<void>('/api/contacts/message-sent', data);
   }
 }

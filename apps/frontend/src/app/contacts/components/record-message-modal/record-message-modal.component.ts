@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -7,14 +7,19 @@ import { MatSelectModule } from '@angular/material/select';
 import { ContactReadModel } from '@effectiv-crm/application';
 import { ButtonComponent } from '../../../shared/components';
 import { ContactsFacade } from '../../facades/contacts.facade';
+import { Actions, ofType } from '@ngrx/effects';
+import { RecordMessageSentSuccess, RecordMessageSentFailure } from '../../state/contacts.actions';
+import { takeUntil, Subject } from 'rxjs';
 
 export interface RecordMessageModalData {
   contact: ContactReadModel;
 }
 
 export interface RecordMessageFormData {
+  subject: string;
+  body?: string;
   messageChannel: string;
-  messageContent: string;
+  notes?: string;
   sentAt: string;
 }
 
@@ -31,12 +36,12 @@ export interface RecordMessageFormData {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="p-6">
+    <div class="p-6 bg-white dark:bg-slate-800">
       <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-4">
         Record Message Sent
       </h2>
       <p class="text-sm text-slate-600 dark:text-slate-400 mb-6">
-        Recording message sent to <strong>{{data.contact.name}}</strong>
+        Recording message sent to <strong class="text-slate-900 dark:text-slate-100">{{data.contact.name}}</strong>
       </p>
 
       <form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
@@ -57,12 +62,35 @@ export interface RecordMessageFormData {
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Message Content (optional)</mat-label>
+            <mat-label>Subject</mat-label>
+            <input
+              matInput
+              formControlName="subject"
+              placeholder="Subject of the message"
+              required
+            />
+            @if (messageForm.get('subject')?.invalid && messageForm.get('subject')?.touched) {
+              <mat-error>Subject is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Body (optional)</mat-label>
             <textarea
               matInput
-              formControlName="messageContent"
+              formControlName="body"
               rows="3"
-              placeholder="Brief description of the message..."
+              placeholder="Content of the message..."
+            ></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Notes (optional)</mat-label>
+            <textarea
+              matInput
+              formControlName="notes"
+              rows="2"
+              placeholder="Additional notes about this message..."
             ></textarea>
           </mat-form-field>
 
@@ -100,10 +128,24 @@ export interface RecordMessageFormData {
     </div>
   `,
   styles: [`
+    ::ng-deep .mat-mdc-dialog-container {
+      background-color: white;
+    }
+
+    ::ng-deep .dark .mat-mdc-dialog-container {
+      background-color: rgb(30 41 59); /* slate-800 */
+    }
+
     ::ng-deep .mat-mdc-form-field {
       --mdc-filled-text-field-container-color: transparent;
       --mdc-outlined-text-field-outline-color: rgb(148 163 184);
       --mdc-outlined-text-field-hover-outline-color: rgb(100 116 139);
+      --mdc-outlined-text-field-focus-outline-color: rgb(34 197 94);
+    }
+
+    ::ng-deep .dark .mat-mdc-form-field {
+      --mdc-outlined-text-field-outline-color: rgb(100 116 139);
+      --mdc-outlined-text-field-hover-outline-color: rgb(148 163 184);
       --mdc-outlined-text-field-focus-outline-color: rgb(34 197 94);
     }
 
@@ -123,6 +165,14 @@ export interface RecordMessageFormData {
       color: rgb(248 250 252);
     }
 
+    ::ng-deep .mat-mdc-form-field-label {
+      color: rgb(100 116 139);
+    }
+
+    ::ng-deep .dark .mat-mdc-form-field-label {
+      color: rgb(148 163 184);
+    }
+
     ::ng-deep .mat-mdc-form-field-subscript-wrapper {
       color: rgb(148 163 184);
     }
@@ -134,21 +184,68 @@ export interface RecordMessageFormData {
     ::ng-deep .mat-mdc-form-field-error {
       color: rgb(239 68 68) !important;
     }
+
+    ::ng-deep .mat-mdc-select-panel {
+      background-color: white;
+    }
+
+    ::ng-deep .dark .mat-mdc-select-panel {
+      background-color: rgb(30 41 59);
+    }
+
+    ::ng-deep .mat-mdc-option {
+      color: rgb(15 23 42);
+    }
+
+    ::ng-deep .dark .mat-mdc-option {
+      color: rgb(248 250 252);
+    }
+
+    ::ng-deep .mat-mdc-option:hover {
+      background-color: rgb(241 245 249);
+    }
+
+    ::ng-deep .dark .mat-mdc-option:hover {
+      background-color: rgb(51 65 85);
+    }
   `]
 })
-export class RecordMessageModalComponent {
+export class RecordMessageModalComponent implements OnDestroy {
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<RecordMessageModalComponent>);
   protected data = inject(MAT_DIALOG_DATA) as RecordMessageModalData;
   private contactsFacade = inject(ContactsFacade);
+  private actions$ = inject(Actions);
 
+  private destroy$ = new Subject<void>();
   isSubmitting = false;
 
   messageForm: FormGroup = this.fb.group({
     messageChannel: ['email', Validators.required],
-    messageContent: [''],
+    subject: ['', Validators.required],
+    body: [''],
+    notes: [''],
     sentAt: [this.getCurrentDateTime(), Validators.required]
   });
+
+  constructor() {
+    // Listen for success/failure actions to close modal
+    this.actions$.pipe(
+      ofType(RecordMessageSentSuccess, RecordMessageSentFailure),
+      takeUntil(this.destroy$)
+    ).subscribe((action) => {
+      this.isSubmitting = false;
+      if (action.type === RecordMessageSentSuccess.type) {
+        this.dialogRef.close(true);
+      }
+      // On failure, keep modal open to show error
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   onCancel(): void {
     this.dialogRef.close();
@@ -161,12 +258,12 @@ export class RecordMessageModalComponent {
       
       this.contactsFacade.recordMessageSent(
         this.data.contact.id,
+        formData.subject,
+        formData.body || undefined,
         formData.messageChannel,
-        formData.messageContent || undefined,
+        formData.notes || undefined,
         formData.sentAt
       );
-
-      this.dialogRef.close(formData);
     }
   }
 

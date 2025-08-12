@@ -22,12 +22,14 @@ export class ApiContactsFacade implements ContactsFacade {
     this.store.dispatch(RegisterContact({ contact }));
   }
 
-  recordMessageSent(contactId: string, messageChannel: string, messageContent?: string, sentAt?: string): void {
+  recordMessageSent(contactId: string, subject: string, body?: string, messageChannel?: string, notes?: string, sentAt?: string): void {
     const timestamp = sentAt || new Date().toISOString();
     this.store.dispatch(RecordMessageSent({ 
       contactId, 
-      messageChannel, 
-      messageContent, 
+      subject,
+      body,
+      messageChannel: messageChannel || 'email',
+      notes,
       sentAt: timestamp 
     }));
   }

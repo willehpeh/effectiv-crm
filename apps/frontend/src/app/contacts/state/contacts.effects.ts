@@ -39,8 +39,8 @@ export class ContactsEffects {
 
   recordMessageSent$ = createEffect(() => this.actions$.pipe(
     ofType(RecordMessageSent),
-    switchMap(({ contactId, messageChannel, messageContent, sentAt }) => 
-      this.contactsApi.recordMessageSent({ contactId, messageChannel, messageContent, sentAt }).pipe(
+    switchMap(({ contactId, subject, body, messageChannel, notes, sentAt }) => 
+      this.contactsApi.recordMessageSent({ contactId, subject, body, messageChannel, notes, sentAt }).pipe(
         map(() => RecordMessageSentSuccess({ contactId, sentAt })),
         catchError(error => of(RecordMessageSentFailure({ error: error.message })))
       )

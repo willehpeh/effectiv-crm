@@ -31,7 +31,7 @@ export const LoadContactsFailure = createAction(
 
 export const RecordMessageSent = createAction(
   '[ContactsFacade] Record Message Sent',
-  props<{ contactId: string; messageChannel: string; messageContent?: string; sentAt: string }>()
+  props<{ contactId: string; subject: string; body?: string; messageChannel: string; notes?: string; sentAt: string }>()
 );
 
 export const RecordMessageSentSuccess = createAction(

@@ -8,5 +8,5 @@ export abstract class ContactsFacade {
 
   abstract loadContacts(): void;
   abstract registerContact(contactDto: RegisterContactDto): void;
-  abstract recordMessageSent(contactId: string, messageChannel: string, messageContent?: string, sentAt?: string): void;
+  abstract recordMessageSent(contactId: string, subject: string, body?: string, messageChannel?: string, notes?: string, sentAt?: string): void;
 }

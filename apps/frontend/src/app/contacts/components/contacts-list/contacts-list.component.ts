@@ -51,37 +51,40 @@ import { RecordMessageModalComponent } from '../record-message-modal/record-mess
           <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             @for (contact of contactsFacade.contacts(); track contact.id) {
             <app-card padding="md" shadow="sm">
-              <div class="flex items-start space-x-4">
-                <div class="flex-shrink-0">
-                  <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold text-lg">
-                    {{getInitials(contact.name)}}
+              <div class="space-y-3">
+                <div class="flex items-start space-x-4">
+                  <div class="flex-shrink-0">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold text-lg">
+                      {{getInitials(contact.name)}}
+                    </div>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 truncate">
+                      {{contact.name}}
+                    </h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 truncate">
+                      {{contact.email}}
+                    </p>
+                    @if (contact.company) {
+                      <p class="text-xs text-slate-500 dark:text-slate-500 truncate mt-1">
+                        {{contact.company}}
+                      </p>
+                    }
+                    <p class="text-xs text-slate-500 dark:text-slate-500 truncate mt-1">
+                      Last contacted: {{formatLastContacted(contact.lastContacted)}}
+                    </p>
                   </div>
                 </div>
-                <div class="flex-1 min-w-0">
-                  <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 truncate">
-                    {{contact.name}}
-                  </h3>
-                  <p class="text-sm text-slate-600 dark:text-slate-400 truncate">
-                    {{contact.email}}
-                  </p>
-                  @if (contact.company) {
-                    <p class="text-xs text-slate-500 dark:text-slate-500 truncate mt-1">
-                      {{contact.company}}
-                    </p>
-                  }
-                  <p class="text-xs text-slate-500 dark:text-slate-500 truncate mt-1">
-                    Last contacted: {{formatLastContacted(contact.lastContacted)}}
-                  </p>
-                </div>
-                <div class="flex-shrink-0">
+                <div class="flex justify-end">
                   <button
                     (click)="onRecordMessage(contact)"
-                    class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                    class="inline-flex items-center px-3 py-2 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
                     title="Record message sent"
                   >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
+                    Record Message
                   </button>
                 </div>
               </div>

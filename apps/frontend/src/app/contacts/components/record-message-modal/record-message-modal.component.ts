@@ -53,8 +53,8 @@ export interface RecordMessageFormData {
       </div>
 
       <!-- Scrollable Content -->
-      <div class="flex-1 overflow-y-auto p-4 sm:p-6">
-        <form [formGroup]="messageForm" (ngSubmit)="onSubmit()" class="space-y-4 sm:space-y-6">
+      <div class="flex-1 overflow-y-auto p-4 sm:p-6 pb-safe">
+        <form [formGroup]="messageForm" (ngSubmit)="onSubmit()" class="space-y-4 sm:space-y-6 pb-20 sm:pb-8">
           <app-form-field label="Message Channel" fieldId="messageChannel">
             <app-select
               id="messageChannel"
@@ -137,12 +137,29 @@ export interface RecordMessageFormData {
       background-color: rgb(30 41 59); /* slate-800 */
     }
 
+    .pb-safe {
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
     @media (max-width: 640px) {
       ::ng-deep .mat-mdc-dialog-container {
         margin: 8px;
         max-height: calc(100vh - 16px);
         width: calc(100vw - 16px) !important;
         max-width: none !important;
+      }
+    }
+
+    /* iOS Safari specific fixes */
+    @supports (-webkit-touch-callout: none) {
+      @media (max-width: 640px) {
+        ::ng-deep .mat-mdc-dialog-container {
+          max-height: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 16px);
+        }
+        
+        .pb-safe {
+          padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 80px);
+        }
       }
     }
   `]

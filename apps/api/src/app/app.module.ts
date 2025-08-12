@@ -1,12 +1,12 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
-import { DatabaseModule } from '@effectiv-crm/infrastructure';
 
 import { ContactsModule } from './contacts/contacts.module';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { CorrelationMiddleware } from './middleware/correlation.middleware';
 import { StartupService } from './startup.service';
+import { EventsModule } from './events.module';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { StartupService } from './startup.service';
       ],
     }),
     CqrsModule,
-    DatabaseModule,
+    EventsModule,
     ContactsModule,
 
   ],

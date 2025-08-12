@@ -6,6 +6,7 @@ import { DatabaseModule } from '@effectiv-crm/infrastructure';
 import { ContactsModule } from './contacts/contacts.module';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { CorrelationMiddleware } from './middleware/correlation.middleware';
+import { StartupService } from './startup.service';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { CorrelationMiddleware } from './middleware/correlation.middleware';
     DatabaseModule,
     ContactsModule,
 
-  ]
+  ],
+  providers: [StartupService]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

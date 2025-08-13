@@ -8,5 +8,9 @@ export const contactsRoutes: Route[] = [
   {
     path: 'new',
     loadComponent: () => import('./components/contact-registration-form/contact-registration-form.component').then(m => m.ContactRegistrationFormComponent)
+  },
+  {
+    path: ':id',
+    loadComponent: () => import('./components/contact-detail/contact-detail.component').then(m => m.ContactDetailComponent)
   }
 ];

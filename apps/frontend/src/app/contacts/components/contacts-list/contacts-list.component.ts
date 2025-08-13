@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { CardComponent } from '../../../shared/components';
 import { ContactsFacade } from '../../facades/contacts.facade';
 import { ContactReadModel } from '@effectiv-crm/application';
@@ -75,7 +76,7 @@ import { RecordMessageModalComponent } from '../record-message-modal/record-mess
                     </p>
                   </div>
                 </div>
-                <div class="flex justify-start">
+                <div class="flex justify-between">
                   <button
                     (click)="onRecordMessage(contact)"
                     class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
@@ -83,6 +84,16 @@ import { RecordMessageModalComponent } from '../record-message-modal/record-mess
                   >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                  </button>
+                  <button
+                    (click)="onViewContact(contact)"
+                    class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                    title="View contact details"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
                   </button>
                 </div>
@@ -122,6 +133,7 @@ import { RecordMessageModalComponent } from '../record-message-modal/record-mess
 export class ContactsListComponent implements OnInit {
   protected contactsFacade = inject(ContactsFacade);
   private dialog = inject(MatDialog);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.contactsFacade.loadContacts();
@@ -135,6 +147,10 @@ export class ContactsListComponent implements OnInit {
       maxHeight: '90vh',
       disableClose: false,
     });
+  }
+
+  onViewContact(contact: ContactReadModel): void {
+    this.router.navigate(['/contacts', contact.id]);
   }
 
   getInitials(name: string): string {

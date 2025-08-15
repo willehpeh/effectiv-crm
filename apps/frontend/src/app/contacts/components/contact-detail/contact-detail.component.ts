@@ -1,14 +1,34 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, computed, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Actions, ofType } from '@ngrx/effects';
+import { takeUntil, Subject } from 'rxjs';
 import { CardComponent } from '../../../shared/components';
+import { 
+  ButtonComponent,
+  FormFieldComponent,
+  InputComponent,
+  SelectComponent,
+  TextareaComponent
+} from '../../../shared/components';
 import { ContactsFacade } from '../../facades/contacts.facade';
-import { ContactReadModel } from '@effectiv-crm/application';
+
+import { RecordMessageSentSuccess, RecordMessageSentFailure } from '../../state/contacts.actions';
+import { SelectOption } from '../../../shared/components/form-field/select/select.component';
 
 @Component({
   selector: 'app-contact-detail',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CardComponent],
+  imports: [
+    CardComponent,
+    ReactiveFormsModule,
+    FormFieldComponent,
+    InputComponent,
+    SelectComponent,
+    TextareaComponent,
+    ButtonComponent
+  ],
   template: `
     <div class="space-y-6">
       <div class="flex items-center justify-between">
@@ -47,43 +67,99 @@ import { ContactReadModel } from '@effectiv-crm/application';
               </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3">
-                  Contact Information
-                </h3>
-                <dl class="space-y-2">
-                  <div>
-                    <dt class="text-sm font-medium text-slate-500 dark:text-slate-400">Email</dt>
-                    <dd class="text-sm text-slate-900 dark:text-slate-100">{{contact()!.email}}</dd>
-                  </div>
-                  @if (contact()!.company) {
-                    <div>
-                      <dt class="text-sm font-medium text-slate-500 dark:text-slate-400">Company</dt>
-                      <dd class="text-sm text-slate-900 dark:text-slate-100">{{contact()!.company}}</dd>
-                    </div>
-                  }
-                  <div>
-                    <dt class="text-sm font-medium text-slate-500 dark:text-slate-400">Last Contacted</dt>
-                    <dd class="text-sm text-slate-900 dark:text-slate-100">{{formatLastContacted(contact()!.lastContacted)}}</dd>
-                  </div>
-                </dl>
-              </div>
-
-              <div>
-                <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3">
-                  Actions
-                </h3>
-                <div class="space-y-2">
-                  <button class="w-full px-4 py-2 text-left text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
-                    Send Message
-                  </button>
-                  <button class="w-full px-4 py-2 text-left text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
-                    Edit Contact
-                  </button>
+            <div>
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3">
+                Contact Information
+              </h3>
+              <dl class="space-y-2">
+                <div>
+                  <dt class="text-sm font-medium text-slate-500 dark:text-slate-400">Email</dt>
+                  <dd class="text-sm text-slate-900 dark:text-slate-100">{{contact()!.email}}</dd>
                 </div>
-              </div>
+                @if (contact()!.company) {
+                  <div>
+                    <dt class="text-sm font-medium text-slate-500 dark:text-slate-400">Company</dt>
+                    <dd class="text-sm text-slate-900 dark:text-slate-100">{{contact()!.company}}</dd>
+                  </div>
+                }
+                <div>
+                  <dt class="text-sm font-medium text-slate-500 dark:text-slate-400">Last Contacted</dt>
+                  <dd class="text-sm text-slate-900 dark:text-slate-100">{{formatLastContacted(contact()!.lastContacted)}}</dd>
+                </div>
+              </dl>
             </div>
+          </div>
+        </app-card>
+
+        <app-card padding="lg">
+          <div class="space-y-6">
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
+              Record Message Sent
+            </h3>
+            <form [formGroup]="messageForm" (ngSubmit)="onSubmit()" class="space-y-4">
+              <app-form-field label="Message Channel" fieldId="messageChannel">
+                <app-select
+                  id="messageChannel"
+                  placeholder="Select a channel"
+                  [options]="channelOptions"
+                  formControlName="messageChannel"
+                ></app-select>
+              </app-form-field>
+
+              <app-form-field label="Subject" fieldId="subject">
+                <app-input
+                  id="subject"
+                  type="text"
+                  placeholder="Subject of the message"
+                  formControlName="subject"
+                ></app-input>
+              </app-form-field>
+
+              <app-form-field label="Body (optional)" fieldId="body">
+                <app-textarea
+                  id="body"
+                  [rows]="3"
+                  placeholder="Content of the message..."
+                  formControlName="body"
+                ></app-textarea>
+              </app-form-field>
+
+              <app-form-field label="Notes (optional)" fieldId="notes">
+                <app-textarea
+                  id="notes"
+                  [rows]="2"
+                  placeholder="Additional notes about this message..."
+                  formControlName="notes"
+                ></app-textarea>
+              </app-form-field>
+
+              <app-form-field label="Date & Time Sent" fieldId="sentAt">
+                <app-input
+                  id="sentAt"
+                  type="datetime-local"
+                  formControlName="sentAt"
+                ></app-input>
+              </app-form-field>
+
+              <div class="flex justify-end space-x-3 pt-4">
+                <app-button
+                  variant="outline"
+                  type="button"
+                  size="sm"
+                  (click)="onResetForm()"
+                >
+                  Reset
+                </app-button>
+                <app-button
+                  variant="primary"
+                  type="submit"
+                  size="sm"
+                  [disabled]="messageForm.invalid || isSubmitting"
+                >
+                  {{isSubmitting ? 'Recording...' : 'Record Message'}}
+                </app-button>
+              </div>
+            </form>
           </div>
         </app-card>
       } @else {
@@ -106,10 +182,15 @@ import { ContactReadModel } from '@effectiv-crm/application';
     </div>
   `
 })
-export class ContactDetailComponent implements OnInit {
+export class ContactDetailComponent implements OnInit, OnDestroy {
   protected contactsFacade = inject(ContactsFacade);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private fb = inject(FormBuilder);
+  private actions$ = inject(Actions);
+
+  private destroy$ = new Subject<void>();
+  isSubmitting = false;
 
   contactId = this.route.snapshot.paramMap.get('id');
   contact = computed(() => {
@@ -117,8 +198,42 @@ export class ContactDetailComponent implements OnInit {
     return id ? this.contactsFacade.contacts().find(c => c.id === id) : undefined;
   });
 
+  channelOptions: SelectOption[] = [
+    { value: 'email', label: 'Email' },
+    { value: 'phone', label: 'Phone' },
+    { value: 'sms', label: 'SMS' },
+    { value: 'linkedin', label: 'LinkedIn' },
+    { value: 'in-person', label: 'In Person' },
+    { value: 'other', label: 'Other' }
+  ];
+
+  messageForm: FormGroup = this.fb.group({
+    messageChannel: ['email', Validators.required],
+    subject: ['', Validators.required],
+    body: [''],
+    notes: [''],
+    sentAt: [this.getCurrentDateTime(), Validators.required]
+  });
+
+  constructor() {
+    this.actions$.pipe(
+      ofType(RecordMessageSentSuccess, RecordMessageSentFailure),
+      takeUntil(this.destroy$)
+    ).subscribe((action) => {
+      this.isSubmitting = false;
+      if (action.type === RecordMessageSentSuccess.type) {
+        this.onResetForm();
+      }
+    });
+  }
+
   ngOnInit(): void {
     this.contactsFacade.loadContacts();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onBack(): void {
@@ -140,5 +255,43 @@ export class ContactDetailComponent implements OnInit {
     
     const date = new Date(lastContacted);
     return date.toLocaleDateString();
+  }
+
+  onSubmit(): void {
+    const currentContact = this.contact();
+    if (this.messageForm.valid && !this.isSubmitting && currentContact) {
+      this.isSubmitting = true;
+      const formData = this.messageForm.value;
+      
+      this.contactsFacade.recordMessageSent(
+        currentContact.id,
+        formData.subject,
+        formData.body || undefined,
+        formData.messageChannel,
+        formData.notes || undefined,
+        formData.sentAt
+      );
+    }
+  }
+
+  onResetForm(): void {
+    this.messageForm.reset({
+      messageChannel: 'email',
+      subject: '',
+      body: '',
+      notes: '',
+      sentAt: this.getCurrentDateTime()
+    });
+  }
+
+  private getCurrentDateTime(): string {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 }

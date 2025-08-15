@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit, computed, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, computed, OnDestroy, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Actions, ofType } from '@ngrx/effects';
@@ -93,10 +93,25 @@ import { SelectOption } from '../../../shared/components/form-field/select/selec
 
         <app-card padding="lg">
           <div class="space-y-6">
-            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
-              Record Message Sent
-            </h3>
-            <form [formGroup]="messageForm" (ngSubmit)="onSubmit()" class="space-y-4">
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                Record Message Sent
+              </h3>
+              @if (!showMessageForm()) {
+                <button
+                  (click)="onShowMessageForm()"
+                  class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-lg transition-colors"
+                  title="Record outgoing message"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v8m-4-4l4-4 4 4" />
+                  </svg>
+                </button>
+              }
+            </div>
+            @if (showMessageForm()) {
+              <form [formGroup]="messageForm" (ngSubmit)="onSubmit()" class="space-y-4">
               <app-form-field label="Message Channel" fieldId="messageChannel">
                 <app-select
                   id="messageChannel"
@@ -146,9 +161,9 @@ import { SelectOption } from '../../../shared/components/form-field/select/selec
                   variant="outline"
                   type="button"
                   size="sm"
-                  (click)="onResetForm()"
+                  (click)="onCancelForm()"
                 >
-                  Reset
+                  Cancel
                 </app-button>
                 <app-button
                   variant="primary"
@@ -159,7 +174,8 @@ import { SelectOption } from '../../../shared/components/form-field/select/selec
                   {{isSubmitting ? 'Recording...' : 'Record Message'}}
                 </app-button>
               </div>
-            </form>
+              </form>
+            }
           </div>
         </app-card>
       } @else {
@@ -191,6 +207,7 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   isSubmitting = false;
+  showMessageForm = signal(false);
 
   contactId = this.route.snapshot.paramMap.get('id');
   contact = computed(() => {
@@ -223,6 +240,7 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
       this.isSubmitting = false;
       if (action.type === RecordMessageSentSuccess.type) {
         this.onResetForm();
+        this.showMessageForm.set(false);
       }
     });
   }
@@ -272,6 +290,15 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
         formData.sentAt
       );
     }
+  }
+
+  onShowMessageForm(): void {
+    this.showMessageForm.set(true);
+  }
+
+  onCancelForm(): void {
+    this.showMessageForm.set(false);
+    this.onResetForm();
   }
 
   onResetForm(): void {
